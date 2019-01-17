@@ -642,6 +642,8 @@ void Hydrology::enforce_bounds(const IceModelVec2CellType &cell_type,
     fresh_water_density = m_config->get_double("constants.fresh_water.density"),
     kg_per_m            = m_grid->cell_area() * fresh_water_density; // kg m-1
 
+  const bool tillwat_ocean = m_config->get_boolean("hydrology.set_tillwat_ocean"); 
+
   for (Points p(*m_grid); p; p.next()) {
     const int i = p.i(), j = p.j();
 
@@ -664,7 +666,11 @@ void Hydrology::enforce_bounds(const IceModelVec2CellType &cell_type,
 
     if (cell_type.ocean(i, j)) {
       grounding_line_change(i, j) += -water_thickness(i, j) * kg_per_m;
-      water_thickness(i, j) = 0.0;
+      if (tillwat_ocean) {
+        water_thickness(i, j) = max_thickness;
+      } else {
+        water_thickness(i, j) = 0.0;
+      }
     }
   }
 
