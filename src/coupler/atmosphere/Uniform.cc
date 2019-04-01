@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 PISM Authors
+/* Copyright (C) 2018, 2019 PISM Authors
  *
  * This file is part of PISM.
  *
@@ -25,7 +25,7 @@ namespace pism {
 namespace atmosphere {
 
 Uniform::Uniform(IceGrid::ConstPtr grid)
-  : AtmosphereModel(grid, nullptr) {
+  : AtmosphereModel(grid, std::shared_ptr<AtmosphereModel>()) {
   m_precipitation = allocate_precipitation(grid);
   m_temperature = allocate_temperature(grid);
 }

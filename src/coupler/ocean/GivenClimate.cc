@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 PISM Authors
+// Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 PISM Authors
 //
 // This file is part of PISM.
 //
@@ -27,7 +27,7 @@ namespace pism {
 namespace ocean {
 
 Given::Given(IceGrid::ConstPtr g)
-  : OceanModel(g, nullptr) {
+  : OceanModel(g, std::shared_ptr<OceanModel>()) {
 
   m_shelf_base_temperature = allocate_shelf_base_temperature(g);
   m_shelf_base_mass_flux   = allocate_shelf_base_mass_flux(g);

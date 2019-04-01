@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 PISM Authors
+// Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 PISM Authors
 //
 // This file is part of PISM.
 //
@@ -61,7 +61,7 @@ GivenTH::Constants::Constants(const Config &config) {
 }
 
 GivenTH::GivenTH(IceGrid::ConstPtr g)
-  : CompleteOceanModel(g, nullptr) {
+  : CompleteOceanModel(g, std::shared_ptr<OceanModel>()) {
 
   ForcingOptions opt(*m_grid->ctx(), "ocean.th");
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 PISM Authors
+// Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 PISM Authors
 //
 // This file is part of PISM.
 //
@@ -27,7 +27,7 @@ namespace pism {
 namespace atmosphere {
 
 Given::Given(IceGrid::ConstPtr g)
-  : AtmosphereModel(g, nullptr) {
+  : AtmosphereModel(g, std::shared_ptr<AtmosphereModel>()) {
   ForcingOptions opt(*m_grid->ctx(), "atmosphere.given");
 
   {

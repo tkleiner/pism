@@ -1,4 +1,4 @@
-/* Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 PISM Authors
+/* Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 PISM Authors
  *
  * This file is part of PISM.
  *
@@ -70,7 +70,7 @@ OceanModel::OceanModel(IceGrid::ConstPtr g, std::shared_ptr<OceanModel> input)
 
 // "model" constructor
 OceanModel::OceanModel(IceGrid::ConstPtr g)
-  : OceanModel(g, nullptr) {
+  : OceanModel(g, std::shared_ptr<OceanModel>()) {
   // empty
 }
 
