@@ -1,4 +1,4 @@
-// Copyright (C) 2012-2018 Constantine Khrulev, Ricarda Winkelmann, Ronja Reese, Torsten
+// Copyright (C) 2012-2019 Constantine Khrulev, Ricarda Winkelmann, Ronja Reese, Torsten
 // Albrecht, and Matthias Mengel
 //
 // This file is part of PISM.
@@ -50,7 +50,7 @@ namespace pism {
 namespace ocean {
 
 Pico::Pico(IceGrid::ConstPtr g)
-    : CompleteOceanModel(g, NULL), m_geometry(new PicoGeometry(g)) {
+  : CompleteOceanModel(g, std::shared_ptr<OceanModel>()), m_geometry(new PicoGeometry(g)) {
 
   ForcingOptions opt(*m_grid->ctx(), "ocean.pico");
 
