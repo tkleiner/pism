@@ -1,4 +1,4 @@
-// Copyright (C) 2008-2018 Ed Bueler, Constantine Khroulev, Ricarda Winkelmann,
+// Copyright (C) 2008-2019 Ed Bueler, Constantine Khroulev, Ricarda Winkelmann,
 // Gudfinna Adalgeirsdottir and Andy Aschwanden
 //
 // This file is part of PISM.
@@ -102,7 +102,7 @@ IceModelVec2S::Ptr SurfaceModel::allocate_temperature(IceGrid::ConstPtr grid) {
 }
 
 SurfaceModel::SurfaceModel(IceGrid::ConstPtr grid)
-  : Component(grid), m_input_model(nullptr), m_atmosphere(nullptr) {
+  : Component(grid) {
 
   m_liquid_water_fraction = allocate_liquid_water_fraction(grid);
   m_layer_mass            = allocate_layer_mass(grid);
