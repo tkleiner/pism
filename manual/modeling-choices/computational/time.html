@@ -1,0 +1,343 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Model time &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Ice dynamics and thermodynamics" href="../dynamics/index.html" />
+    <link rel="prev" title="Spatial grid" href="grid.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="model-time">
+<span id="sec-time"></span><h1>Model time<a class="headerlink" href="#model-time" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="#tab-timeoptions"><span class="std std-numref">Table 7</span></a> gives the command-line options which control PISM time. If
+option <code class="docutils literal notranslate"><span class="pre">-ys</span></code> is absent then the start year is read from the input file (if present) or
+it defaults to zero. The default value for the end year is the start year plus the given
+(<code class="docutils literal notranslate"><span class="pre">-y</span></code>) run length. If both <code class="docutils literal notranslate"><span class="pre">-ys</span></code> and <code class="docutils literal notranslate"><span class="pre">-ye</span></code> are used then the run length is set to
+the difference. Using all three of <code class="docutils literal notranslate"><span class="pre">-ys</span></code>, <code class="docutils literal notranslate"><span class="pre">-y</span></code> and <code class="docutils literal notranslate"><span class="pre">-ys</span></code> is not allowed; this
+generates an error message.</p>
+<table border="1" class="colwidths-given docutils" id="tab-timeoptions">
+<caption><span class="caption-number">Table 7 </span><span class="caption-text">Command-line options controlling PISM time</span><a class="headerlink" href="#tab-timeoptions" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-y</span></code> (years)</td>
+<td>Number of model years to run.</td>
+</tr>
+<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ys</span></code> (years)</td>
+<td>Model year at which to start the run. Also resets the model
+time, ignoring any time in the input file.</td>
+</tr>
+<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ye</span></code> (years)</td>
+<td>Model year at which to end the run.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="calendars">
+<span id="sec-calendars"></span><h2>Calendars<a class="headerlink" href="#calendars" title="Permalink to this headline">¶</a></h2>
+<p>Most of PISM, and its ice dynamics core in particular, only needs to know the length of
+the current time-step. Internally PISM stores time in “seconds since a specified moment”
+and thus PISM generally does not use or need a calendar. <a class="footnote-reference" href="#id3" id="id1">[1]</a> We refer to PISM internal
+time as <em>model time</em>.</p>
+<p>One can select a calendar for more precise control of the model time, however. A
+“calendar” is a concept that is part of the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a>. Choosing a calendar is
+appropriate for runs for specific temporal periods like “the 18th-century” or
+“1989–2010”. The calendar is generally needed because specific knowledge of lengths of
+months and years is required to use climate data properly or to facilitate model
+validation.</p>
+<p>PISM uses <a class="reference external" href="http://meteora.ucsd.edu/~pierce/calcalcs/calendars.html">CalCalcs</a> by David W. Pierce to perform calendric computations. This lets us
+support all the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html#calendar">calendars</a> defined by the CF Metadata Conventions
+document except for the <code class="docutils literal notranslate"><span class="pre">366_day</span></code> (<code class="docutils literal notranslate"><span class="pre">all_leap</span></code>) calendar.</p>
+<p>Time units in PISM’s output files always contain a reference date because it is required
+by the CF metadata conventions.</p>
+<p>By default PISM uses the <code class="docutils literal notranslate"><span class="pre">365_day</span></code> calendar. This is appropriate for runs that do not
+require precise application of forcing data or reporting on particular dates
+(paleo-climate runs, for example). In this mode PISM ignores the reference date in time
+unit specifications (such as “<code class="docutils literal notranslate"><span class="pre">days</span> <span class="pre">since</span> <span class="pre">1969-7-20</span></code>”), though the value set using
+<code class="config docutils literal notranslate"><span class="pre">time.reference_date</span></code> configuration parameter is saved in (is passed forward into)
+output files.</p>
+<p>The calendar setting also affects the year length. In particular, with the default choice
+of the calendar (<code class="docutils literal notranslate"><span class="pre">365_day</span></code>), <code class="docutils literal notranslate"><span class="pre">-y</span> <span class="pre">10</span></code> sets the run duration to</p>
+<div class="math notranslate nohighlight">
+\[10 \times 365 \times 24 \times 60 \times 60 = 315360000\]</div>
+<p>seconds, not <span class="math notranslate nohighlight">\(10 \times 365.25 \times 24 \times 60 \times 60\)</span> or similar.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This does <strong>not</strong> affect unit conversion: the factor used to convert <span class="math notranslate nohighlight">\(m/s\)</span> to
+<span class="math notranslate nohighlight">\(m/\text{year}\)</span> does not depend on the calendar choice.</p>
+</div>
+<table border="1" class="colwidths-given docutils" id="tab-calendars">
+<caption><span class="caption-number">Table 8 </span><span class="caption-text">Calendars supported by PISM. Please see <a class="reference external" href="http://meteora.ucsd.edu/~pierce/calcalcs/calendars.html">CalCalcs</a> documentation for
+             details</span><a class="headerlink" href="#tab-calendars" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Keyword</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gregorian</span></code> or <code class="docutils literal notranslate"><span class="pre">standard</span></code></td>
+<td>Mixed Gregorian/Julian calendar used today.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">proleptic_gregorian</span></code></td>
+<td>Gregorian calendar extended to dates before 1582-10-15.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">noleap</span></code> or <code class="docutils literal notranslate"><span class="pre">365_day</span></code></td>
+<td>Calendar with fixed-length 365-day years</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">360_day</span></code></td>
+<td>Calendar with fixed-length 360-day years divided into 30-day months</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">julian</span></code></td>
+<td>Julian calendar</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">none</span></code></td>
+<td>no calendar</td>
+</tr>
+</tbody>
+</table>
+<p>Selecting a non-trivial (Gregorian, Proleptic Gregorian, or Julian) calendar using the
+<code class="config docutils literal notranslate"><span class="pre">time.calendar</span></code> configuration parameter or the <code class="option docutils literal notranslate"><span class="pre">-calendar</span></code> command-line
+option enables calendar-based time management; see <a class="reference internal" href="#tab-calendars"><span class="std std-numref">Table 8</span></a>. The
+implications of selecting such a calendar are:</p>
+<ul>
+<li><p class="first">PISM uses the <code class="docutils literal notranslate"><span class="pre">units</span></code> attribute of coordinate variables <em>literally</em> (including the
+reference date) in unit conversions. Please make sure that the <code class="variable docutils literal notranslate"><span class="pre">time</span></code> variable in
+all forcing files has the units attribute such as “<code class="docutils literal notranslate"><span class="pre">days</span> <span class="pre">since</span> <span class="pre">2012-1-1</span></code>”. PISM will
+stop with an error message if a time variable does not have a reference date in its unit
+specification.</p>
+</li>
+<li><p class="first">It is important to use units that are a fixed multiple of “seconds”, such as “<code class="docutils literal notranslate"><span class="pre">minutes</span>
+<span class="pre">since</span> <span class="pre">1989-1-1</span></code>” or “<code class="docutils literal notranslate"><span class="pre">days</span> <span class="pre">since</span> <span class="pre">1999-12-31</span></code>” and avoid “months” and “years”. (PISM
+uses UDUNITS-2 to convert units, and in UDUNITS one month is always interpreted as
+<span class="math notranslate nohighlight">\(\frac{1}{12}\cdot 365.242198781\)</span> days.) Please see the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a> document
+for details.</p>
+</li>
+<li><p class="first">PISM uses dates in standard output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>...
+   time interval (length)   [2012-01-01, 2021-12-31]  (10.000 years)
+...
+S 2012-05-26:  0.00011    0.6306   0.00000000           0.00000
+$v$Eh m (dt=0.10000)
+S 2012-07-01:  0.00014    0.6306   0.00000000           0.00000
+</pre></div>
+</div>
+<p>Just like in the no-calendar mode, run length, run start and run end times are specified
+using <code class="option docutils literal notranslate"><span class="pre">-y</span></code>, <code class="option docutils literal notranslate"><span class="pre">-ys</span></code> and <code class="option docutils literal notranslate"><span class="pre">-ye</span></code> command-line options, respectively. Arguments
+of these options are interpreted in a slightly different manner, though:</p>
+</li>
+<li><p class="first">the run length option <code class="docutils literal notranslate"><span class="pre">-y</span></code> takes an <em>integer</em> argument, interpreted as the number of
+<em>calendar</em> years</p>
+</li>
+<li><p class="first">options <code class="docutils literal notranslate"><span class="pre">-ys</span></code> and <code class="docutils literal notranslate"><span class="pre">-ye</span></code> take <em>dates</em> as arguments.</p>
+</li>
+</ul>
+<p>For example, either of the following commands sets up a run covering the <span class="math notranslate nohighlight">\(21^{st}\)</span>
+century:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -calendar gregorian -ys 2001-1-1 -y 100 ...
+pismr -calendar standard -ys 2001-1-1 -ye 2101-1-1 ...
+</pre></div>
+</div>
+<p>(These option combinations are equivalent.)</p>
+<p>It is also possible to run PISM for the duration of the available forcing data using the
+<code class="option docutils literal notranslate"><span class="pre">-time_file</span></code> option. The command</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -calendar gregorian -time_file forcing.nc
+</pre></div>
+</div>
+<p>will extract the reference date and run length from <code class="docutils literal notranslate"><span class="pre">forcing.nc</span></code>, respecting time
+bounds.</p>
+<p>When a non-trivial calendar is selected, spatial and scalar time-series can be saved
+daily, monthly or yearly using these calendric computations. See sections
+<a class="reference internal" href="../../practical-usage/saving-time-series.html#sec-saving-time-series"><span class="std std-ref">Saving time series of scalar diagnostic quantities</span></a> and <a class="reference internal" href="../../practical-usage/saving-diagnostics.html#sec-saving-diagnostics"><span class="std std-ref">Saving time series of spatially-varying diagnostic quantities</span></a>.</p>
+</div>
+<div class="section" id="re-starting-an-interrupted-run-using-time-file">
+<span id="sec-time-file-restart"></span><h2>Re-starting an interrupted run using <code class="docutils literal notranslate"><span class="pre">-time_file</span></code><a class="headerlink" href="#re-starting-an-interrupted-run-using-time-file" title="Permalink to this headline">¶</a></h2>
+<p>If a run using <code class="docutils literal notranslate"><span class="pre">-time_file</span></code> gets interrupted but manages to save a backup, re-starting
+with <code class="docutils literal notranslate"><span class="pre">-time_file</span></code> will attempt to re-do the entire run because options <code class="docutils literal notranslate"><span class="pre">-y</span></code>, <code class="docutils literal notranslate"><span class="pre">-ys</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">-ye</span></code> are ignored:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># This run gets killed but leaves backup.nc:</span>
+pismr -i input.nc -time_file time.nc -o output.nc
+<span class="c1"># This WILL NOT start from the time saved in backup.nc</span>
+<span class="c1"># and continue until the end time in time.nc</span>
+pismr -i backup.nc -time_file time.nc -o output.nc
+</pre></div>
+</div>
+<p>In this case we want to set the start time of the run from <code class="docutils literal notranslate"><span class="pre">backup.nc</span></code>, but use the end
+time from <code class="docutils literal notranslate"><span class="pre">time.nc</span></code>. To achieve this, use the option <code class="option docutils literal notranslate"><span class="pre">-time_file_continue_run</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># This run gets killed but leaves backup.nc:</span>
+pismr -i input.nc -time_file time.nc -o output.nc
+<span class="c1"># This WILL continue until the end time in time.nc, starting from backup.nc</span>
+pismr -i backup.nc -time_file time.nc -o output.nc -time_file_continue_run
+</pre></div>
+</div>
+</div>
+<div class="section" id="diagnostic-computations">
+<span id="sec-diagnostic-computations"></span><h2>Diagnostic computations<a class="headerlink" href="#diagnostic-computations" title="Permalink to this headline">¶</a></h2>
+<p>A “diagnostic” computation can be defined as one where the internal state does not evolve.
+The internal state of PISM is the set of variables read by “<code class="docutils literal notranslate"><span class="pre">-i</span></code>”. You can ask PISM to
+do a diagnostic computation by setting the run duration to a small number such as
+<span class="math notranslate nohighlight">\(0.001\)</span> years (about <span class="math notranslate nohighlight">\(9\)</span> hours). The duration to use depends on the modeling
+setup, but should be smaller than the maximum time-step allowed by PISM’s stability
+criteria. Such short runs can also be used to look at additional fields corresponding to
+the current model state.</p>
+<p>As an example, consider these two runs:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pisms -y 6000 -o foo.nc
+pismr -i foo.nc -y 0.001 -o bar.nc -o_size big
+</pre></div>
+</div>
+<p>The result of the second (short) run is a NetCDF file <code class="docutils literal notranslate"><span class="pre">bar.nc</span></code> which contains the full
+three-dimensional velocity field in the scalar NetCDF variables <code class="docutils literal notranslate"><span class="pre">uvel</span></code>, <code class="docutils literal notranslate"><span class="pre">vvel</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">wvel</span></code>, as well as many other variables. The file <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code> does not contain many of
+these fields because it was written with the default output size of <code class="docutils literal notranslate"><span class="pre">medium</span></code>. The “<code class="docutils literal notranslate"><span class="pre">-y</span>
+<span class="pre">0.001</span></code>” run has diagnostically “filled-in” all the fields which PISM can model at a time
+step, but the run duration was chosen so as to avoid significant model state evolution
+during the run.</p>
+<p>This diagnostic mode is often associated to the modeling of ice shelves and ice streams.
+section <a class="reference internal" href="../../validation/ross.html#sec-ross"><span class="std std-ref">An SSA flow model for the Ross Ice Shelf in Antarctica</span></a> describes using a short “diagnostic” run to model the Ross ice
+shelf <a class="reference internal" href="../../../zzz_references_html.html#macayealetal" id="id2">[64]</a>. Verification tests I and J, section <a class="reference internal" href="../../verification/index.html#sec-verif"><span class="std std-ref">Verification</span></a>, are
+diagnostic calculations using the SSA.</p>
+<p>The NetCDF model state saved by PISM at the end of an <em>evolution</em> run (i.e. with “<code class="docutils literal notranslate"><span class="pre">-y</span>
+<span class="pre">Y</span></code>” for <span class="math notranslate nohighlight">\(Y&gt;0\)</span>) does not, under the default <code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">medium</span></code> output size, contain
+the three-dimensional velocity field. Instead, it contains just a few more variables than
+those which are needed to restart the run with <code class="docutils literal notranslate"><span class="pre">-i</span></code>. One can force PISM to save all the
+supported diagnostic quantities at the end of a time-stepping run using the option
+<code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">big</span></code>. Or one can go back and do a “<code class="docutils literal notranslate"><span class="pre">-y</span> <span class="pre">small_number</span></code>” diagnostic run using
+<code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">big</span></code>.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Note seconds are part of SI units.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="grid.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="../dynamics/index.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Modeling choices</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Model domain, grid, and time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dynamics/index.html">Ice dynamics and thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../subglacier/index.html">The subglacier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../marine/index.html">Marine ice sheet modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../regional/index.html">Modeling individual outlet glaciers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../disabling.html">Disabling sub-models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hard-choices.html">Dealing with more difficult modeling choices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

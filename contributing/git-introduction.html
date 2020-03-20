@@ -1,0 +1,230 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Git introduction for PISM developers &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Git branches" href="git-branches.html" />
+    <link rel="prev" title="PISM coding guidelines" href="coding_guidelines.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="git-introduction-for-pism-developers">
+<span id="sec-git-introduction"></span><h1>Git introduction for PISM developers<a class="headerlink" href="#git-introduction-for-pism-developers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="recommended-git-configuration">
+<span id="sec-git-configuration"></span><h2>Recommended Git configuration<a class="headerlink" href="#recommended-git-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Set name and e-mail address:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git config --global user.name <span class="s2">&quot;John Doe&quot;</span>
+git config --global user.email johndoe@example.com
+</pre></div>
+</div>
+<p>Do not push local branches nonexistent on upstream by default:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git config --global push.default simple
+</pre></div>
+</div>
+<p>Set an editor to use when writing commit messages. For example, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git config --global core.editor vi
+</pre></div>
+</div>
+<p>to use <code class="docutils literal notranslate"><span class="pre">vi</span></code>.</p>
+</div>
+<div class="section" id="working-on-a-new-branch">
+<span id="sec-new-feature-branch"></span><h2>Working on a new branch<a class="headerlink" href="#working-on-a-new-branch" title="Permalink to this headline">¶</a></h2>
+<p>This section summarizes Git commands used in a typical development workflow. A good Git
+GUI can save you from having to type these commands yourself but one should still know
+them.</p>
+<ol class="arabic">
+<li><p class="first">When starting work on a new feature make sure to start from the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout dev
+</pre></div>
+</div>
+<p>When working on a bug fix for the current (released) PISM version, start from <code class="docutils literal notranslate"><span class="pre">master</span></code>
+instead:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout master
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="git-branches.html#sec-git-branches"><span class="std std-ref">Git branches</span></a> for more.</p>
+</li>
+<li><p class="first">Next, create and switch to a new branch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout -b &lt;user-name&gt;/&lt;short-description&gt;
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;user-name&gt;</span></code> is your GitHub user name and <code class="docutils literal notranslate"><span class="pre">&lt;short-description&gt;</span></code> is a short (two
+or three words) description of the topic you intend to work on.</p>
+<p>For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout -b ckhroulev/energy-balance
+</pre></div>
+</div>
+</li>
+<li><p class="first">Work on the code, documentation, etc.</p>
+</li>
+<li><p class="first">Inspect changes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git status
+</pre></div>
+</div>
+</li>
+<li><p class="first">Commit changes:</p>
+<ul>
+<li><p class="first">To commit all changes to files that are already in the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git commit -a
+</pre></div>
+</div>
+</li>
+<li><p class="first">To commit particular files</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git commit file1 file2 ...
+</pre></div>
+</div>
+</li>
+<li><p class="first">To add new files that are to be committed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git add file1 file2 ...
+git commit
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">Push changes to GitHub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git push -u origin ckhroulev/energy-balance
+</pre></div>
+</div>
+<p>Push changes to your own branch or other branches dedicated to a topic you may be
+sharing with your collaborators.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Do <em>not</em> push to <code class="docutils literal notranslate"><span class="pre">dev</span></code> or <code class="docutils literal notranslate"><span class="pre">master</span></code> directly unless you know what you are doing.</p>
+</div>
+</li>
+<li><p class="first">If you started your branch from <code class="docutils literal notranslate"><span class="pre">dev</span></code> and need to use a feature that was added to <code class="docutils literal notranslate"><span class="pre">dev</span></code>
+since then you can run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git merge dev
+</pre></div>
+</div>
+<p>to “merge” the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch into your branch.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please do not merge <code class="docutils literal notranslate"><span class="pre">dev</span></code> into your branch unless you need to: doing it too often
+makes the development history (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code>) more confusing and less useful.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="writing-better-commit-messages">
+<span id="sec-better-commit-messages"></span><h2>Writing better commit messages<a class="headerlink" href="#writing-better-commit-messages" title="Permalink to this headline">¶</a></h2>
+<p>Every commit should be accompanied by a meaningful message.</p>
+<p>A commit message consists of a short one-line summary followed by a blank line and a
+free-form body of the message.</p>
+<p>The summary should be capitalized, use the imperative mood, and should not end in a period.</p>
+<p>The body of a commit message should explain what changes were made and why (but not <em>how</em>).</p>
+<p>If a commit addresses a GitHub issue, please include the issue title and number in the
+body. Summarize the issue if its title is not descriptive enough.</p>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="coding_guidelines.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="git-branches.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Contributing to PISM</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bug-reporting.html">Submitting bug reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coding_guidelines.html">PISM coding guidelines</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Git introduction for PISM developers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#recommended-git-configuration">Recommended Git configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#working-on-a-new-branch">Working on a new branch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writing-better-commit-messages">Writing better commit messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="git-branches.html">Git branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development-workflow.html">Development workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how-to.html">How do I…?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

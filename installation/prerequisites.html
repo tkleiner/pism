@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Required tools and libraries &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installing parallel I/O libraries" href="parallel-io-libraries.html" />
+    <link rel="prev" title="Installing PISM" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="required-tools-and-libraries">
+<span id="sec-install-prerequisites"></span><h1>Required tools and libraries<a class="headerlink" href="#required-tools-and-libraries" title="Permalink to this headline">¶</a></h1>
+<p>This table lists required dependencies for PISM alphabetically.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Library</th>
+<th class="head">Comment</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="https://cmake.org/">CMake</a></td>
+<td>version <span class="math notranslate nohighlight">\(\ge\)</span> 3.1</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.fftw.org/">FFTW</a></td>
+<td>version <span class="math notranslate nohighlight">\(\ge\)</span> 3.1</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.gnu.org/software/gsl/">GSL</a></td>
+<td>version <span class="math notranslate nohighlight">\(\ge\)</span> 1.15</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.mcs.anl.gov/research/projects/mpi/">MPI</a></td>
+<td>any recent version</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF</a> <a class="footnote-reference" href="#id4" id="id1">[1]</a></td>
+<td>version <span class="math notranslate nohighlight">\(\ge\)</span> 4.1</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.mcs.anl.gov/petsc/">PETSc</a> <a class="footnote-reference" href="#id5" id="id2">[2]</a></td>
+<td>version <span class="math notranslate nohighlight">\(\ge\)</span> 3.5</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.unidata.ucar.edu/software/udunits/">UDUNITS</a></td>
+<td>any recent version</td>
+</tr>
+</tbody>
+</table>
+<p>Before installing these “by hand”, check sections <a class="reference internal" href="debian.html#sec-install-debian"><span class="std std-ref">Installing prerequisites on Debian or Ubuntu</span></a> and
+<a class="reference internal" href="macos.html#sec-install-macos"><span class="std std-ref">Installing required libraries on macOS</span></a> for specific how-to.</p>
+<p>In particular, if multiple MPI implementations (e.g. MPICH and Open MPI) are installed
+then PETSc can under some situations “get confused” and throw MPI-related errors. Even
+package systems have been known to allow this confusion.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We recommend un-installing all MPI libraries except one. In most cases there is no
+reason to have both Open MPI and MPICH, for example.</p>
+</div>
+<p>Optional libraries listed below are needed for certain PISM features, namely computing
+longitude, latitude coordinates of grid points and parallel I/O. These libraries are
+recommended, but not strictly required:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Optional Library</th>
+<th class="head">Comment</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="https://proj.org/">PROJ</a></td>
+<td>version <span class="math notranslate nohighlight">\(\ge\)</span> 5.0 (used to compute longitude-latitude grid coordinates and cell bounds)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://parallel-netcdf.github.io/">PnetCDF</a></td>
+<td>Can be used for faster parallel I/O</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://ncar.github.io/ParallelIO/">ParallelIO</a></td>
+<td>Can be used for faster parallel I/O</td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference external" href="https://www.python.org">Python</a> is needed for the PETSc installation process; a number of PISM’s pre- and
+post-processing scripts also use Python (either 2.7 or 3.x), while <a class="reference external" href="https://git-scm.com/">Git</a> is usually needed
+to download the PISM code.</p>
+<p>PISM’s Python bindings support Python 2.7 or 3.3 and later <a class="footnote-reference" href="#id6" id="id3">[3]</a>.</p>
+<p>The following Python packages are needed to do all the examples in the <a class="reference internal" href="../manual/index.html#sec-users-manual"><span class="std std-ref">User’s Manual</span></a> (which run Python scripts):</p>
+<table border="1" class="docutils" id="id7">
+<caption><span class="caption-number">Table 2 </span><span class="caption-text">Python packages</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Library</th>
+<th class="head">Comment</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="https://www.numpy.org/">NumPy</a></td>
+<td>used in <em>most</em> scripts</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://matplotlib.org/">matplotlib</a></td>
+<td>used in some scripts</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://pypi.org/project/netCDF4">netcdf4-python</a></td>
+<td>used in <em>most</em> scripts</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Note that PISM uses <code class="docutils literal notranslate"><span class="pre">ncgen</span></code> (provided by NetCDF) on the system where PISM is
+<em>compiled</em>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>“PETSc” is pronounced “pet-see”.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>PISM’s Python bindings are tested using Python 3.6.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="index.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="parallel-io-libraries.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installing PISM</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Required tools and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel-io-libraries.html">Installing parallel I/O libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html">Installation Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html">Quick tests of the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html#next-steps">Next steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Rebuilding PISM documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

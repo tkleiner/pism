@@ -1,0 +1,583 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>BOMBPROOF, PISM’s numerical scheme for conservation of energy &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Computing steady-state subglacial water flux" href="steady-hydrology.html" />
+    <link rel="prev" title="Calving front stress boundary condition" href="ssafd-cfbc.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="math notranslate nohighlight">
+\[\begin{split}\newcommand{\Diff}[2]{ \frac{\mathrm{d}#1}{\mathrm{d}#2} }
+\newcommand{\diff}[2]{ \frac{\partial #1}{\partial #2} }
+\newcommand{\var}[2]{ {#1}_{\text{#2}} }
+\newcommand{\h}[1]{ \var{h}{#1} }
+\newcommand{\T}[1]{ \var{T}{#1} }
+\newcommand{\m}[1]{ \var{m}{#1} }
+\newcommand{\ms}[1]{ \var{m^{*}}{#1} }
+\newcommand{\psw}{p_{\text{ocean}}}
+\newcommand{\pice}{p_{\text{ice}}}
+\newcommand{\pmelange}{p_{\text{melange}}}
+\newcommand{\n}{\mathbf{n}}
+\newcommand{\nx}{\n_{x}}
+\newcommand{\ny}{\n_{y}}
+\newcommand{\phimin}{\phi_{\mathrm{min}}}
+\newcommand{\phimax}{\phi_{\mathrm{max}}}
+\newcommand{\bmin}{b_{\mathrm{min}}}
+\newcommand{\bmax}{b_{\mathrm{max}}}
+\newcommand{\bq}{\mathbf{q}}
+\newcommand{\Up}[2]{\operatorname{Up}\left(#1\big|#2\right)}
+\newcommand{\uppair}[2]{\left\{\begin{matrix} #1 \\ #2 \end{matrix}\right\}}
+\newcommand{\div}{\nabla \cdot}
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\Wtill}{W_{\mathrm{till}}}\end{split}\]</div>
+<div class="section" id="bombproof-pism-s-numerical-scheme-for-conservation-of-energy">
+<span id="sec-bombproof"></span><h1>BOMBPROOF, PISM’s numerical scheme for conservation of energy<a class="headerlink" href="#bombproof-pism-s-numerical-scheme-for-conservation-of-energy" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>One of the essential goals for any thermomechanically-coupled numerical ice sheet model is
+a completely bombproof numerical scheme for the advection-conduction-reaction problem for
+the conservation of energy within the ice. “Bombproof” means being as stable as possible
+in as many realistic modeling contexts as possible. PISM’s scheme is observed to be highly
+robust in practice, but it is also provably stable in a significant range of
+circumstances. The scheme is special to shallow ice sheets because it makes specific
+tradeoff choices with respect to vertical velocity. It is generic and low order in how it
+treats horizontal velocity. In this page we state the scheme, prove its stability
+properties, and address the basal boundary condition.</p>
+<p>The scheme is conditionally-stable. The length of the time step is limited only by the
+maximum magnitude of the horizontal velocities within the ice, i.e. horizontal CFL. This
+condition for stability is included in the PISM adaptive time-stepping technique.</p>
+<p>Accuracy is necessarily a second goal. Our shallow scheme has truncation error <span class="math notranslate nohighlight">\(O(\Delta
+z^2)\)</span> in many circumstances, though it reverts to lower order when it “detects trouble” in
+the form of large vertical velocities. Overall the scheme has order <span class="math notranslate nohighlight">\(O(\Delta t,\Delta
+x,\Delta y, \Delta z^2)\)</span> in circumstances where the vertical ice flow velocity is small
+enough, relative to conductivity, and otherwise reverts to
+<span class="math notranslate nohighlight">\(O(\Delta t,\Delta x,\Delta y, \Delta z^1)\)</span>.</p>
+<p>The conservation of energy problem for the ice is in terms of an enthalpy field
+<a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id1">[31]</a>. The current scheme supercedes the cold-ice,
+temperature-based scheme described in the appendices of <a class="reference internal" href="../zzz_references_html.html#bbl" id="id2">[26]</a> and in
+<a class="reference internal" href="../zzz_references_html.html#bbssasliding" id="id3">[25]</a>. Compared to a cold-ice scheme, the enthalpy formulation does a
+better job of conserving energy, has a more-physical model for basal melt rate and
+drainage, and can model polythermal ice with any CTS topology
+<a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id4">[31]</a>. The finite difference implementation of the
+enthalpy method is robust and avoids the CFL condition on vertical advection which was
+present in the older, cold-ice scheme.</p>
+<p>The bedrock thermal problem is solved by splitting the timestep into an update of the
+bedrock temperature field, assuming the ice base is as constant temperature, and an update
+of the ice enthalpy field, by the BOMBPROOF scheme here, assuming the upward heat flux
+from the bedrock layer is constant during the timestep. For more on the implementation,
+see the <code class="docutils literal notranslate"><span class="pre">BedThermalUnit</span></code> class.</p>
+<p>The region in which the conservation of energy equation needs to be solved changes over
+time. This is an essential complicating factor in ice sheet modeling. Also relevant is
+that the velocity field has a complicated provenance as it comes from different stress
+balance equations chosen at runtime. These stress balances, especially with transitions in
+flow type, for instance at grounding lines, are incompletely understood when
+thermomechanically-coupled. (The <code class="docutils literal notranslate"><span class="pre">ShallowStressBalance</span></code> instance owned by
+<code class="docutils literal notranslate"><span class="pre">IceModel</span></code> could be the SIA, the SSA, a hybrid of these, or other stress balances in
+future PISM versions.) We will therefore not make, in proving stability, assumptions about
+the regularity of the velocity field in space or time other than boundedness.</p>
+<p>Nor do we want the numerical scheme for advection to need any information about the
+velocity except its value at the beginning of the time step. Thus the conservation of
+energy timestep is assumed to be split from the mass continuity time step and its
+associated stress balance solve. We have not considered implementing a scheme which
+requires the Jacobian of the velocity field with respect to changes in enthalpy, for
+example. At very least such a fully-implicit scheme would require blind iteration (e.g.
+with no guarantee of convergence of the iteration). The scheme we propose involves no such
+iteration.</p>
+</div>
+<div class="section" id="conservation-of-energy-in-a-shallow-ice-sheet">
+<h2>Conservation of energy in a shallow ice sheet<a class="headerlink" href="#conservation-of-energy-in-a-shallow-ice-sheet" title="Permalink to this headline">¶</a></h2>
+<p>In an enthalpy formulation <a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id5">[31]</a> (and references therein),
+the ice sheet is regarded as a mixture of two phases, solid and liquid, so that both cold
+and temperate ice with liquid ice matrix can be modeled. The specific enthalpy field of
+the ice mixture is denoted <span class="math notranslate nohighlight">\(E(x,y,z,t)\)</span> and has units <span class="math notranslate nohighlight">\(J / kg\)</span>. (Within
+the PISM documentation the symbol <span class="math notranslate nohighlight">\(H\)</span> is used for ice thickness so we use <span class="math notranslate nohighlight">\(E\)</span> for enthalpy
+here and in the PISM source code versus “H” in <a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id6">[31]</a>.)
+The conservation of energy equation is</p>
+<div class="math notranslate nohighlight" id="equation-basicenergy">
+<span class="eqno">(41)<a class="headerlink" href="#equation-basicenergy" title="Permalink to this equation">¶</a></span>\[\rho \frac{dE}{dt} = -\nabla \cdot \mathbf{q} + Q,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is the mixture density. The mixture density is assumed to be the same as ice
+density even if there is a nonzero liquid fraction, and the mixture is assumed to be
+incompressible <a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id7">[31]</a>. The left and right sides of
+equation <a class="reference internal" href="#equation-basicenergy">(41)</a>, and thus the quantity <span class="math notranslate nohighlight">\(Q\)</span>, have units
+<span class="math notranslate nohighlight">\(J\,\text{s}^{-1}\,\text{m}^{-3} = \text{W}\,\text{m}^{-3}\)</span>.</p>
+<p>Neglecting the dependence of conductivity and heat capacity on temperature
+<a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id8">[31]</a>, the heat flux in cold ice and temperate ice is</p>
+<div class="math notranslate nohighlight" id="equation-heatflux">
+<span class="eqno">(42)<a class="headerlink" href="#equation-heatflux" title="Permalink to this equation">¶</a></span>\[\begin{split}\mathbf{q} =
+\begin{cases}
+   - \frac{k_i}{c_i} \nabla E, &amp; \text{cold ice}, \\
+   - K_0 \nabla E, &amp; \text{temperate ice},\\
+\end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(k_i,c_i,K_0\)</span> are constant <a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id9">[31]</a>. The nonzero flux
+in the temperate ice case, may be conceptualized as a regularization of the “real”
+equation, or as a flux of latent heat carried by liquid water. Also, <span class="math notranslate nohighlight">\(dE/dt\)</span> stands for
+the material derivative of the enthalpy field, so the expanded form of <a class="reference internal" href="#equation-basicenergy">(41)</a>
+is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\rho \left(\frac{\partial E}{\partial t} + \mathbf{U}\cdot \nabla E\right)
+= \nabla \cdot \left(\left\{\begin{matrix} \frac{k_i}{c_i} \\ K_0 \end{matrix}\right\}
+\nabla E \right) + Q,\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> is the three dimensional velocity, thus advection is included.</p>
+<p>The additive quantity <span class="math notranslate nohighlight">\(Q\)</span> is the dissipation (strain-rate) heating,</p>
+<div class="math notranslate nohighlight">
+\[Q = \sum_{i,j=1}^3 D_{ij} \tau_{ij}\]</div>
+<p>where <span class="math notranslate nohighlight">\(D_{ij}\)</span> is the strain rate tensor and <span class="math notranslate nohighlight">\(\tau_{ij}\)</span> is the deviatoric stress tensor.
+Reference <a class="reference internal" href="../zzz_references_html.html#bbssasliding" id="id10">[25]</a> addresses how this term is computed in PISM, according to
+the shallow stress balance approximations; see
+<code class="docutils literal notranslate"><span class="pre">StressBalance::compute_volumetric_strain_heating()</span></code>. (<span class="math notranslate nohighlight">\(Q\)</span> is called <span class="math notranslate nohighlight">\(\Sigma\)</span> in
+<a class="reference internal" href="../zzz_references_html.html#bbl" id="id11">[26]</a>, <a class="reference internal" href="../zzz_references_html.html#bbssasliding" id="id12">[25]</a> and in many places in the source code.)</p>
+<p>Friction from sliding also is a source of heating. It has units of <span class="math notranslate nohighlight">\(W / m^2 = J / (m^2 s)\)</span>, that
+is, the same units as the heat flux <span class="math notranslate nohighlight">\(\mathbf{q}\)</span> above. In formulas we write</p>
+<div class="math notranslate nohighlight">
+\[F_b = - \tau_b \cdot \mathbf{u}_b,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_b\)</span> is the basal shear stress and <span class="math notranslate nohighlight">\(\mathbf{u}_b\)</span> is the basal sliding velocity;
+the basal shear stress is oppositely-directed to the basal velocity. For example, in the
+plastic case <span class="math notranslate nohighlight">\(\tau_b = - \tau_c \mathbf{u}_b / |\mathbf{u}_b|\)</span> where <span class="math notranslate nohighlight">\(\tau_c\)</span> is a
+positive scalar, the yield stress. See method
+<code class="docutils literal notranslate"><span class="pre">StressBalance::basal_frictional_heating()</span></code>. The friction heating is concentrated at
+<span class="math notranslate nohighlight">\(z=0\)</span>, and it enters into the basal boundary condition and melt rate calculation,
+addressed in section <a class="reference internal" href="#sec-melt"><span class="std std-ref">Temperate basal boundary condition, and computing the basal melt rate</span></a> below.</p>
+<p>We use a shallow approximation of equation <a class="reference internal" href="#equation-basicenergy">(41)</a> which lacks horizontal
+conduction terms  <a class="reference internal" href="../zzz_references_html.html#fowler" id="id13">[27]</a>.  For the initial analysis of the core BOMBPROOF
+scheme, we specialize to cold ice.  Within cold ice, the coefficient in the heat
+flux is constant, so</p>
+<div class="math notranslate nohighlight">
+\[\nabla \cdot \mathbf{q} = - \frac{k_i}{c_i} \frac{\partial^2 E}{\partial z^2}.\]</div>
+<p>Therefore the equation we initially analyze is</p>
+<div class="math notranslate nohighlight" id="equation-basicshallow">
+<span class="eqno">(43)<a class="headerlink" href="#equation-basicshallow" title="Permalink to this equation">¶</a></span>\[\rho_i \left(\frac{\partial E}{\partial t} + \mathbf{U}\cdot \nabla E\right) = \frac{k_i}{c_i} \frac{\partial^2 E}{\partial z^2} + Q,\]</div>
+<p>We focus the analysis on the direction in which the enthalpy has largest derivative,
+namely with respect to the vertical coordinate <span class="math notranslate nohighlight">\(z\)</span>.  Rewriting equation
+<a class="reference internal" href="#equation-basicshallow">(43)</a> to emphasize the vertical terms we have</p>
+<div class="math notranslate nohighlight" id="equation-vertproblem">
+<span class="eqno">(44)<a class="headerlink" href="#equation-vertproblem" title="Permalink to this equation">¶</a></span>\[ \rho_i \left(\frac{\partial E}{\partial t} + w \frac{\partial E}{\partial z}\right)
+      = \frac{k_i}{c_i}  \frac{\partial^2 E}{\partial z^2} + \Phi\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\Phi = Q - \rho_i \left(u \frac{\partial E}{\partial x}
++ v \frac{\partial E}{\partial y}\right)\]</div>
+<p>We assume that the surface enthalpy <span class="math notranslate nohighlight">\(E_s(t,x,y)\)</span> (K) and the geothermal flux <span class="math notranslate nohighlight">\(G(t,x,y)\)</span>
+(<span class="math notranslate nohighlight">\(W / m^2\)</span>) at <span class="math notranslate nohighlight">\(z=0\)</span> are given. (The latter is the output of the <code class="docutils literal notranslate"><span class="pre">energy::BedThermalUnit</span></code>
+object, and it may come from an evolving temperature field within the upper crust, the
+bedrock layer. If a surface temperature is given then it will be converted to enthalpy by
+the <code class="docutils literal notranslate"><span class="pre">EnthalpyConverter</span></code> class.) The boundary conditions to problem <a class="reference internal" href="#equation-vertproblem">(44)</a>
+are, therefore,</p>
+<div class="math notranslate nohighlight" id="equation-columnbcs">
+<span class="eqno">(45)<a class="headerlink" href="#equation-columnbcs" title="Permalink to this equation">¶</a></span>\[\begin{split}E(t,x,y,z=H) &amp;=E_s(t,x,y),\\
+-\frac{k_i}{c_i} \frac{\partial E}{\partial z}\Big|_{z=0} &amp;= G.\end{split}\]</div>
+<p>For a temperate ice base, including any ice base below which there is liquid water,
+the lower boundary condition is more interesting.  It is addressed below in section
+<a class="reference internal" href="#sec-melt"><span class="std std-ref">Temperate basal boundary condition, and computing the basal melt rate</span></a>.</p>
+</div>
+<div class="section" id="the-core-bombproof-scheme">
+<h2>The core BOMBPROOF scheme<a class="headerlink" href="#the-core-bombproof-scheme" title="Permalink to this headline">¶</a></h2>
+<p>For the discussion of the numerical scheme below, let <span class="math notranslate nohighlight">\(E_{ijk}^n\)</span> be our approximation to
+the exact enthalpy <span class="math notranslate nohighlight">\(E\)</span> at the grid point with coordinates <span class="math notranslate nohighlight">\((x_i,y_j,z_k)\)</span> at time <span class="math notranslate nohighlight">\(t_n\)</span>.
+When <span class="math notranslate nohighlight">\(i,j\)</span> are uninteresting we suppress them and write <span class="math notranslate nohighlight">\(E_k^n\)</span>, and we will use similar
+notation for numerical approximations to the other quantities. We put the horizontal
+advection terms in the source term <span class="math notranslate nohighlight">\(\Phi\)</span> because we treat them explicitly, evaluating at
+time <span class="math notranslate nohighlight">\(t_n\)</span>. (Implicit or semi-implicit treatment of horizontal advection would require a
+coupled system distributed across processors, a difficulty which is currently avoided.)</p>
+<p>The scheme we use for horizontal advection is explicit first-order upwinding. There is a
+CFL condition for the scheme to be stable, in the absence of conduction, based on the
+magnitude of the horizontal velocity components. To state the upwind scheme itself, let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Up{f_{\bullet}}{\alpha} =
+\begin{cases}
+  f_i-f_{i-1}, &amp; \alpha \ge 0, \\
+  f_{i+1}-f_i, &amp; \alpha &lt; 0.
+\end{cases}\end{split}\]</div>
+<p>The approximate horizontal advection terms, and thus the approximation to the whole
+term <span class="math notranslate nohighlight">\(\Phi\)</span>, are</p>
+<div class="math notranslate nohighlight">
+\[\Phi_{ijk}^n = \Sigma_{ijk}^n - \rho_i
+\left( u_{ijk}^n\,\frac{\Up{E_{\bullet jk}^n}{u_{ijk}^n}}{\Delta x}
++ v_{ijk}^n\,\frac{\Up{E_{i\bullet k}^n}{v_{ijk}^n}}{\Delta y} \right).\]</div>
+<p>The CFL stability condition for this part of the scheme is</p>
+<div class="math notranslate nohighlight" id="equation-cfl">
+<span class="eqno">(46)<a class="headerlink" href="#equation-cfl" title="Permalink to this equation">¶</a></span>\[\Delta t \,\left( \left|\frac{u_{ijk}^n}{\Delta x}\right|
++ \left|\frac{v_{ijk}^n}{\Delta y}\right| \right) \le 1.\]</div>
+<p>The routine <code class="docutils literal notranslate"><span class="pre">max_timestep_cfl_3d()</span></code> computes the maximum of velocity
+magnitudes. This produces a time step restriction based on the above CFL condition. Then
+<code class="docutils literal notranslate"><span class="pre">IceModel::max_timestep()</span></code> implements adaptive time-stepping based on this and
+other stability criteria.</p>
+<p>In the analysis below we assume an equally-spaced grid <span class="math notranslate nohighlight">\(z_0,\dots,z_{M_z}\)</span>
+with <span class="math notranslate nohighlight">\(\Delta z = z_{k+1} - z_k\)</span>.  In fact PISM has a remapping scheme in each
+column, wherein the enthalpy in a column of ice is stored on an unequally-spaced
+vertical grid, but is mapped to a fine, equally-spaced grid for the conservation
+of energy computation described here.  (Similar structure applies to the age
+computation.  See classes <code class="docutils literal notranslate"><span class="pre">EnthalpyModel</span></code> and <code class="docutils literal notranslate"><span class="pre">AgeModel</span></code>.)</p>
+<p>The <span class="math notranslate nohighlight">\(z\)</span> derivative terms in <a class="reference internal" href="#equation-vertproblem">(44)</a> will be approximated implicitly. Let
+<span class="math notranslate nohighlight">\(\lambda\)</span> be in the interval <span class="math notranslate nohighlight">\(0 \le \lambda \le 1\)</span>. Suppressing indices <span class="math notranslate nohighlight">\(i,j\)</span>, the
+approximation to <a class="reference internal" href="#equation-vertproblem">(44)</a> is</p>
+<div class="math notranslate nohighlight" id="equation-bombone">
+<span class="eqno">(47)<a class="headerlink" href="#equation-bombone" title="Permalink to this equation">¶</a></span>\[\begin{split} \rho_i &amp;\left(
+        \frac{E_k^{n+1} - E_k^n}{\Delta t}
+        + \lambda w_k^n \frac{E_{k+1}^{n+1} - E_{k-1}^{n+1}}{2 \Delta z}
+        + (1-\lambda) w_k^{n} \frac{\Up{E_{\bullet}^{n+1}}{w_k^{n}}}{\Delta z} \right) \\
+      &amp;= \frac{k_i}{c_i}\, \frac{E_{k+1}^{n+1} - 2 E_{k}^{n+1} + E_{k-1}^{n+1}}{\Delta z^2} + \Phi_k^n.\end{split}\]</div>
+<p>Equation <a class="reference internal" href="#equation-bombone">(47)</a>, along with a determination of <span class="math notranslate nohighlight">\(\lambda\)</span> by
+<a class="reference internal" href="#equation-lambdachoice">(51)</a> below, is the scheme BOMBPROOF.  It includes two approximations
+of vertical advection,  implicit centered difference  (<span class="math notranslate nohighlight">\(\lambda = 1\)</span>) and
+implicit first-order upwinding (<span class="math notranslate nohighlight">\(\lambda=0\)</span>).  They are combined using
+nonnegative coefficients which sum to one, a convex combination.  The centered
+formula has higher accuracy,</p>
+<div class="math notranslate nohighlight">
+\[w_k^n \frac{E_{k+1}^{n+1} - E_{k-1}^{n+1}}{2 \Delta z}
+= w \frac{\partial E}{\partial z} + O(\Delta t,\Delta z^2),\]</div>
+<p>while the first order upwind formula has lower accuracy,</p>
+<div class="math notranslate nohighlight">
+\[w_k^{n} \frac{\Up{E_{\bullet}^{n+1}}{w_k^{n}}}{\Delta z}
+= w \frac{\partial E}{\partial z} + O(\Delta t,\Delta z).\]</div>
+<p>Thus we prefer to use the centered formula when possible, but we apply (implicit)
+upwinding when it is needed for its added stability benefits.</p>
+<p>We now rewrite <a class="reference internal" href="#equation-bombone">(47)</a> for computational purposes as one of a system of equations
+for the unknowns <span class="math notranslate nohighlight">\(\{E_k^{n+1}\}\)</span>.  In this system the coefficients will be
+scaled so that the diagonal entries of the matrix have limit one as
+<span class="math notranslate nohighlight">\(\Delta t\to 0\)</span>.  Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\nu &amp;= \frac{\Delta t}{\Delta z},\\
+R &amp;= \frac{k_i \Delta t}{\rho_i c_i \Delta z^2}.\end{split}\]</div>
+<p>Now multiply equation <a class="reference internal" href="#equation-bombone">(47)</a> by <span class="math notranslate nohighlight">\(\Delta t\)</span>, divide it by <span class="math notranslate nohighlight">\(\rho_i\)</span>,
+and rearrange:</p>
+<div class="math notranslate nohighlight" id="equation-bombtwo">
+<span class="eqno">(48)<a class="headerlink" href="#equation-bombtwo" title="Permalink to this equation">¶</a></span>\[\begin{split} \left(-R - \nu w_k^n \uppair{1-\lambda/2}{\lambda/2}\right) E_{k-1}^{n+1}\\ +
+ \left(1 + 2 R + \nu w_k^n (1-\lambda) \uppair{+1}{-1}\right) E_k^{n+1}\\ +
+ \left(-R + \nu w_k^n \uppair{\lambda/2}{1-\lambda/2} \right) E_{k+1}^{n+1}\\
+ = E_k^n + \Delta t \rho_i^{-1}\Phi_k^n\end{split}\]</div>
+<p>Here <span class="math notranslate nohighlight">\(\uppair{a}{b} = a\)</span> when <span class="math notranslate nohighlight">\(w_k^n\ge 0\)</span> and <span class="math notranslate nohighlight">\(\uppair{a}{b} = b\)</span> when <span class="math notranslate nohighlight">\(w_k^n &lt; 0\)</span>.</p>
+<p>Equation <a class="reference internal" href="#equation-bombtwo">(48)</a> has coefficients which are scaled to have no units.  It is
+ready to be put in the system managed by <code class="docutils literal notranslate"><span class="pre">enthSystemCtx</span></code>.</p>
+<p>One way of stating the stability of first-order upwinding is to say it satisfies
+a  “maximum principle” <a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id14">[144]</a>.  An example of a maximum principle
+for this kind of finite difference scheme is that if <span class="math notranslate nohighlight">\(U_{k-1}^n,U_k^n,U_{k+1}^n\)</span>
+are adjacent gridded values of some abstract quantity at time step <span class="math notranslate nohighlight">\(t_n\)</span>, and
+if the next value satisfies the scheme</p>
+<div class="math notranslate nohighlight" id="equation-abstractexplicit">
+<span class="eqno">(49)<a class="headerlink" href="#equation-abstractexplicit" title="Permalink to this equation">¶</a></span>\[U_k^{n+1} = C_{-1} U_{k-1}^n + C_0 U_k^n + C_{+1} U_{k+1}^n\]</div>
+<p>for <em>nonnegative</em> coefficients <span class="math notranslate nohighlight">\(C_i\)</span> summing to one, <span class="math notranslate nohighlight">\(C_{-1} + C_0 + C_{+1} = 1\)</span>, then it
+follows by the triangle inequality that</p>
+<div class="math notranslate nohighlight">
+\[\min\{|U_{k-1}^n|, |U_k^n|, |U_{k+1}^n|\}
+\le |U_k^{n+1}| \le \max\{|U_{k-1}^n|, |U_k^n|, |U_{k+1}^n|\}.\]</div>
+<p>Thus a “wiggle” cannot appear in <span class="math notranslate nohighlight">\(\{U_k^{n+1}\}\)</span> if previous values <span class="math notranslate nohighlight">\(\{U_k^n\}\)</span> were
+smoother. The proof below shows the corresponding “wiggle-free” property for scheme <a class="reference internal" href="#equation-bombtwo">(48)</a>.</p>
+<p>However, the pure implicit centered difference scheme (<span class="math notranslate nohighlight">\(\lambda=1\)</span>), namely</p>
+<div class="math notranslate nohighlight" id="equation-centered">
+<span class="eqno">(50)<a class="headerlink" href="#equation-centered" title="Permalink to this equation">¶</a></span>\[\begin{split} &amp;\left(-R - \nu w_k^n/2\right) E_{k-1}^{n+1} + \left(1 + 2 R\right) E_k^{n+1} \\
+ &amp;+ \left(-R + \nu w_k^n/2\right) E_{k+1}^{n+1}
+ = E_k^n + \Delta t \rho_i^{-1}\Phi_k^n\end{split}\]</div>
+<p>is <em>less stable</em> than implicit first-order upwinding. It is less stable in the same sense
+that Crank-Nicolson is a less stable scheme than backwards Euler for the simplest heat
+equation <span class="math notranslate nohighlight">\(u_t = u_{xx}\)</span> <a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id15">[144]</a>. In fact, although oscillatory modes cannot
+grow exponentially under equation <a class="reference internal" href="#equation-centered">(50)</a>, those modes <em>can</em> appear when none are
+present already, even in the homogeneous case <span class="math notranslate nohighlight">\(\Phi_k^n=0\)</span>.</p>
+</div>
+<div class="section" id="stability-properties-of-the-bombproof-scheme">
+<h2>Stability properties of the BOMBPROOF scheme<a class="headerlink" href="#stability-properties-of-the-bombproof-scheme" title="Permalink to this headline">¶</a></h2>
+<p>We want to be precise about the phrase “unconditionally stable” for BOMBPROOF.
+To do so we consider somewhat simplified cases which are amenable to analysis, and
+we prove two stability properties.  These stability properties identify the
+precise advantages of BOMBPROOF.</p>
+<div class="section" id="theorem-stating-the-stability-properties">
+<h3>Theorem (stating the stability properties).<a class="headerlink" href="#theorem-stating-the-stability-properties" title="Permalink to this headline">¶</a></h3>
+<p>Assume, for the precise but limited assertion of this theorem, that the surface
+temperature <span class="math notranslate nohighlight">\(T_s\)</span> and the geothermal flux <span class="math notranslate nohighlight">\(G\)</span> are constant in time. Assume also that the
+entire source function <span class="math notranslate nohighlight">\(\Phi\)</span> is identically zero (but see comments below). Fix an
+equally-spaced vertical grid <span class="math notranslate nohighlight">\(z_0=0 &lt; z_1 &lt; \dots &lt; z_N=H\)</span>, so that the upper grid point
+coincides with the surface of the ice. With these assumptions, if</p>
+<div class="math notranslate nohighlight" id="equation-lambdachoice">
+<span class="eqno">(51)<a class="headerlink" href="#equation-lambdachoice" title="Permalink to this equation">¶</a></span>\[\lambda = \min
+\left\{
+1, \min_{k=0,\dots,N} \left\{ \frac{2 k_i}{|w_k^n| \rho_i c_i \Delta z} \right\}
+\right\},\]</div>
+<p>reset at each time step <span class="math notranslate nohighlight">\(n\)</span>, then scheme <a class="reference internal" href="#equation-bombone">(47)</a>, <a class="reference internal" href="#equation-bombtwo">(48)</a> is
+unconditionally-stable in the following two senses:</p>
+<ol class="arabic simple">
+<li>A maximum principle applies without further assumptions.</li>
+<li>Suppose we freeze the coefficients of the problem to have constant values in time and
+space. (Concretely, we assume that <span class="math notranslate nohighlight">\(\lambda\)</span> is chosen independently of the time step
+<span class="math notranslate nohighlight">\(n\)</span>, and that <span class="math notranslate nohighlight">\(\Delta t\)</span> is the same for each time step. We assume constant vertical
+velocity <span class="math notranslate nohighlight">\(w_k^n=w_0\)</span>. We also consider a spatially-periodic or unbounded version of our
+problem, with no boundary conditions.) Then a von Neumann analysis of the constant
+coefficient problem yields a growth factor less than one for all modes on the grid.</li>
+</ol>
+</div>
+<div class="section" id="remarks">
+<h3>Remarks<a class="headerlink" href="#remarks" title="Permalink to this headline">¶</a></h3>
+<p>The phrases <em>maximum principle</em> and <em>von Neumann analysis</em> will be precisely illustrated
+in the following proof. Both approaches are in <a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id16">[144]</a>. There is additional
+information on the von Neumann analysis of implicit finite difference methods for
+advection in <a class="reference internal" href="../zzz_references_html.html#strikwerda" id="id17">[145]</a>.</p>
+<p>These statements also apply in case <span class="math notranslate nohighlight">\(k_i=0\)</span>, in which case <a class="reference internal" href="#equation-lambdachoice">(51)</a> implies
+<span class="math notranslate nohighlight">\(\lambda=0\)</span>, and the method reduces to implicit first-order upwinding. (Implicit
+first-order upwinding has properties 1 and 2 <a class="reference internal" href="../zzz_references_html.html#strikwerda" id="id18">[145]</a>.) The case <span class="math notranslate nohighlight">\(k_i=0\)</span> is
+relevant because it applies to the least-transport model of temperate ice in which there
+is zero enthalpy conduction. (One reasonable model for temperate ice is to assume no
+transport of the liquid fraction, whether diffusive transport or otherwise, and to ignore
+conduction along the temperature gradient, because the gradient is only from
+pressure-melting temperature differences.)</p>
+</div>
+<div class="section" id="proof-of-1">
+<h3>Proof of 1<a class="headerlink" href="#proof-of-1" title="Permalink to this headline">¶</a></h3>
+<p>In the case considered for the maximum principle, with <span class="math notranslate nohighlight">\(\Phi_k^n=0\)</span>,
+we can rewrite <a class="reference internal" href="#equation-bombtwo">(48)</a> as</p>
+<div class="math notranslate nohighlight" id="equation-formax">
+<span class="eqno">(52)<a class="headerlink" href="#equation-formax" title="Permalink to this equation">¶</a></span>\[\begin{split} &amp;\left(1 + 2 R + \nu w_k^n (1-\lambda) \uppair{+1}{-1}\right) E_k^{n+1} \\
+ &amp;= E_k^n + \left(R + \nu w_k^n \uppair{1-\lambda/2}{\lambda/2}\right) E_{k-1}^{n+1}
+                 + \left(R - \nu w_k^n \uppair{\lambda/2}{1-\lambda/2}\right) E_{k+1}^{n+1}.\end{split}\]</div>
+<p>We claim that with choice <a class="reference internal" href="#equation-lambdachoice">(51)</a> for <span class="math notranslate nohighlight">\(0 \le \lambda \le 1\)</span>, all
+coefficients in <a class="reference internal" href="#equation-formax">(52)</a> are nonnegative.  At one extreme, in
+the upwinding case (<span class="math notranslate nohighlight">\(\lambda=0\)</span>), all the coefficients are nonnegative.  Otherwise, note that
+<span class="math notranslate nohighlight">\(\nu w_k^n (1-\lambda) \uppair{+1}{-1}\)</span> is nonnegative for any valid value
+of <span class="math notranslate nohighlight">\(\lambda\)</span> and for any value of <span class="math notranslate nohighlight">\(w_k^n\)</span>, noting the meaning of the <span class="math notranslate nohighlight">\(\uppair{+1}{-1}\)</span>
+symbol.  Thus the coefficient on the left is always nonnegative.  The coefficient of
+<span class="math notranslate nohighlight">\(E_{k-1}^{n+1}\)</span> is clearly nonnegative for any valid value of <span class="math notranslate nohighlight">\(\lambda\)</span> if <span class="math notranslate nohighlight">\(w_k^n \ge 0\)</span>.
+The coefficient of <span class="math notranslate nohighlight">\(E_{k+1}^{n+1}\)</span> is clearly nonnegative for any valid value of <span class="math notranslate nohighlight">\(\lambda\)</span> if
+<span class="math notranslate nohighlight">\(w_k^n \le 0\)</span>.</p>
+<p>Therefore the only concerns are for the coefficient of <span class="math notranslate nohighlight">\(E_{k-1}^{n+1}\)</span> when <span class="math notranslate nohighlight">\(w_k^n\le 0\)</span> and the
+coefficient of <span class="math notranslate nohighlight">\(E_{k+1}^{n+1}\)</span> when <span class="math notranslate nohighlight">\(w_k^n\ge 0\)</span>.  But if <span class="math notranslate nohighlight">\(\lambda\)</span> is smaller than
+<span class="math notranslate nohighlight">\(2k_i/(|w_k^n| \rho_i c_i \Delta z)\)</span> then</p>
+<div class="math notranslate nohighlight">
+\[R - \nu |w_k^n| (\lambda/2) = \frac{k_i \Delta t}{\rho_i c_i \Delta z^2} - \frac{\Delta t |w_k^n|}{\Delta z} \frac{\lambda}{2} \ge \frac{k_i \Delta t}{\rho_i c_i \Delta z^2}
+ - \frac{\Delta t |w_k^n|}{\Delta z} \frac{k_i}{|w_k^n| \rho_i c_i \Delta z} = 0.\]</div>
+<p>Thus all the coefficients in <a class="reference internal" href="#equation-formax">(52)</a> are nonnegative.  On the other hand, in equation <a class="reference internal" href="#equation-formax">(52)</a>, all coefficients on the right side sum to</p>
+<div class="math notranslate nohighlight">
+\[1+2R+\nu w_k^n \uppair{1-\lambda}{-1+\lambda} = 1+2R+\nu w_k^n (1-\lambda) \uppair{+1}{-1},\]</div>
+<p>which is exactly the coefficient on the left side of <a class="reference internal" href="#equation-formax">(52)</a>.  It follows that</p>
+<div class="math notranslate nohighlight">
+\[E_k^{n+1} = a_k E_k^n + b_k E_{k-1}^{n+1} + c_k E_{k+1}^{n+1}\]</div>
+<p>where <span class="math notranslate nohighlight">\(a_k,b_k,c_k\)</span> are positive and <span class="math notranslate nohighlight">\(a_k+b_k+c_k=1\)</span>. Thus a maximum principle applies
+<a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id19">[144]</a>. <strong>END OF PROOF OF 1.</strong></p>
+</div>
+<div class="section" id="proof-of-2">
+<h3>Proof of 2<a class="headerlink" href="#proof-of-2" title="Permalink to this headline">¶</a></h3>
+<p>As a von Neumann analysis is much more restrictive than the analysis above, we will be brief.
+Let’s assume the velocity is downward, <span class="math notranslate nohighlight">\(w_0&lt;0\)</span>; the other case is similar.  Equation
+<a class="reference internal" href="#equation-bombtwo">(48)</a> becomes</p>
+<div class="math notranslate nohighlight" id="equation-prevon">
+<span class="eqno">(53)<a class="headerlink" href="#equation-prevon" title="Permalink to this equation">¶</a></span>\[\begin{split} &amp;\left(-R - \nu w_0 (\lambda/2)\right) E_{k-1}^{n+1}
+ + \left(1 + 2 R - \nu w_0 (1-\lambda)\right) E_k^{n+1} \\
+ &amp; + \left(-R + \nu w_0 (1-\lambda/2) \right) E_{k+1}^{n+1}  = E_k^n.\end{split}\]</div>
+<p>The heart of the von Neumann analysis is the substitution of a growing or decaying
+(in time index <span class="math notranslate nohighlight">\(n\)</span>) oscillatory mode on the grid of spatial wave number <span class="math notranslate nohighlight">\(\mu\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[E_k^n = \sigma^n e^{i\mu\,(k\Delta z)}.\]</div>
+<p>Here <span class="math notranslate nohighlight">\(k\Delta z = z_k\)</span> is a grid point. Such a mode is a solution to <a class="reference internal" href="#equation-prevon">(53)</a> if and
+only if</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\sigma\Big[  &amp;(-R - \nu w_0(\lambda/2)) e^{-i\mu\Delta z}
++ (1 + 2 R - \nu w_0 (1-\lambda)) \\
+&amp;+ (-R  + \nu w_0 (\lambda/2)) e^{+i\mu\Delta z}
++ \nu w_0 (1-\lambda) e^{+i\mu\Delta z} \Big] = 1.\end{split}\]</div>
+<p>This equation reduces by standard manipulations to</p>
+<div class="math notranslate nohighlight">
+\[\sigma = \frac{1}{1 + \left(4 R - 2 \nu w_0 (1-\lambda)\right)\cos^2(\mu \Delta z/2)
++ i\,\nu w_0 (1-\lambda/2)\sin(\mu\Delta z)}.\]</div>
+<p>Note <span class="math notranslate nohighlight">\(4 R - 2 \nu w_0 (1-\lambda) \ge 0\)</span> without restrictions on
+numerical parameters <span class="math notranslate nohighlight">\(\Delta t\)</span>, <span class="math notranslate nohighlight">\(\Delta z\)</span>, because <span class="math notranslate nohighlight">\(w_0&lt;0\)</span> in the
+case under consideration.  Therefore</p>
+<div class="math notranslate nohighlight">
+\[|\sigma|^2 = \frac{1}{\left[1 + \left(4 R - 2 \nu w_0 (1-\lambda)\right)
+\cos^2(\mu \Delta z/2)\right]^2
++ \left[\nu w_0 (1-\lambda/2)\sin(\mu\Delta z)\right]^2}.\]</div>
+<p>This positive number is less than one, so <span class="math notranslate nohighlight">\(|\sigma| &lt; 1\)</span>.  It follows that all
+modes decay exponentially.
+<strong>END OF PROOF OF 2.</strong></p>
+</div>
+<div class="section" id="remark-about-our-von-neumann-stability-analysis">
+<h3>Remark about our von Neumann stability analysis<a class="headerlink" href="#remark-about-our-von-neumann-stability-analysis" title="Permalink to this headline">¶</a></h3>
+<p>The constant <span class="math notranslate nohighlight">\(\lambda\)</span> is carefully chosen in <a class="reference internal" href="#equation-lambdachoice">(51)</a> so that the maximum
+principle 1 applies. On the other hand, both the implicit first-order upwind and the
+implicit centered difference formulas have unconditional stability in the von Neumann
+sense. The proof of case 2 above is thus a formality, merely showing that a convex
+combination of unconditionally stable (von Neumann sense) schemes is still unconditionally
+stable in the same sense.</p>
+</div>
+<div class="section" id="convergence-a-consequence-of-the-maximum-principle">
+<h3>Convergence: a consequence of the maximum principle<a class="headerlink" href="#convergence-a-consequence-of-the-maximum-principle" title="Permalink to this headline">¶</a></h3>
+<p>If we define the pointwise numerical error <span class="math notranslate nohighlight">\(e_k^n = E_k^n - E(t_n,x_i,y_j,z_k)\)</span>,
+where <span class="math notranslate nohighlight">\(E(\dots)\)</span> is the unknown exact solution (exact enthalpy field) <a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id20">[144]</a>,
+then <a class="reference internal" href="#equation-formax">(52)</a> implies an equality of the form</p>
+<div class="math notranslate nohighlight">
+\[A e_k^{n+1} = e_k^n + B_- e_{k-1}^{n+1} + B_+ e_{k+1}^{n+1} + \Delta t\, \tau_k^n\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_k^n\)</span> is the truncation error of the scheme and <span class="math notranslate nohighlight">\(A,B_\pm\)</span> are nonnegative
+coefficients, which need no detail for now other than to note that <span class="math notranslate nohighlight">\(1 + B_- + B_+ = A\)</span>.
+Letting <span class="math notranslate nohighlight">\({\bar e}^n = \max_k |e_k^n|\)</span> we have, because of the positivity of coefficients,</p>
+<div class="math notranslate nohighlight" id="equation-prebound">
+<span class="eqno">(54)<a class="headerlink" href="#equation-prebound" title="Permalink to this equation">¶</a></span>\[ A |e_k^{n+1}| \le {\bar e}^n + \left(B_- + B_+\right){\bar e}^{n+1} + \Delta t\,\bar\tau^n\]</div>
+<p>for all <span class="math notranslate nohighlight">\(k\)</span>, where <span class="math notranslate nohighlight">\(\bar\tau^n = \max_k |\tau_k^n|\)</span>.  Now let <span class="math notranslate nohighlight">\(k\)</span> be the index for
+which <span class="math notranslate nohighlight">\(|e_k^{n+1}| = {\bar e}^{n+1}\)</span>.  For that <span class="math notranslate nohighlight">\(k\)</span> we can replace <span class="math notranslate nohighlight">\(|e_k^{n+1}|\)</span> in
+equation <a class="reference internal" href="#equation-prebound">(54)</a> with <span class="math notranslate nohighlight">\({\bar e}^{n+1}\)</span>.  Subtracting the same quantity from
+each side of the resulting inequality gives</p>
+<div class="math notranslate nohighlight">
+\[{\bar e}^{n+1} \le {\bar e}^n + \Delta t\,\bar\tau^n,\]</div>
+<p>It follows that <span class="math notranslate nohighlight">\(\bar e^n \le C \Delta t\)</span>, for some finite <span class="math notranslate nohighlight">\(C\)</span>, if <span class="math notranslate nohighlight">\(\bar e^0 = 0\)</span>
+<a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id21">[144]</a>.  Thus a maximum principle for BOMBPROOF implies convergence
+in the standard way <a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id22">[144]</a>.  This convergence proof has the same
+assumptions as case 1 in the theorem, and thus it only <em>suggests</em> convergence
+in any broad range of glaciologically-interesting cases.</p>
+</div>
+<div class="section" id="remark-on-nonzero-source-term">
+<h3>Remark on nonzero source term<a class="headerlink" href="#remark-on-nonzero-source-term" title="Permalink to this headline">¶</a></h3>
+<p>Now recall we assumed in Theorem 1 that the entire “source” <span class="math notranslate nohighlight">\(\Phi_k^n\)</span> was identically zero.
+Of course this is not realistic.  What we understand is provable, however, is that if a
+numerical scheme for a linear advection/conduction equation</p>
+<div class="math notranslate nohighlight">
+\[u_t + A u_x = B u_{xx}\]</div>
+<p>is stable in the general sense of numerical schemes for partial differential equations
+(e.g. as defined in subsection 5.5 of <a class="reference internal" href="../zzz_references_html.html#mortonmayers" id="id23">[144]</a>) then the same scheme is stable
+in the same general sense when applied to the equation with (linear) lower order terms:</p>
+<div class="math notranslate nohighlight">
+\[u_t + A u_x = B u_{xx} + C u + D.\]</div>
+<p>A precise statement of this general fact is hard to find in the literature, to put it
+mildly, but theorem 2.2.3 of <a class="reference internal" href="../zzz_references_html.html#strikwerda" id="id24">[145]</a> is one interesting case (<span class="math notranslate nohighlight">\(B=0\)</span> and <span class="math notranslate nohighlight">\(D=0\)</span>).
+But even the form we state with linear term (<span class="math notranslate nohighlight">\(C u + D\)</span>) is not adequate to the job because
+of the strongly-nonlinear dependence of <span class="math notranslate nohighlight">\(\Phi\)</span> on the temperature <span class="math notranslate nohighlight">\(T\)</span> <a class="reference internal" href="../zzz_references_html.html#bbl" id="id25">[26]</a>.</p>
+<p>Nonetheless the maximum principle is a highly-desirable form of stability because we can
+exclude “wiggles” from the finite difference approximations of the conductive and
+advective terms, even if the complete physics, with strain heating in particular, is not
+yet shown to be non-explosive. Because the complete physics includes the appearance of the
+famous “spokes” of EISMINT II, for example, a maximum principle cannot apply too
+literally. Indeed there is an underlying fluid instability <a class="reference internal" href="../zzz_references_html.html#bbl" id="id26">[26]</a>, one that means the
+solution of the continuum equations can include growing “wiggles” which are fluid features
+(though not at the grid-based spatial frequency of the usual numerical wiggles). Recall
+that, because we use first-order upwinding on the horizontal advection terms, we can
+expect maximum principle-type stability behavior of the whole three-dimensional scheme.</p>
+</div>
+</div>
+<div class="section" id="temperate-basal-boundary-condition-and-computing-the-basal-melt-rate">
+<span id="sec-melt"></span><h2>Temperate basal boundary condition, and computing the basal melt rate<a class="headerlink" href="#temperate-basal-boundary-condition-and-computing-the-basal-melt-rate" title="Permalink to this headline">¶</a></h2>
+<p>At the bottom of grounded ice, a certain amount of heat comes out of the earth and either
+enters the ice through conduction or melts the base of the ice. On the one hand, see the
+documentation for <code class="docutils literal notranslate"><span class="pre">BedThermalUnit</span></code> for the model of how much comes out of the
+earth. On the other hand, <a class="reference internal" href="../zzz_references_html.html#aschwandenbuelerkhroulevblatter" id="id27">[31]</a> includes a careful
+analysis of the subglacial layer equation and the corresponding boundary conditions and
+basal melt rate calculation, and the reader should consult that reference.</p>
+<div class="section" id="regarding-the-floating-case">
+<h3>Regarding the floating case<a class="headerlink" href="#regarding-the-floating-case" title="Permalink to this headline">¶</a></h3>
+<p>The shelf base temperature <span class="math notranslate nohighlight">\(T_{sb}\)</span> and the melt rate <span class="math notranslate nohighlight">\(M\)</span> are supplied by <code class="docutils literal notranslate"><span class="pre">OceanModel</span></code>.
+Note that we make the possibly-peculiar physical choice that the shelf base temperature is
+used as the temperature at the <em>top of the bedrock</em>, which is actually the bottom of the
+ocean. This choice means that there should be no abrupt changes in top-of-bedrock heat
+flux as the grounding line moves. This choice also means that the conservation of energy
+code does not need to know about the bedrock topography or the elevation of sea level. (In
+the future <code class="docutils literal notranslate"><span class="pre">OceanModel</span></code> could have a <code class="docutils literal notranslate"><span class="pre">subshelf_bed_temperature()</span></code> method.)</p>
+</div>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="ssafd-cfbc.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="steady-hydrology.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Technical notes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cf-standard-names.html">CF standard names used by PISM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vertchange.html">On the vertical coordinate in PISM, and a critical change of variable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bed_roughness.html">Using Schoof’s parameterized bed roughness technique in PISM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssafd-cfbc.html">Calving front stress boundary condition</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">BOMBPROOF, PISM’s numerical scheme for conservation of energy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conservation-of-energy-in-a-shallow-ice-sheet">Conservation of energy in a shallow ice sheet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-core-bombproof-scheme">The core BOMBPROOF scheme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stability-properties-of-the-bombproof-scheme">Stability properties of the BOMBPROOF scheme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#temperate-basal-boundary-condition-and-computing-the-basal-melt-rate">Temperate basal boundary condition, and computing the basal melt rate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="steady-hydrology.html">Computing steady-state subglacial water flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_checklist.html">Release checklist</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

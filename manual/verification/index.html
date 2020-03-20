@@ -1,0 +1,369 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Verification &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sample convergence plots" href="convergence-figures.html" />
+    <link rel="prev" title="MISMIP3d" href="../simplified-geometry/mismip3d.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="verification">
+<span id="sec-verif"></span><h1>Verification<a class="headerlink" href="#verification" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>Two types of errors may be distinguished: modeling errors and numerical errors. Modeling
+errors arise from not solving the right equations. Numerical errors result from not
+solving the equations right. The assessment of modeling errors is <em>validation</em>, whereas
+the assessment of numerical errors is called <em>verification</em>… Validation makes sense
+only after verification, otherwise agreement between measured and computed results may
+well be fortuitous.</p>
+<p>P. Wesseling, (2001) <em>Principles of Computational Fluid Dynamics</em>, pp. 560–561
+<a class="reference internal" href="../../zzz_references_html.html#wesseling" id="id1">[134]</a></p>
+</div></blockquote>
+<p>Verification is the essentially mathematical task of checking that the predictions of the
+numerical code are close to the predictions of a continuum model, the one which the
+numerical code claims to approximate. It is a crucial task for a code as complicated as
+PISM. In verification there is no comparison between model output and observations of
+nature. Instead, one compares exact solutions of the continuum model, in circumstances in
+which they are available, to their numerical approximations.</p>
+<p>Reference <a class="reference internal" href="../../zzz_references_html.html#roache" id="id2">[133]</a> gives a broad discussion of verification and validation in
+computational fluid dynamics. See <a class="reference internal" href="../../zzz_references_html.html#blkcb" id="id3">[29]</a> and <a class="reference internal" href="../../zzz_references_html.html#bbl" id="id4">[26]</a> for discussion of verification
+issues for the isothermal and thermomechanically coupled shallow ice approximation (SIA),
+respectively, and for exact solutions to these models, and <a class="reference internal" href="../../zzz_references_html.html#bbssasliding" id="id5">[25]</a>,
+<a class="reference internal" href="../../zzz_references_html.html#schoofstream" id="id6">[41]</a> for verification using an exact solution to the SSA equations for ice
+streams.</p>
+<p>In PISM there is a separate executable <code class="docutils literal notranslate"><span class="pre">pismv</span></code> which is used for SIA-related
+verification, and there are additional scripts for SSA-related verification. The source
+codes which are verified by <code class="docutils literal notranslate"><span class="pre">pismv</span></code> are, however, exactly the same source files as are
+run by the normal PISM executable <code class="docutils literal notranslate"><span class="pre">pismr</span></code>. In technical terms, <code class="docutils literal notranslate"><span class="pre">pismv</span></code> runs a derived
+class of the PISM base class.</p>
+<table border="1" class="colwidths-given docutils" id="tab-tests">
+<caption><span class="caption-number">Table 43 </span><span class="caption-text">Exact solutions for verification</span><a class="headerlink" href="#tab-tests" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="9%" />
+<col width="36%" />
+<col width="18%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Test</th>
+<th class="head">Continuum model tested</th>
+<th class="head">Reference</th>
+<th class="head">Comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>A</td>
+<td>isothermal SIA, steady,  flat bed, constant accumulation</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#blkcb" id="id7">[29]</a></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>B</td>
+<td>isothermal SIA, flat bed, zero accumulation</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#blkcb" id="id8">[29]</a>, <a class="reference internal" href="../../zzz_references_html.html#halfar83" id="id9">[110]</a></td>
+<td>similarity solution</td>
+</tr>
+<tr class="row-even"><td>C</td>
+<td>isothermal SIA, flat bed, growing accumulation</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#blkcb" id="id10">[29]</a></td>
+<td>similarity solution</td>
+</tr>
+<tr class="row-odd"><td>D</td>
+<td>isothermal SIA, flat bed, oscillating accumulation</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#blkcb" id="id11">[29]</a></td>
+<td>uses compensatory accumulation</td>
+</tr>
+<tr class="row-even"><td>E</td>
+<td>isothermal SIA; as A, but with sliding in a sector</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#blkcb" id="id12">[29]</a></td>
+<td>uses compensatory accumulation</td>
+</tr>
+<tr class="row-odd"><td>F</td>
+<td>thermomechanically coupled SIA (mass and energy conservation), steady, flat bed</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#bb" id="id13">[72]</a>, <a class="reference internal" href="../../zzz_references_html.html#bbl" id="id14">[26]</a></td>
+<td>uses compensatory accumulation and heating</td>
+</tr>
+<tr class="row-even"><td>G</td>
+<td>thermomechanically coupled SIA; as F  but with oscillating accumulation</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#bb" id="id15">[72]</a>, <a class="reference internal" href="../../zzz_references_html.html#bbl" id="id16">[26]</a></td>
+<td>ditto</td>
+</tr>
+<tr class="row-odd"><td>H</td>
+<td>bed deformation coupled with isothermal SIA</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#blkfastearth" id="id17">[23]</a></td>
+<td>joined similarity solution</td>
+</tr>
+<tr class="row-even"><td>I</td>
+<td>stream velocity computation using SSA (plastic till)</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#schoofstream" id="id18">[41]</a>, <a class="reference internal" href="../../zzz_references_html.html#bbssasliding" id="id19">[25]</a></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>J</td>
+<td>shelf velocity computation using SSA</td>
+<td>(source code)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>K</td>
+<td>pure conduction in ice and bedrock</td>
+<td><a class="reference internal" href="../../zzz_references_html.html#buelertestk" id="id20">[143]</a></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>L</td>
+<td>isothermal SIA, steady, non-flat bed</td>
+<td>(source code)</td>
+<td>numerical ODE solution</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-auto docutils" id="tab-tests-exec">
+<caption><span class="caption-number">Table 44 </span><span class="caption-text">Canonical PISM verification runs using the exact solutions listed in
+            <a class="reference internal" href="#tab-tests"><span class="std std-numref">Table 43</span></a>.</span><a class="headerlink" href="#tab-tests-exec" title="Permalink to this table">¶</a></caption>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Test</th>
+<th class="head">Example invocation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>A</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">A</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">11</span> <span class="pre">-y</span> <span class="pre">25000</span></code></td>
+</tr>
+<tr class="row-odd"><td>B</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">B</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">11</span> <span class="pre">-ys</span> <span class="pre">422.45</span> <span class="pre">-y</span> <span class="pre">25000</span></code></td>
+</tr>
+<tr class="row-even"><td>C</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">C</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">11</span> <span class="pre">-y</span> <span class="pre">15208.0</span></code></td>
+</tr>
+<tr class="row-odd"><td>D</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">D</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">11</span> <span class="pre">-y</span> <span class="pre">25000</span></code></td>
+</tr>
+<tr class="row-even"><td>E</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">E</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">11</span> <span class="pre">-y</span> <span class="pre">25000</span></code></td>
+</tr>
+<tr class="row-odd"><td>F</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">F</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-y</span> <span class="pre">25000</span></code></td>
+</tr>
+<tr class="row-even"><td>G</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">G</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-y</span> <span class="pre">25000</span></code></td>
+</tr>
+<tr class="row-odd"><td>H</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">H</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">11</span> <span class="pre">-y</span> <span class="pre">40034</span> <span class="pre">-bed_def</span> <span class="pre">iso</span></code></td>
+</tr>
+<tr class="row-even"><td>I</td>
+<td><code class="docutils literal notranslate"><span class="pre">ssa_testi</span> <span class="pre">-ssa_method</span> <span class="pre">fd</span> <span class="pre">-Mx</span> <span class="pre">5</span> <span class="pre">-My</span> <span class="pre">500</span> <span class="pre">-ssafd_picard_rtol</span> <span class="pre">1e-6</span> <span class="pre">-ssafd_ksp_rtol</span> <span class="pre">1e-11</span></code></td>
+</tr>
+<tr class="row-odd"><td>J</td>
+<td><code class="docutils literal notranslate"><span class="pre">ssa_testj</span> <span class="pre">-ssa_method</span> <span class="pre">fd</span> <span class="pre">-Mx</span> <span class="pre">60</span> <span class="pre">-My</span> <span class="pre">60</span> <span class="pre">-ssafd_ksp_rtol</span> <span class="pre">1e-12</span></code></td>
+</tr>
+<tr class="row-even"><td>K</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">K</span> <span class="pre">-Mx</span> <span class="pre">6</span> <span class="pre">-My</span> <span class="pre">6</span> <span class="pre">-Mz</span> <span class="pre">401</span> <span class="pre">-Mbz</span> <span class="pre">101</span> <span class="pre">-y</span> <span class="pre">130000</span></code></td>
+</tr>
+<tr class="row-odd"><td>L</td>
+<td><code class="docutils literal notranslate"><span class="pre">pismv</span> <span class="pre">-test</span> <span class="pre">L</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">31</span> <span class="pre">-y</span> <span class="pre">25000</span></code></td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils" id="tab-pismv-options">
+<caption><span class="caption-number">Table 45 </span><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">pismv</span></code> command-line options</span><a class="headerlink" href="#tab-pismv-options" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-test</span></code></td>
+<td>Choose verification test by single character name; see <a class="reference internal" href="#tab-tests"><span class="std std-numref">Table 43</span></a>.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-no_report</span></code></td>
+<td>Do not report errors at the end of a verification run.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-eo</span></code></td>
+<td>Only evaluate the exact solution; no numerical approximation at all.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-report_file</span></code></td>
+<td>Save error report to a netCDF file.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-append</span></code></td>
+<td>Append to a report file.</td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference internal" href="#tab-tests"><span class="std std-numref">Table 43</span></a> summarizes the many exact solutions currently available in PISM. Most
+of these exact solutions are solutions of <em>free boundary problems</em> for partial
+differential equations; only Tests A, E, J, K are fixed boundary value problems.</p>
+<p><a class="reference internal" href="#tab-tests-exec"><span class="std std-numref">Table 44</span></a> shows how to run each of them on a coarse grids. Note that tests
+I and J require special executables <code class="docutils literal notranslate"><span class="pre">ssa_testi,ssa_testj</span></code> which are built with
+configuration flag <code class="docutils literal notranslate"><span class="pre">Pism_BUILD_EXTRA_EXECS</span></code> equal to <code class="docutils literal notranslate"><span class="pre">ON</span></code>. <a class="reference internal" href="#tab-pismv-options"><span class="std std-numref">Table 45</span></a>
+gives the special verification-related options of the <code class="docutils literal notranslate"><span class="pre">pismv</span></code> executable.</p>
+<p>Numerical errors are not, however, the dominant reasons why ice sheet models give
+imperfect results. The largest sources of errors include those from using the wrong (e.g.
+over-simplified or incorrectly-parameterized) continuum model, and from observational or
+pre-processing errors present in input data. Our focus here on numerical errors has a
+model-maintenance goal. It is <em>easier</em> to maintain code by quantitatively confirming that
+it produces small errors in cases where those can be measured, rather than “eyeballing”
+results to see that they are “right” according to human judgment.</p>
+<p>The goal of verification is not generally to see that the error is zero at any particular
+resolution, or even to show that the error is small in a predetermined absolute sense.
+Rather the goals are</p>
+<ul class="simple">
+<li>to see that the error <em>is</em> decreasing,</li>
+<li>to measure the rate at which it decreases, and</li>
+<li>to develop a sense of the magnitude of numerical error before doing realistic ice sheet
+model runs.</li>
+</ul>
+<p>Knowing the error decay rate may give a prediction of how fine a grid is necessary to
+achieve a desired smallness for the numerical error.</p>
+<p>Therefore one must “go down” a grid refinement “path” and measure numerical error for each
+grid <a class="reference internal" href="../../zzz_references_html.html#roache" id="id21">[133]</a>. The refinement path is defined by a sequence of spatial grid cell sizes
+which decrease toward the refinement limit of zero size <a class="reference internal" href="../../zzz_references_html.html#mortonmayers" id="id22">[144]</a>. In PISM the
+timestep <span class="math notranslate nohighlight">\(\Delta t\)</span> is determined adaptively by a stability criterion (see
+section <a class="reference internal" href="../practical-usage/time-stepping.html#sec-adapt"><span class="std std-ref">Understanding adaptive time-stepping</span></a>). In PISM one specifies the number of grid points, thus the
+grid cell sizes because the overall dimensions of the computational box are normally
+fixed; see section <a class="reference internal" href="../modeling-choices/computational/box.html#sec-coords"><span class="std std-ref">Computational box</span></a>. By “measuring the error for each grid” we mean
+computing a norm (or norms) of the difference between the numerical solution and the exact
+solution.</p>
+<p>For a grid refinement path example, in tests of the thermomechanically-coupled SIA model
+one refines in three dimensions, and these runs produced Figures 13, 14, and 15 of <a class="reference internal" href="../../zzz_references_html.html#bbl" id="id23">[26]</a>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismv -test G -max_dt 10.0 -y 25000 -Mx 61 -My 61 -Mz 61 -z_spacing equal
+pismv -test G -max_dt 10.0 -y 25000 -Mx 91 -My 91 -Mz 91 -z_spacing equal
+pismv -test G -max_dt 10.0 -y 25000 -Mx 121 -My 121 -Mz 121 -z_spacing equal
+pismv -test G -max_dt 10.0 -y 25000 -Mx 181 -My 181 -Mz 181 -z_spacing equal
+pismv -test G -max_dt 10.0 -y 25000 -Mx 241 -My 241 -Mz 241 -z_spacing equal
+pismv -test G -max_dt 10.0 -y 25000 -Mx 361 -My 361 -Mz 361 -z_spacing equal
+</pre></div>
+</div>
+<p>The last two runs require a supercomputer! In fact the <span class="math notranslate nohighlight">\(361\times 361\times 361\)</span> run
+involves more than <span class="math notranslate nohighlight">\(100\)</span> million unknowns, updated at each of millions of time
+steps. Appropriate use of parallelism (<code class="docutils literal notranslate"><span class="pre">mpiexec</span> <span class="pre">-n</span> <span class="pre">NN</span> <span class="pre">pismv</span></code>) and of the <code class="docutils literal notranslate"><span class="pre">-skip</span></code>
+modification to adaptive timestepping accelerates such fine-grid runs; see section
+<a class="reference internal" href="../practical-usage/time-stepping.html#sec-adapt"><span class="std std-ref">Understanding adaptive time-stepping</span></a>.</p>
+<p>Figures <a class="reference internal" href="convergence-figures.html#fig-thickerrsb"><span class="std std-numref">Fig. 25</span></a> through <a class="reference internal" href="convergence-figures.html#fig-velerrsi"><span class="std std-numref">Fig. 29</span></a> in
+<a class="reference internal" href="convergence-figures.html#sec-convergence-plots"><span class="std std-ref">Sample convergence plots</span></a> show a sampling of the results of verifying PISM using the
+tests described above. These figures were produced automatically using Python scripts
+<code class="docutils literal notranslate"><span class="pre">test/vfnow.py</span></code> and <code class="docutils literal notranslate"><span class="pre">test/vnreport.py</span></code>. See section <a class="reference internal" href="../practical-usage/scripts.html#sec-scripts"><span class="std std-ref">Utility and test scripts</span></a>.</p>
+<p>These figures <em>do not</em> show outstanding rates of convergence, relative to textbook partial
+differential equation examples. For the errors in tests B and G, see the discussion of
+free margin shape in <a class="reference internal" href="../../zzz_references_html.html#blkcb" id="id24">[29]</a>. For the errors in test I, the exact continuum solution is
+not very smooth at the free boundary <a class="reference internal" href="../../zzz_references_html.html#schoofstream" id="id25">[41]</a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="convergence-figures.html">Sample convergence plots</a></li>
+</ul>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="../simplified-geometry/mismip3d.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="../index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="convergence-figures.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="convergence-figures.html">Sample convergence plots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Fourth run: paleo-climate model spin-up &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Grid sequencing" href="grid-sequencing.html" />
+    <link rel="prev" title="Third run: higher resolution" href="run-3.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="fourth-run-paleo-climate-model-spin-up">
+<span id="sec-paleorun"></span><h1>Fourth run: paleo-climate model spin-up<a class="headerlink" href="#fourth-run-paleo-climate-model-spin-up" title="Permalink to this headline">¶</a></h1>
+<p>A this point we have barely mentioned one of the most important players in an ice sheet
+model: the surface mass balance (SMB) model. Specifically, an SMB model combines
+precipitation (e.g. <a class="reference internal" href="../../zzz_references_html.html#balesetal2001" id="id1">[132]</a> for present-day Greenland) and a model for melt.
+Melt models are always based on some approximation of the energy available at the ice
+surface <a class="reference internal" href="../../zzz_references_html.html#hock05" id="id2">[22]</a>. Previous runs in this section used a “constant-climate”
+assumption, which specifically meant using the modeled present-day SMB rates from the
+regional climate model RACMO <a class="reference internal" href="../../zzz_references_html.html#ettemaetal2009" id="id3">[59]</a>, as contained in the SeaRISE-Greenland
+data set <code class="docutils literal notranslate"><span class="pre">Greenland_5km_v1.1.nc</span></code>.</p>
+<p>While a physical model of ice dynamics only describes the movement of the ice, the SMB
+(and the sub-shelf melt rate) are key inputs which directly determine changes in the
+boundary geometry. Boundary geometry changes then influence the stresses seen by the
+stress balance model and thus the motion.</p>
+<p>There are other methods for producing SMB than using present-day modeled values. We now
+try such a method, a “paleo-climate spin-up” for our Greenland ice sheet model. Of course,
+direct measurements of prior climates in Greenland are not available as data! There are,
+however, estimates of past surface temperatures at the locations of ice cores (see
+<a class="reference internal" href="../../zzz_references_html.html#johnsenetalgrip" id="id4">[8]</a> for GRIP), along with estimates of past global sea level
+<a class="reference internal" href="../../zzz_references_html.html#imbrieetal1984" id="id5">[9]</a> which can be used to determine where the flotation criterion is
+applied—this is how PISM’s <code class="docutils literal notranslate"><span class="pre">mask</span></code> variable is determined. Also, models have been
+constructed for how precipitation differs from the present-day values
+<a class="reference internal" href="../../zzz_references_html.html#huybrechts02" id="id6">[2]</a>. For demonstration purposes, these are all used in the next run. The
+relevant options are further documented in the <a class="reference internal" href="../../climate_forcing/index.html#sec-climate-forcing"><span class="std std-ref">Climate Forcing Manual</span></a>.</p>
+<p>As noted, one must compute melt in order to compute SMB. Here this is done using a
+temperature-index, <a class="reference internal" href="../../climate_forcing/surface.html#sec-surface-pdd"><span class="std std-ref">“positive degree-day”</span></a> (PDD) model <a class="reference internal" href="../../zzz_references_html.html#hock05" id="id7">[22]</a>. Such a PDD model has
+parameters for how much snow and/or ice is melted when surface temperatures spend time
+near or above zero degrees. Again, see the <a class="reference internal" href="../../climate_forcing/index.html#sec-climate-forcing"><span class="std std-ref">Climate Forcing Manual</span></a> for relevant options.</p>
+<p>To summarize the paleo-climate model applied here, temperature offsets from the GRIP core
+record affect the snow energy balance, and thus the rates of melting and runoff calculated
+by the PDD model. In warm periods there is more marginal ablation, but precipitation may
+also increase (according to a temperature-offset model <a class="reference internal" href="../../zzz_references_html.html#huybrechts02" id="id8">[2]</a>). Additionally
+sea level undergoes changes in time and this affects which ice is floating. Finally we add
+an earth deformation model, which responds to changes in ice load by changing the bedrock
+elevation <a class="reference internal" href="../../zzz_references_html.html#blkfastearth" id="id9">[23]</a>.</p>
+<p>To see how all this translates into PISM options, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PARAM_PPQ</span><span class="o">=</span><span class="m">0</span>.5
+<span class="nb">export</span> <span class="nv">REGRIDFILE</span><span class="o">=</span>g20km_10ka_hy.nc
+<span class="nv">PISM_DO</span><span class="o">=</span><span class="nb">echo</span> ./spinup.sh <span class="m">4</span> paleo <span class="m">25000</span> <span class="m">20</span> hybrid g20km_25ka_paleo.nc
+</pre></div>
+</div>
+<p>You will see an impressively-long command, which you can compare to the <a class="reference internal" href="run-1.html#firstcommand"><span class="std std-ref">first one</span></a>. There are several key changes. First, we do not start from scratch but
+instead from a previously computed near-equilibrium result:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-regrid_file g20km_10ka_hy.nc -regrid_vars litho_temp,thk,enthalpy,tillwat,bmelt
+</pre></div>
+</div>
+<p>For more on regridding see section <a class="reference internal" href="../practical-usage/regridding.html#sec-regridding"><span class="std std-ref">Regridding</span></a>. Then we turn on the earth
+deformation model with option <code class="docutils literal notranslate"><span class="pre">-bed_def</span> <span class="pre">lc</span></code>; see section <a class="reference internal" href="../modeling-choices/subglacier/bed-deformation.html#sec-beddef"><span class="std std-ref">Earth deformation models</span></a>. After
+that the atmosphere and surface (PDD) models are turned on and the files they need are
+identified:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-atmosphere searise_greenland,delta_T,precip_scaling -surface pdd \
+-atmosphere_precip_scaling_file pism_dT.nc -atmosphere_delta_T_file pism_dT.nc
+</pre></div>
+</div>
+<p>Then the sea level forcing module providing both a time-dependent sea level to the ice
+dynamics core, is turned on with <code class="docutils literal notranslate"><span class="pre">-sea_level</span> <span class="pre">constant,delta_sl</span></code> and the file it needs is
+identified with <code class="docutils literal notranslate"><span class="pre">-ocean_delta_sl_file</span> <span class="pre">pism_dSL.nc</span></code>. For all of these “forcing” options,
+see the <a class="reference internal" href="../../climate_forcing/index.html#sec-climate-forcing"><span class="std std-ref">Climate Forcing Manual</span></a>. The remainder of the options
+are similar or identical to the run that created <code class="docutils literal notranslate"><span class="pre">g20km_10ka_hy.nc</span></code>.</p>
+<p>To actually start the run, which we rather arbitrarily start at year <span class="math notranslate nohighlight">\(-25000\)</span>, essentially
+at the LGM, do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PARAM_PPQ</span><span class="o">=</span><span class="m">0</span>.5
+<span class="nb">export</span> <span class="nv">REGRIDFILE</span><span class="o">=</span>g20km_10ka_hy.nc
+./spinup.sh <span class="m">4</span> paleo <span class="m">25000</span> <span class="m">20</span> hybrid g20km_25ka_paleo.nc <span class="p">&amp;</span>&gt; out.g20km_25ka_paleo <span class="p">&amp;</span>
+</pre></div>
+</div>
+<p>This run should only take one or two hours, noting it is at a coarse 20 km resolution.</p>
+<p>The fields <code class="docutils literal notranslate"><span class="pre">usurf</span></code>, <code class="docutils literal notranslate"><span class="pre">velsurf_mag</span></code>, and <code class="docutils literal notranslate"><span class="pre">velbase_mag</span></code> from file
+<code class="docutils literal notranslate"><span class="pre">g20km_25ka_paleo.nc</span></code> are sufficiently similar to those shown in
+<a class="reference internal" href="run-2.html#fig-secondoutputcoarse"><span class="std std-numref">Fig. 4</span></a> that they are not shown here. Close inspection reveals
+differences, but of course these runs only differ in the applied climate and run duration
+and not in resolution or ice dynamics parameters.</p>
+<p>To see the difference between runs more clearly, <a class="reference internal" href="#fig-ivolconstpaleo"><span class="std std-numref">Fig. 8</span></a> compares the
+time-series variable <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code>. We see the effect of option <code class="docutils literal notranslate"><span class="pre">-regrid_file</span>
+<span class="pre">g20km_10ka_hy.nc</span> <span class="pre">-regrid_vars</span> <span class="pre">...,thk,...</span></code>, which implies that the paleo-climate run
+starts with the ice geometry from the end of the constant-climate run.</p>
+<div class="figure" id="fig-ivolconstpaleo">
+<img alt="../../_images/ivol-const-paleo.png" src="../../_images/ivol-const-paleo.png" />
+<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Time series of modeled ice sheet volume <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code> from constant-climate
+(blue; <code class="docutils literal notranslate"><span class="pre">ts_g20km_10ka_hy.nc</span></code>) and paleo-climate (green; <code class="docutils literal notranslate"><span class="pre">ts_g20km_25ka_paleo.nc</span></code>)
+spinup runs. Note that the paleo-climate run started with the ice geometry at the end
+of the constant-climate run.</span></p>
+</div>
+<p>Another time-series comparison, of the variable <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_temperate</span></code>, the
+total volume of temperate (at <span class="math notranslate nohighlight">\(0^\circ C\)</span>) ice, appears in
+<a class="reference internal" href="#fig-ivoltempconstpaleo"><span class="std std-numref">Fig. 9</span></a>. The paleo-climate run shows the cold period from
+<span class="math notranslate nohighlight">\(\approx -25\)</span> ka to <span class="math notranslate nohighlight">\(\approx -12\)</span> ka. Both constant-climate and paleo-climate runs then
+come into rough equilibrium in the holocene. The bootstrapping artifact, seen at the start
+of the constant-climate run, which disappears in less than 1000 years, is avoided in the
+paleo-climate run by starting with the constant-climate end-state. The reader is
+encouraged to examine the diagnostic files <code class="docutils literal notranslate"><span class="pre">ts_g20km_25ka_paleo.nc</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ex_g20km_25ka_paleo.nc</span></code> to find more evidence of the (modeled) climate impact on the
+ice dynamics.</p>
+<div class="figure" id="fig-ivoltempconstpaleo">
+<img alt="../../_images/ivoltemp-const-paleo.png" src="../../_images/ivoltemp-const-paleo.png" />
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">Time series of temperate ice volume <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_temperate</span></code> from
+constant-climate (blue; <code class="docutils literal notranslate"><span class="pre">ts_g20km_10ka_hy.nc</span></code>) and paleo-climate (green;
+<code class="docutils literal notranslate"><span class="pre">ts_g20km_25ka_paleo.nc</span></code>) spinup runs. The cold of the last ice age affects the
+fraction of temperate ice. Note different volume scale compared to that in
+<a class="reference internal" href="#fig-ivolconstpaleo"><span class="std std-numref">Fig. 8</span></a>; only about 1% of ice is temperate (by volume).</span></p>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="run-3.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="grid-sequencing.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Getting started: a Greenland ice sheet example</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="input-data.html">Input data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-1.html">First run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-1-watching.html">Watching the first run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-2.html">Second run: a better ice-dynamics model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-3.html">Third run: higher resolution</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Fourth run: paleo-climate model spin-up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grid-sequencing.html">Grid sequencing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameter-study.html">An ice dynamics parameter study</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

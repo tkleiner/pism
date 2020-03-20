@@ -1,0 +1,256 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Testing if forcing data is used correctly &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Surface mass and energy process model components" href="surface.html" />
+    <link rel="prev" title="Examples and corresponding options" href="examples.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="testing-if-forcing-data-is-used-correctly">
+<h1>Testing if forcing data is used correctly<a class="headerlink" href="#testing-if-forcing-data-is-used-correctly" title="Permalink to this headline">¶</a></h1>
+<p>It is very important to ensure that selected forcing options produce the result you
+expect: we find that the ice sheet response is very sensitive to provided climate forcing,
+especially in short-scale simulations.</p>
+<p>This section describes how to use PISM to inspect climate forcing.</p>
+<div class="section" id="visualizing-climate-inputs-without-ice-dynamics">
+<h2>Visualizing climate inputs, without ice dynamics<a class="headerlink" href="#visualizing-climate-inputs-without-ice-dynamics" title="Permalink to this headline">¶</a></h2>
+<p>Recall that internally in PISM there is a <a class="reference internal" href="../manual/highlevelview/climate-inputs.html#sec-climate-inputs"><span class="std std-ref">separation of climate inputs from ice
+dynamics</span></a>. This makes it possible to turn “off” the ice dynamics
+code to visualize the climate mass balance and temperature boundary conditions produced
+using a combination of options and input files. This is helpful during the process of
+creating PISM-readable data files, and modeling with such.</p>
+<p>To do this, use the option <code class="option docutils literal notranslate"><span class="pre">-test_climate_models</span></code> (which is equivalent to
+<code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">none</span></code> and <code class="option docutils literal notranslate"><span class="pre">-energy</span> <span class="pre">none</span></code>) together with PISM’s reporting
+capabilities (<code class="option docutils literal notranslate"><span class="pre">-extra_file</span></code>, <code class="option docutils literal notranslate"><span class="pre">-extra_times</span></code>, <code class="option docutils literal notranslate"><span class="pre">-extra_vars</span></code>).</p>
+<p>Turning “off” ice dynamics saves computational time while allowing one to use the same
+options as in an actual modeling run. Note that <code class="option docutils literal notranslate"><span class="pre">-test_climate_models</span></code> does <em>not</em>
+disable geometry updates, so one can check if surface elevation feedbacks modeled using
+lapse rates (and similar) work correctly. Please use the <code class="option docutils literal notranslate"><span class="pre">-no_mass</span></code> command-line
+option to fix ice geometry. (This may be necessary if the mass balance rate data would
+result in extreme ice sheet growth that is not balanced by ice flow in this setup.</p>
+<p>As an example, set up an ice sheet state file and check if climate data is read in
+correctly:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec -n 2 pisms -eisII A -y 1000 -o state.nc
+pismr -i state.nc -surface given -extra_times 0.0:0.1:2.5 \
+      -extra_file movie.nc -extra_vars climatic_mass_balance,ice_surface_temp \
+      -ys 0 -ye 2.5
+</pre></div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">pisms</span></code> merely generates demonstration climate data, using EISMINT II choices
+<a class="reference internal" href="../zzz_references_html.html#eismint00" id="id1">[21]</a>. The next run extracts the surface mass balance <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>
+and surface temperature <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code> from <code class="docutils literal notranslate"><span class="pre">state.nc</span></code>. It then does nothing
+interesting, exactly because a constant climate is used. Viewing <code class="docutils literal notranslate"><span class="pre">movie.nc</span></code> we see these
+same values as from <code class="docutils literal notranslate"><span class="pre">state.nc</span></code>, in variables <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>,
+<code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code>, reported back to us as the time- and space-dependent climate at
+times <code class="docutils literal notranslate"><span class="pre">ys:dt:ye</span></code>. It is a boring “movie.”</p>
+<p>A more interesting example uses a <a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">positive degree-day scheme</span></a>).
+This scheme uses a variable called <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>, and a calculation of melting, to
+get the surface mass balance <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>.</p>
+<p>Assuming that <code class="docutils literal notranslate"><span class="pre">g20km_10ka.nc</span></code> was created <a class="reference internal" href="../manual/std-greenland/run-1.html#sec-runscript"><span class="std std-ref">as described in the User’s Manual</span></a>, running</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -test_climate_models -no_mass -i g20km_10ka.nc \
+      -atmosphere searise_greenland -surface pdd \
+      -ys 0 -ye 1 -extra_times 0:1week:1 \
+      -extra_file foo.nc \
+      -extra_vars climatic_mass_balance,ice_surface_temp,air_temp_snapshot,precipitation
+</pre></div>
+</div>
+<p>produces <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code>. Viewing in with <code class="docutils literal notranslate"><span class="pre">ncview</span></code> shows an annual cycle in the variable
+<code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code> and a noticeable decrease in the surface mass balance during summer months
+(see variable <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>). Note that <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code> is constant
+in time: this is the temperature <em>at the ice surface but below firn</em> and it does not
+include seasonal variations <a class="reference internal" href="../zzz_references_html.html#hock05" id="id2">[22]</a>.</p>
+</div>
+<div class="section" id="using-low-resolution-test-runs">
+<h2>Using low-resolution test runs<a class="headerlink" href="#using-low-resolution-test-runs" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes a run like the one above is still too costly. In this case it might be helpful
+to replace it with a similar run on a coarser grid, with or without the option
+<code class="option docutils literal notranslate"><span class="pre">-test_climate_models</span></code>. (Testing climate inputs usually means checking if the timing
+of modeled events is right, and high spatial resolution is not essential.)</p>
+<p>The command</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i g20km_pre100.nc -bootstrap -Mx 51 -My 101 -Mz 11 \
+      -atmosphere searise_greenland \
+      -surface pdd -ys 0 -ye 2.5 \
+      -extra_file foo.nc -extra_times 0:0.1:2.5 \
+      -extra_vars climatic_mass_balance,air_temp_snapshot,smelt,srunoff,saccum
+      -ts_file ts.nc -ts_times 0:0.1:2.5 \
+      -o bar.nc
+</pre></div>
+</div>
+<p>will produce <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code> containing a “movie” very similar to the one created by the
+previous run, but including the full influence of ice dynamics.</p>
+<p>In addition to <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code>, the latter command will produce <code class="docutils literal notranslate"><span class="pre">ts.nc</span></code> containing scalar
+time-series. The variable <code class="docutils literal notranslate"><span class="pre">surface_ice_flux</span></code> (the <em>total over the ice-covered area</em> of
+the surface mass flux) can be used to detect if climate forcing is applied at the right
+time.</p>
+</div>
+<div class="section" id="visualizing-the-climate-inputs-in-the-greenland-case">
+<h2>Visualizing the climate inputs in the Greenland case<a class="headerlink" href="#visualizing-the-climate-inputs-in-the-greenland-case" title="Permalink to this headline">¶</a></h2>
+<p>Assuming that <code class="docutils literal notranslate"><span class="pre">g20km_pre100.nc</span></code> was produced by the run described in section
+<a class="reference internal" href="../manual/std-greenland/index.html#sec-start"><span class="std std-ref">Getting started: a Greenland ice sheet example</span></a>), one can run the following to check if the PDD model in PISM (see
+section <a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">Temperature-index scheme</span></a>) is “reasonable”:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i g20km_pre100.nc -atmosphere searise_greenland,precip_scaling \
+      -surface pdd -atmosphere_precip_scaling_file pism_dT.nc \
+      -extra_times 0:1week:3 -ys 0 -ye 3 \
+      -extra_file pddmovie.nc -o_order zyx \
+      -extra_vars climatic_mass_balance,air_temp_snapshot
+</pre></div>
+</div>
+<p>This produces the file <code class="docutils literal notranslate"><span class="pre">pddmovie.nc</span></code> with several variables:
+<code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> (instantaneous net accumulation (ablation) rate),
+<code class="variable docutils literal notranslate"><span class="pre">air_temp_snapshot</span></code> (instantaneous near-surface air temperature),
+<code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> (mean annual ice-equivalent precipitation rate) and some others.</p>
+<p>The variable <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> does not evolve over time because it is part of the
+SeaRISE-Greenland data and is read in from the input file.</p>
+<p>The other two variables were used to create figure <a class="reference internal" href="#fig-pddseries"><span class="std std-numref">Fig. 35</span></a>, which shows
+the time-series of the accumulation rate (top graph) and the air temperature (bottom
+graph) with the map view of the surface elevation on the left.</p>
+<p>Here are two things to notice:</p>
+<ol class="arabic simple">
+<li>The summer peak day is in the right place. The default for this value is July 15 (day
+<span class="math notranslate nohighlight">\(196\)</span>, at approximately <span class="math notranslate nohighlight">\(196/365 \simeq 0.54\)</span> year). (If it is important, the peak day
+can be changed using the configuration parameter
+<code class="config docutils literal notranslate"><span class="pre">atmosphere.fausto_air_temp.summer_peak_day</span></code>).</li>
+<li>Lows of the surface mass balance rate <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> correspond to
+positive degree-days in the given period, because of highs of the air temperature.
+Recall the air temperature graph does not show random daily variations. Even though it
+has the maximum of about <span class="math notranslate nohighlight">\(266\)</span> Kelvin, the parameterized instantaneous air
+temperature can be above freezing. A positive value for positive degree-days is
+expected <a class="reference internal" href="../zzz_references_html.html#calovgreve05" id="id3">[17]</a>.</li>
+</ol>
+<div class="figure" id="fig-pddseries">
+<img alt="../_images/pdd-movie.png" src="../_images/pdd-movie.png" />
+<p class="caption"><span class="caption-number">Fig. 35 </span><span class="caption-text">Time series of the surface mass balance rate and near-surface air temperature.</span></p>
+</div>
+<p>We can also test the surface temperature forcing code with the following command.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i g20km_pre100.nc -surface simple \
+      -atmosphere searise_greenland,delta_T \
+      -atmosphere_delta_T_file pism_dT.nc \
+      -extra_times 100 -ys -125e3 -ye 0 \
+      -extra_vars ice_surface_temp \
+      -extra_file dT_movie.nc -o_order zyx \
+      -test_climate_models -no_mass
+</pre></div>
+</div>
+<p>The output <code class="docutils literal notranslate"><span class="pre">dT_movie.nc</span></code> and <code class="docutils literal notranslate"><span class="pre">pism_dT.nc</span></code> were used to create
+<a class="reference internal" href="#fig-artm-timeseries"><span class="std std-numref">Fig. 36</span></a>.</p>
+<p>This figure shows the GRIP temperature offsets and the time-series of the temperature at
+the ice surface at a point in southern Greenland (bottom graph), confirming that the
+temperature offsets are used correctly.</p>
+<div class="figure" id="fig-artm-timeseries">
+<img alt="../_images/dT-movie.png" src="../_images/dT-movie.png" />
+<p class="caption"><span class="caption-number">Fig. 36 </span><span class="caption-text">Time series of the surface temperature compared to GRIP temperature offsets</span></p>
+</div>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="examples.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="surface.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Climate forcing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="time.html">Managing model time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples and corresponding options</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Testing if forcing data is used correctly</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#visualizing-climate-inputs-without-ice-dynamics">Visualizing climate inputs, without ice dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-low-resolution-test-runs">Using low-resolution test runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visualizing-the-climate-inputs-in-the-greenland-case">Visualizing the climate inputs in the Greenland case</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="surface.html">Surface mass and energy process model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atmosphere.html">Atmosphere model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ocean.html">Ocean model components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

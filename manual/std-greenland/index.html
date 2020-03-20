@@ -1,0 +1,167 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Getting started: a Greenland ice sheet example &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Input data" href="input-data.html" />
+    <link rel="prev" title="PISM User’s Manual" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="getting-started-a-greenland-ice-sheet-example">
+<span id="sec-start"></span><h1>Getting started: a Greenland ice sheet example<a class="headerlink" href="#getting-started-a-greenland-ice-sheet-example" title="Permalink to this headline">¶</a></h1>
+<p>This introduction is intended to be interactive and participatory, and it should work on
+<em>your personal machine</em> as well as on a supercomputer. Please try the commands and view
+the resulting files. Do the runs with your own values for the options. We can’t hide the
+fact that PISM has lots of “control knobs,” but fiddling with them will help you get
+going. Give it a try!</p>
+<p>We get started with an extended example showing how to generate initial states for
+prognostic model experiments on the Greenland ice sheet. Ice sheet and glacier model
+studies often involve modeling present and past states using actions like the ones
+demonstrated here. Our particular choices made here are motivated by the evaluation of
+initialization methods in <a class="reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id1">[62]</a>.</p>
+<p>We use data assembled by the <a class="reference external" href="http://websrv.cs.umt.edu/isis/index.php/SeaRISE_Assessment">Sea-level Response to Ice Sheet Evolution (SeaRISE)</a> assessment process <a class="reference internal" href="../../zzz_references_html.html#bindschadler2013searise" id="id2">[58]</a>. SeaRISE is a
+community-organized assessment process providing an upper bound on ice sheet contributions
+to sea level in the next 100–200 years, especially for the IPCC AR5 report in 2013.</p>
+<p>This example is a hands-on first look at PISM. It is not an in-depth tutorial, and some
+details of what is happening are only explained later in this Manual, which thoroughly
+discusses PISM options, nontrivial modeling choices, and how to preprocess input data.</p>
+<p>The basic runs here, mostly on coarse <span class="math notranslate nohighlight">\(20\)</span> and <span class="math notranslate nohighlight">\(10\,\textrm{km}\)</span> grids, can be
+done on a typical workstation or laptop. PISM is, however, designed to make high
+resolution (e.g. <span class="math notranslate nohighlight">\(5\,\textrm{km}\)</span> to <span class="math notranslate nohighlight">\(\sim 500\,\textrm{m}\)</span> grids for
+whole-Greenland ice sheet modeling) possible by exploiting large-scale parallel
+processing. See <a class="reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id3">[62]</a>, <a class="reference internal" href="../../zzz_references_html.html#golledgeetal2012" id="id4">[124]</a>,
+<a class="reference internal" href="../../zzz_references_html.html#golledgeetal2013" id="id5">[82]</a>, among other published high-resolution PISM examples.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="input-data.html">Input data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-1.html">First run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-1-watching.html">Watching the first run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-2.html">Second run: a better ice-dynamics model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-3.html">Third run: higher resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-4.html">Fourth run: paleo-climate model spin-up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grid-sequencing.html">Grid sequencing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameter-study.html">An ice dynamics parameter study</a></li>
+</ul>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="../index.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="../index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="input-data.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Getting started: a Greenland ice sheet example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="input-data.html">Input data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-1.html">First run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-1-watching.html">Watching the first run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-2.html">Second run: a better ice-dynamics model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-3.html">Third run: higher resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-4.html">Fourth run: paleo-climate model spin-up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grid-sequencing.html">Grid sequencing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameter-study.html">An ice dynamics parameter study</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

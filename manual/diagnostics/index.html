@@ -1,0 +1,2624 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Diagnostic quantities &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Climate forcing" href="../../climate_forcing/index.html" />
+    <link rel="prev" title="Configuration parameters" href="../parameters/index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="diagnostic-quantities">
+<span id="sec-diagnostics-list"></span><h1><a class="toc-backref" href="#id2">Diagnostic quantities</a><a class="headerlink" href="#diagnostic-quantities" title="Permalink to this headline">¶</a></h1>
+<p>The availability of a diagnostic depends on modeling choices. For example, the bed uplift
+rate <code class="variable docutils literal notranslate"><span class="pre">dbdt</span></code> is available only if a bed deformation model is selected.</p>
+<p>Some scalar diagnostics come in two versions: the one with the suffix <code class="docutils literal notranslate"><span class="pre">_glacierized</span></code> and
+the one without. Here the former account for the ice
+<code class="config docutils literal notranslate"><span class="pre">output.ice_free_thickness_standard</span></code> meters or thicker (10 meters by default) and
+the latter include all ice regardless of the thickness. “Glacierized” versions were added
+to make it easier to analyze changes in glacier volumes and areas and exclude changes in
+the seasonal snow cover.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#diagnostic-quantities" id="id2">Diagnostic quantities</a><ul>
+<li><a class="reference internal" href="#spatially-variable-fields" id="id3">Spatially-variable fields</a></li>
+<li><a class="reference internal" href="#scalar-time-series" id="id4">Scalar time-series</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="spatially-variable-fields">
+<span id="sec-extra-vars"></span><h2><a class="toc-backref" href="#id3">Spatially-variable fields</a><a class="headerlink" href="#spatially-variable-fields" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">air_temp_mean_summer</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Kelvin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mean summer near-surface air temperature used in the cosine yearly cycle</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">air_temp_sd</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Kelvin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">standard deviation of near-surface air temperature</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">air_temp_snapshot</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Kelvin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">instantaneous value of the near-surface air temperature</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">basal_mass_flux_floating</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average basal mass flux over the reporting interval (floating areas)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">basal_mass_flux_grounded</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average basal mass flux over the reporting interval (grounded areas)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">basal_melt_rate_grounded</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice basal melt rate from energy conservation, in ice thickness per time (valid in grounded areas)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive basal melt rate corresponds to ice loss</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bedtoptemp</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Kelvin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">temperature at the top surface of the bedrock thermal layer</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">beta</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa s / m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">basal drag coefficient</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bfrict</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">W m-2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">basal frictional heating</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bheatflx</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">mW m-2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">upward geothermal flux at the bottom bedrock surface</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive values correspond to an upward flux</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bmelt</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice basal melt rate from energy conservation and subshelf melt, in ice thickness per time</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_basal_melt_rate</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive basal melt rate corresponds to ice loss</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bwat</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">thickness of transportable subglacial water layer</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bwatvel</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">bwatvel[0]</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">velocity of water in subglacial layer, i-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bwatvel[1]</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">velocity of water in subglacial layer, j-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bwp</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">pressure of transportable water in subglacial layer</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">bwprel</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">pressure of transportable water in subglacial layer as fraction of the overburden pressure</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">cell_grounded_fraction</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">fractional grounded/floating mask (floating=0, grounded=1)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface mass balance (accumulation/ablation) rate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_surface_specific_mass_balance_flux</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">cts</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">cts = E/E_s(p), so cold-temperate transition surface is at cts = 1</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">dHdt</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice thickness rate of change</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_thickness</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">dbdt</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">mm year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">bedrock uplift rate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_bedrock_altitude</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">deviatoric_stresses</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">sigma_xx</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">deviatoric stress in X direction</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">sigma_yy</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">deviatoric stress in Y direction</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">sigma_xy</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">deviatoric shear stress</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">diffusivity</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">diffusivity of SIA mass continuity equation</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">diffusivity_staggered</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">diffusivity_i</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">diffusivity of SIA mass continuity equation on the staggered grid (i-offset)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">diffusivity_j</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">diffusivity of SIA mass continuity equation on the staggered grid (j-offset)</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">effbwp</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">effective pressure of transportable water in subglacial layer (overburden pressure minus water pressure)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">effective_air_temp</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Kelvin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">effective mean-annual near-surface air temperature</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">effective_precipitation</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">effective precipitation rate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">precipitation_flux</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">effective_viscosity</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kPascal second</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">effective viscosity of ice</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">effective_water_velocity</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">u_effective_water_velocity</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m day-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">x-component of the effective water velocity in the steady-state hydrology model</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">v_effective_water_velocity</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m day-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">y-component of the effective water velocity in the steady-state hydrology model</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">eigen_calving_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">horizontal calving rate due to eigen-calving</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">elastic_bed_displacement</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">meters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">elastic part of the displacement in the Lingle-Clark bed deformation model; see <a class="reference internal" href="../../zzz_references_html.html#blkfastearth" id="id1">[23]</a></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">enthalpy</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">J kg-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice enthalpy (includes sensible heat, latent heat, pressure)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">enthalpybase</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">J kg-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice enthalpy at the base of ice</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">enthalpysurf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">J kg-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice enthalpy at 1m below the ice surface</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">firn_depth</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">firn cover depth</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">flux</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">uflux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">Vertically integrated horizontal flux of ice in the X direction</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vflux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">Vertically integrated horizontal flux of ice in the Y direction</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">flux_divergence</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">flux divergence</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">flux_mag</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">magnitude of vertically-integrated horizontal flux of ice</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">flux_staggered</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">fluxes through cell interfaces (sides) on the staggered grid</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">frontal_melt_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m day-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">frontal melt rate</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">frontal_melt_retreat_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">retreat rate due to frontal melt</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">takes into account what part of the front is submerged</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">grounding_line_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">grounding line flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">Positive flux corresponds to mass moving from the ocean to an icy grounded area. This convention makes it easier to compare grounding line flux to the total discharge into the ocean</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">h_x</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">h_x_i</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">the x-component of the surface gradient, i-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">h_x_j</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">the x-component of the surface gradient, j-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">h_y</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">h_y_i</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">the y-component of the surface gradient, i-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">h_y_j</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">the y-component of the surface gradient, j-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">hardav</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa s0.333333</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertical average of ice hardness</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">hardness</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa s0.333333</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice hardness computed using the SIA flow law</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">heat_flux_from_bedrock</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">mW m-2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">upward geothermal flux at the top bedrock surface</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">upward_geothermal_heat_flux_at_ground_level_in_land_ice</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive values correspond to an upward flux</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">height_above_flotation</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice thickness in excess of the maximum floating ice thickness</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">shows how close to floatation the ice is at a given location</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">hydraulic_potential</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">hydraulic potential in the subglacial hydrology system</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">hydraulic_potential_adjustment</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">potential adjustment needed to fill sinks when computing an estimate of the steady-state hydraulic potential</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">hydraulic_sinks</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">map of sinks in the domain (for debugging)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_area_specific_volume</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3/m2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice-volume-per-area in partially-filled grid cells</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">this variable represents the amount of ice in a partially-filled cell and not the corresponding geometry, so thinking about it as ‘thickness’ is not helpful</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_base_elevation</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice bottom surface elevation</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_margin_pressure_difference</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertically-integrated pressure difference at ice margins (including calving fronts)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_mass</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mass per cell</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_surface_liquid_water_fraction</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice liquid water fraction at the ice surface</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_surface_temp</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">K</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice temperature at the top ice surface</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">temperature_at_top_of_ice_sheet_model</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">lat</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">degree_north</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">latitude</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">latitude</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">liqfrac</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">liquid water fraction in ice (between 0 and 1)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">lon</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">degree_east</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">longitude</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">longitude</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">mask</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice-type (ice-free/grounded/floating/ocean) integer mask</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">melange_back_pressure_fraction</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">dimensionless pressure fraction at calving fronts due to presence of melange</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">nuH</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">nuH[0]</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kPa s m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice thickness times effective viscosity, i-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">nuH[1]</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kPa s m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice thickness times effective viscosity, j-offset</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">pressure</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">pressure in ice (hydrostatic)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">rank</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">processor rank</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">remaining_water_thickness</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">scaled water thickness in the steady state hydrology model (has no physical meaning)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">schoofs_theta</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">multiplier ‘theta’ in Schoof’s (2003) theory of bed roughness in SIA</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">sea_level</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">meters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">sea level elevation, relative to the geoid</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">sftflf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">fraction of a grid cell covered by floating ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">floating_ice_shelf_area_fraction</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">sftgif</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">fraction of a grid cell covered by ice (grounded or floating)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_area_fraction</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">sftgrf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">fraction of a grid cell covered by grounded ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">grounded_ice_sheet_area_fraction</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">shelfbmassflux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mass flux at the basal surface of ice shelves</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">shelfbtemp</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Kelvin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice temperature at the basal surface of ice shelves</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">snow_depth</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">snow cover depth (set to zero once a year)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ssa_bc_mask</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">—</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">Dirichlet boundary mask</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ssa_bc_vel</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">u_ssa_bc</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">X-component of the SSA velocity boundary conditions</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">v_ssa_bc</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">Y-component of the SSA velocity boundary conditions</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">steady_state_hydraulic_potential</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">estimate of the steady state hydraulic potential in the steady hydrology model</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">strain_rates</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">eigen1</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">first eigenvalue of the horizontal, vertically-integrated strain rate tensor</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">eigen2</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">second eigenvalue of the horizontal, vertically-integrated strain rate tensor</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">strainheat</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">mW m-3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of strain heating in ice (dissipation heating)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">subglacial_water_flux_mag</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">magnitude of the subglacial water flux</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">subglacial_water_input_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">water input rate from the ice surface into the subglacial water system</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_accumulation_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">accumulation (precipitation minus rain), averaged over the reporting interval</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_accumulation_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">accumulation (precipitation minus rain), averaged over the reporting interval</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_layer_mass</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mass of the surface layer (snow and firn)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_layer_thickness</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">meters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">thickness of the surface layer (snow and firn)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_melt_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface melt, averaged over the reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">surface_snow_and_ice_melt_flux</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_melt_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface melt, averaged over the reporting interval</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_runoff_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface runoff, averaged over the reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">surface_runoff_flux</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_runoff_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface runoff, averaged over the reporting interval</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">taub</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">taub_x</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">X-component of the shear stress at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">this field is purely diagnostic (not used by the model)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">taub_y</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">Y-component of the shear stress at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">this field is purely diagnostic (not used by the model)</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">taub_mag</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">magnitude of the basal shear stress at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_basal_drag</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">this field is purely diagnostic (not used by the model)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tauc</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">yield stress for basal till (plastic or pseudo-plastic model)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">taud</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">taud_x</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">X-component of the driving shear stress at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">this is the driving stress used by the SSA solver</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">taud_y</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">Y-component of the driving shear stress at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">this is the driving stress used by the SSA solver</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">taud_mag</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">magnitude of the driving shear stress at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">this is the magnitude of the driving stress used by the SSA solver</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tauxz</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">shear stress xz component (in shallow ice approximation SIA)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tauyz</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">shear stress yz component (in shallow ice approximation SIA)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">temp</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">K</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice temperature</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_temperature</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">temp_pa</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">deg_C</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">pressure-adjusted ice temperature (degrees above pressure-melting point)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tempbase</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">K</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice temperature at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_basal_temperature</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tempicethk</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">temperate ice thickness (total column content)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tempicethk_basal</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">thickness of the basal layer of temperate ice</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">temppabase</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Celsius</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">pressure-adjusted ice temperature at the base of ice</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tempsurf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">K</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice temperature at 1m below the ice surface</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">temperature_at_ground_level_in_snow_or_firn</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_amount</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the ice amount</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_amount_due_to_basal_mass_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average basal mass flux over reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_amount_due_to_calving</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">calving flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_specific_mass_flux_due_to_calving</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_amount_due_to_conservation_error</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average mass conservation error flux over reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_amount_due_to_discharge</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">discharge flux (calving, frontal melt, forced retreat)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_specific_mass_flux_due_to_calving_and_ice_front_melting</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_amount_due_to_flow</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of ice amount due to flow</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_amount_due_to_surface_mass_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg m-2 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average surface mass flux over reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_surface_specific_mass_balance_flux</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the ice mass</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_basal_mass_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average basal mass flux over reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_basal_mass_balance</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_calving</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">calving flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_conservation_error</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average mass conservation error flux over reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_discharge</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">discharge flux (calving, frontal melt, forced retreat)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_flow</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of ice mass due to flow</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_surface_mass_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">average surface mass flux over reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_subglacial_water_mass</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the total mass of subglacial water</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_subglacial_water_mass_at_domain_boundary</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">subglacial water flux at domain boundary (in regional model configurations)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_subglacial_water_mass_at_grounded_margins</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">subglacial water flux at grounded ice margins</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_subglacial_water_mass_at_grounding_line</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">subglacial water flux at grounding lines</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_subglacial_water_mass_due_to_conservation_error</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">subglacial water flux due to conservation error (mass added to preserve non-negativity)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_subglacial_water_mass_due_to_flow</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change subglacial water mass due to lateral flow</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_subglacial_water_mass_due_to_input</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">subglacial water flux due to input</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive flux corresponds to water gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">thickness_calving_threshold</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">threshold used by the ‘calving at threshold’ calving method</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">thk</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">land ice thickness</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_thickness</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">thksmooth</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">thickness relative to smoothed bed elevation in Schoof’s (2003) theory of bed roughness in SIA</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tillphi</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">degrees</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">friction angle for till under grounded ice sheet</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tillwat</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">effective thickness of subglacial water stored in till</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">topg</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">bedrock surface elevation</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">bedrock_altitude</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">topg_sl_adjusted</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">meters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">sea-level adjusted bed topography (zero is at sea level)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">topgsmooth</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">smoothed bed elevation in Schoof’s (2003) theory of bed roughness in SIA</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">usurf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">ice top surface elevation</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">surface_altitude</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">uvel</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">horizontal velocity of ice in the X direction</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_x_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">velbar</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">ubar</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertical mean of horizontal ice velocity in the X direction</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_vertical_mean_x_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vbar</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertical mean of horizontal ice velocity in the Y direction</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_vertical_mean_y_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">velbar_mag</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">magnitude of vertically-integrated horizontal velocity of ice</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">velbase</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">uvelbase</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">x-component of the horizontal velocity of ice at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_basal_x_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vvelbase</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">y-component of the horizontal velocity of ice at the base of ice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_basal_y_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">velbase_mag</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">magnitude of horizontal velocity of ice at base of ice</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">velsurf</span></code><ul>
+<li><code class="docutils literal notranslate"><span class="pre">uvelsurf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">x-component of the horizontal velocity of ice at ice surface</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_surface_x_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vvelsurf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">y-component of the horizontal velocity of ice at ice surface</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_surface_y_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">velsurf_mag</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">magnitude of horizontal velocity of ice at ice surface</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">viscous_bed_displacement</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">meters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">bed displacement in the viscous half-space bed deformation model; see BuelerLingleBrown</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vonmises_calving_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">horizontal calving rate due to von Mises calving</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vonmises_calving_threshold</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pa</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">threshold used by the ‘von Mises’ calving method</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vonmises_stress</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Pascal</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">tensile von Mises stress</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">vvel</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">horizontal velocity of ice in the Y direction</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_y_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">wallmelt</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">wall melt into subglacial hydrology layer from (turbulent) dissipation of energy in transportable water</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">wvel</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertical velocity of ice, relative to geoid</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">wvel_rel</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertical velocity of ice, relative to base of ice directly below</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">wvelbase</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertical velocity of ice at the base of ice, relative to the geoid</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_basal_upward_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">wvelsurf</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">vertical velocity of ice at ice surface, relative to the geoid</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_surface_upward_velocity</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</div>
+<div class="section" id="scalar-time-series">
+<span id="sec-ts-vars"></span><h2><a class="toc-backref" href="#id4">Scalar time-series</a><a class="headerlink" href="#scalar-time-series" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">basal_mass_flux_floating</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">total sub-shelf ice flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_basal_mass_balance</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive means ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">basal_mass_flux_grounded</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">total over grounded ice domain of basal mass flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_basal_mass_balance</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive means ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">dt</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">year</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mass continuity time step</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">grounding_line_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">total ice flux across the grounding line</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">negative flux corresponds to ice loss into the ocean</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_area_glacierized</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">glacierized area</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_cold_base</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">glacierized area where basal ice is cold</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_floating</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">area of ice shelves in glacierized areas</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">floating_ice_shelf_area</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_grounded</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">area of grounded ice in glacierized areas</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">grounded_ice_sheet_area</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_temperate_base</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">glacierized area where basal ice is temperate</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_enthalpy</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">J</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">enthalpy of the ice, including seasonal cover</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_enthalpy_glacierized</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">J</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">enthalpy of the ice in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_mass</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mass of the ice, including seasonal cover</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_mass</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_mass_glacierized</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mass of the ice in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of the ice, including seasonal cover</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume_cold</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of cold ice, including seasonal cover</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of the ice in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_cold</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of cold ice in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_floating</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of ice shelves in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_grounded</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of grounded ice in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_temperate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of temperate ice in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">ice_volume_temperate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">volume of temperate ice, including seasonal cover</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">limnsw</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">mass of the ice not displacing sea water</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">land_ice_mass_not_displacing_sea_water</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">liquified_ice_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3 / year</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of ice loss due to liquefaction, averaged over the reporting interval</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive means ice loss</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">max_diffusivity</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m2 s-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">maximum diffusivity</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">max_hor_vel</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">maximum abs component of horizontal ice velocity over grid in last time step during time-series reporting interval</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">sea_level_rise_potential</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">the sea level rise that would result if all the ice were melted</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_accumulation_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface accumulation rate (PDD model)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_melt_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface melt rate (PDD model)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">surface_runoff_rate</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">kg year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">surface runoff rate (PDD model)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the mass of ice, including seasonal cover</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_basal_mass_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">total over ice domain of bottom surface ice mass flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_basal_mass_balance</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive means ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_calving</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">calving flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_calving</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive means ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_conservation_error</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">total numerical flux needed to preserve non-negativity of ice thickness</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Comment:</th><td class="field-body">positive means ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_discharge</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">discharge flux (frontal melt, calving, forced retreat)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_calving_and_ice_front_melting</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive means ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_flow</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the mass of ice due to flow (i.e. prescribed ice thickness)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_due_to_surface_mass_flux</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">total over ice domain of top surface ice mass flux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Standard name:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_surface_mass_balance</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Comment:</th><td class="field-body">positive means ice gain</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_mass_glacierized</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">Gt year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the ice mass in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_volume</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the ice volume, including seasonal cover</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tendency_of_ice_volume_glacierized</span></code><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Units:</th><td class="field-body">m3 year-1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Description:</th><td class="field-body">rate of change of the ice volume in glacierized areas</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="../parameters/index.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="../index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="../../climate_forcing/index.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Diagnostic quantities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spatially-variable-fields">Spatially-variable fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scalar-time-series">Scalar time-series</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

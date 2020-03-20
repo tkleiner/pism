@@ -1,0 +1,189 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Surface gradient method &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Modeling conservation of energy" href="energy-balance.html" />
+    <link rel="prev" title="Ice rheology" href="rheology.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="surface-gradient-method">
+<span id="sec-gradient"></span><h1>Surface gradient method<a class="headerlink" href="#surface-gradient-method" title="Permalink to this headline">¶</a></h1>
+<p>PISM computes surface gradients to determine the “driving stress”</p>
+<div class="math notranslate nohighlight">
+\[(\tau_{d,x},\tau_{d,y}) = - \rho g H \nabla h,\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is the ice thickness, and <span class="math notranslate nohighlight">\(h\)</span> is the ice surface elevation. The driving stress
+enters into both the SIA and SSA stress balances, but in the former the driving stress is
+needed on a staggered grid, while in the latter the driving stress is needed on the
+regular grid.</p>
+<p>Surface gradients are computed by finite differences in several slightly-different ways.
+There are options for choosing which method to use <strong>in the SIA model</strong>, but to the best
+of our knowledge there is no theoretical advice on the best, most robust mechanism.</p>
+<p>The SSA model uses centered finite differences, switching from centered to one-sided near
+the ice margin and does not recognize choices other than <code class="option docutils literal notranslate"><span class="pre">-gradient</span> <span class="pre">eta</span></code>.</p>
+<p>There are three <code class="option docutils literal notranslate"><span class="pre">-gradient</span></code> methods in PISM:</p>
+<table border="1" class="colwidths-given docutils" id="tab-sia-gradient">
+<caption><span class="caption-number">Table 15 </span><span class="caption-text">Options controlling the surface gradient computation in the SIA code</span><a class="headerlink" href="#tab-sia-gradient" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-gradient</span> <span class="pre">mahaffy</span></code></td>
+<td>This most “standard” way computes the surface slope onto the staggered grid for the
+SIA <a class="reference internal" href="../../../zzz_references_html.html#mahaffy" id="id1">[76]</a>. It makes <span class="math notranslate nohighlight">\(O(\Delta x^2,\Delta y^2)\)</span> errors. For computations
+of driving stress on the regular grid, centered differencing is used instead.</td>
+</tr>
+<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-gradient</span> <span class="pre">haseloff</span></code></td>
+<td>This is the default method. It only differs from <code class="docutils literal notranslate"><span class="pre">mahaffy</span></code> at ice-margin
+locations, where the slope is approximated using one-sided finite differences in
+cases where an adjacent ice-free bedrock surface elevation is above the ice
+elevation.</td>
+</tr>
+<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-gradient</span> <span class="pre">eta</span></code></td>
+<td><p class="first">In this method we first transform the thickness <span class="math notranslate nohighlight">\(H\)</span> by <span class="math notranslate nohighlight">\(\eta = H^{(2n+2)/n}\)</span> and
+then differentiate the sum of the thickness and the bed using centered differences:</p>
+<div class="math notranslate nohighlight">
+\[\nabla h = \nabla H + \nabla b = \frac{n}{(2n+2)}
+\eta^{(-n-2)/(2n+2)} \nabla \eta + \nabla b.\]</div>
+<p class="last">Here <span class="math notranslate nohighlight">\(b\)</span> is the bed elevation and <span class="math notranslate nohighlight">\(h\)</span> is the surface elevation. This transformation
+sometimes has the benefits that the surface values of the horizontal velocity and
+vertical velocity, and the driving stress, are better behaved near the margin. See
+<a class="reference internal" href="../../../zzz_references_html.html#blkcb" id="id2">[29]</a> for technical explanation of this transformation and compare
+<a class="reference internal" href="../../../zzz_references_html.html#saitomargin" id="id3">[77]</a>. The actual finite difference schemes applied to compute the
+surface slope are similar to option <code class="docutils literal notranslate"><span class="pre">mahaffy</span></code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="option docutils literal notranslate"><span class="pre">-gradient</span> <span class="pre">eta</span></code> may improve the model performance near <em>grounded</em>
+margins but should not be used in simulations of marine ice sheets.</p>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="rheology.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="energy-balance.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Modeling choices</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../computational/index.html">Model domain, grid, and time</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Ice dynamics and thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../subglacier/index.html">The subglacier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../marine/index.html">Marine ice sheet modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../regional/index.html">Modeling individual outlet glaciers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../disabling.html">Disabling sub-models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hard-choices.html">Dealing with more difficult modeling choices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

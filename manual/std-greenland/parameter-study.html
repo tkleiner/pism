@@ -1,0 +1,291 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>An ice dynamics parameter study &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ice dynamics, the PISM view" href="../highlevelview/index.html" />
+    <link rel="prev" title="Grid sequencing" href="grid-sequencing.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="an-ice-dynamics-parameter-study">
+<span id="sec-paramstudy"></span><h1>An ice dynamics parameter study<a class="headerlink" href="#an-ice-dynamics-parameter-study" title="Permalink to this headline">¶</a></h1>
+<p>The readers of this manual should not assume the PISM authors know all the correct
+parameters for describing ice flow. While PISM must have <em>default</em> values of all
+parameters, to help users get started,<a class="footnote-reference" href="#id10" id="id1">[1]</a> it has more than two hundred user-configurable
+parameters. The goal in this manual is to help the reader adjust them to their desired
+values. While “correct” values may never be known, or may not exist, examining the
+behavior of the model as it depends on parameters is both a nontrivial and an essential
+task.</p>
+<p>For some parameters used by PISM, changing their values within their ranges of
+experimental uncertainty is unlikely to affect model results in any important manner (e.g.
+<code class="docutils literal notranslate"><span class="pre">constants.sea_water.density</span></code>). For others, however, for instance for the exponent in
+the basal sliding law, changing the value is highly-significant to model results, as we’ll
+see in this subsection. This is also a parameter which is very uncertain given current
+glaciological understanding <a class="reference internal" href="../../zzz_references_html.html#cuffeypaterson" id="id2">[74]</a>.</p>
+<p>To illustrate a parameter study in this Manual we restrict consideration to just two
+important parameters for ice dynamics,</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(q=\)</span> <code class="config docutils literal notranslate"><span class="pre">basal_resistance.pseudo_plastic.q</span></code>: exponent used in
+the sliding law which relates basal sliding velocity to basal shear stress in the SSA
+stress balance; see subsection <a class="reference internal" href="../modeling-choices/subglacier/basal-strength.html#sec-basestrength"><span class="std std-ref">Controlling basal strength</span></a> for more on this parameter, and</li>
+<li><span class="math notranslate nohighlight">\(e=\)</span> <code class="config docutils literal notranslate"><span class="pre">stress_balance.sia.enhancement_factor</span></code>: values larger
+than one give flow “enhancement” by making the ice deform more easily in shear than is
+determined by the standard flow law <a class="reference internal" href="../../zzz_references_html.html#lliboutryduval1985" id="id3">[71]</a>, <a class="reference internal" href="../../zzz_references_html.html#patersonbudd" id="id4">[69]</a>;
+applied only in the SIA stress balance; see section <a class="reference internal" href="../modeling-choices/dynamics/rheology.html#sec-rheology"><span class="std std-ref">Ice rheology</span></a> for more on this
+parameter.</li>
+</ul>
+<p>By varying these parameters over full intervals of values, say <span class="math notranslate nohighlight">\(0.1\le q \le 1.0\)</span>
+and <span class="math notranslate nohighlight">\(1 \le e \le 6\)</span>, we could explore a two-dimensional parameter space. But of
+course each <span class="math notranslate nohighlight">\((q,e)\)</span> pair needs a full computation, so we can only sample this
+two-dimensional space. Furthermore we must specify a concrete run for each parameter pair.
+In this case we choose to run for 1000 model years, in every case initializing from the
+stored state <code class="docutils literal notranslate"><span class="pre">g10km_gridseq.nc</span></code> generated in the previous section <a class="reference internal" href="grid-sequencing.html#sec-gridseq"><span class="std std-ref">Grid sequencing</span></a>.</p>
+<p>The next script, which is <code class="docutils literal notranslate"><span class="pre">param.sh</span></code> in <code class="docutils literal notranslate"><span class="pre">examples/std-greenland/</span></code>, gets values
+<span class="math notranslate nohighlight">\(q \in \{0.1,0.5,1.0\}\)</span> and <span class="math notranslate nohighlight">\(e\in\{1,3,6\}\)</span> in a double <code class="docutils literal notranslate"><span class="pre">for</span></code>-loop. It
+generates a run-script for each <span class="math notranslate nohighlight">\((q,e)\)</span> pair. For each parameter setting it calls
+<code class="docutils literal notranslate"><span class="pre">spinup.sh</span></code>, with the environment variable <code class="docutils literal notranslate"><span class="pre">PISM_DO=echo</span></code> so that <code class="docutils literal notranslate"><span class="pre">spinup.sh</span></code> simply
+outputs the run command. This run command is then redirected into an appropriately-named
+<code class="docutils literal notranslate"><span class="pre">.sh</span></code> script file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nv">NN</span><span class="o">=</span><span class="m">4</span>
+<span class="nv">DURATION</span><span class="o">=</span><span class="m">1000</span>
+<span class="nv">START</span><span class="o">=</span>g10km_gridseq.nc
+<span class="k">for</span> PPQ in <span class="m">0</span>.1 <span class="m">0</span>.5 <span class="m">1</span>.0 <span class="p">;</span> <span class="k">do</span>
+  <span class="k">for</span> SIAE in <span class="m">1</span> <span class="m">3</span> <span class="m">6</span> <span class="p">;</span> <span class="k">do</span>
+     <span class="nb">export</span> <span class="nv">PISM_DO</span><span class="o">=</span><span class="nb">echo</span> <span class="nv">REGRIDFILE</span><span class="o">=</span><span class="nv">$START</span> <span class="nv">PARAM_PPQ</span><span class="o">=</span><span class="nv">$PPQ</span> <span class="nv">PARAM_SIAE</span><span class="o">=</span><span class="nv">$SIAE</span>
+     ./spinup.sh <span class="nv">$NN</span> const <span class="nv">$DURATION</span> <span class="m">10</span> hybrid p10km_<span class="si">${</span><span class="nv">PPQ</span><span class="si">}</span>_<span class="si">${</span><span class="nv">SIAE</span><span class="si">}</span>.nc <span class="p">&amp;</span>&gt; p10km_<span class="si">${</span><span class="nv">PPQ</span><span class="si">}</span>_<span class="si">${</span><span class="nv">SIAE</span><span class="si">}</span>.sh
+  <span class="k">done</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>Notice that, because the stored state <code class="docutils literal notranslate"><span class="pre">g10km_gridseq.nc</span></code> used <span class="math notranslate nohighlight">\(q=0.5\)</span> and
+<span class="math notranslate nohighlight">\(e=3\)</span>, one of these runs simply continues with no change in the physics.</p>
+<p>To set up and run the parameter study, without making a mess from all the generated files,
+do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> examples/std-greenland/           <span class="c1"># g10km_gridseq.nc should be in this directory</span>
+mkdir paramstudy
+<span class="nb">cd</span> paramstudy
+ln -s ../g10km_gridseq.nc            <span class="c1"># these four lines make links to ...</span>
+ln -s ../pism_Greenland_5km_v1.1.nc  <span class="c1">#</span>
+ln -s ../spinup.sh                   <span class="c1">#</span>
+ln -s ../param.sh                    <span class="c1"># ... existing files in examples/std-greenland/</span>
+./param.sh
+</pre></div>
+</div>
+<p>The result of the last command is to generate nine run scripts,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>p10km_0.1_1.sh  p10km_0.1_3.sh  p10km_0.1_6.sh
+p10km_0.5_1.sh  p10km_0.5_3.sh  p10km_0.5_6.sh
+p10km_1.0_1.sh  p10km_1.0_3.sh  p10km_1.0_6.sh
+</pre></div>
+</div>
+<p>The reader should inspect a few of these scripts. They are all very similar, of course,
+but, for instance, the <code class="docutils literal notranslate"><span class="pre">p10km_0.1_1.sh</span></code> script uses options <code class="docutils literal notranslate"><span class="pre">-pseudo_plastic_q</span> <span class="pre">0.1</span></code>
+and <code class="docutils literal notranslate"><span class="pre">-sia_e</span> <span class="pre">1</span></code>.</p>
+<div class="figure" id="fig-ivolparamstudy">
+<img alt="../../_images/ivol-param.png" src="../../_images/ivol-param.png" />
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Time series of ice volume <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code> from nine runs in our parameter study
+example, with parameter choices <span class="math notranslate nohighlight">\((q,e)\)</span> given.</span></p>
+</div>
+<p>We have not yet run PISM, but only asked one script to create nine others. We now have the
+option of running them sequentially or in parallel. Each script itself does a parallel
+run, over the <code class="docutils literal notranslate"><span class="pre">NN=4</span></code> processes specified by <code class="docutils literal notranslate"><span class="pre">param.sh</span></code> when generating the run
+scripts. If you have <span class="math notranslate nohighlight">\(4 \times 9 = 36\)</span> cores available then you can do the runs
+fully in parallel (this is <code class="docutils literal notranslate"><span class="pre">runparallel.sh</span></code> in <code class="docutils literal notranslate"><span class="pre">examples/std-greenland/</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="k">for</span> scriptname in <span class="k">$(</span>ls p10km*sh<span class="k">)</span> <span class="p">;</span> <span class="k">do</span>
+  <span class="nb">echo</span> <span class="p">;</span> <span class="nb">echo</span> <span class="s2">&quot;starting </span><span class="si">${</span><span class="nv">scriptname</span><span class="si">}</span><span class="s2"> ...&quot;</span>
+  bash <span class="nv">$scriptname</span> <span class="p">&amp;</span>&gt; out.<span class="nv">$scriptname</span> <span class="p">&amp;</span>  <span class="c1"># start immediately in background</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>Otherwise you should do them in sequence (this is <code class="docutils literal notranslate"><span class="pre">runsequential.sh</span></code> in
+<code class="docutils literal notranslate"><span class="pre">examples/std-greenland/</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="k">for</span> scriptname in <span class="k">$(</span>ls p10km*sh<span class="k">)</span> <span class="p">;</span> <span class="k">do</span>
+  <span class="nb">echo</span> <span class="p">;</span> <span class="nb">echo</span> <span class="s2">&quot;starting </span><span class="si">${</span><span class="nv">scriptname</span><span class="si">}</span><span class="s2"> ...&quot;</span>
+  bash <span class="nv">$scriptname</span>                       <span class="c1"># will wait for completion</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>On the same old 2012-era 4 core laptop, <code class="docutils literal notranslate"><span class="pre">runsequential.sh</span></code> took a total of just under 7
+hours to complete the whole parameter study. The runs with <span class="math notranslate nohighlight">\(q=0.1\)</span> (the more
+“plastic” end of the basal sliding spectrum) took up to four times longer than the
+<span class="math notranslate nohighlight">\(q=0.5\)</span> and <span class="math notranslate nohighlight">\(q=1.0\)</span> runs. Roughly speaking, values of <span class="math notranslate nohighlight">\(q\)</span> which are
+close to zero imply a subglacial till model with a true yield stress, and the result is
+that even small changes in overall ice sheet state (geometry, energy, …) will cause
+<em>some</em> location to exceed its yield stress and suddenly change flow regime. This will
+shorten the time steps. By contrast, the <span class="math notranslate nohighlight">\(e\)</span> value is much less significant in
+determining run times.</p>
+<div class="figure" id="fig-paramstudy">
+<img alt="../../_images/p10km-comparison.png" src="../../_images/p10km-comparison.png" />
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Surface speed <code class="docutils literal notranslate"><span class="pre">velsurf_mag</span></code> from a 10 km grid parameter study. Right-most subfigure
+is observed data from <code class="docutils literal notranslate"><span class="pre">Greenland_5km_v1.1.nc</span></code>. Top row: <span class="math notranslate nohighlight">\(q=0.1\)</span> and
+<span class="math notranslate nohighlight">\(e=1,3,6\)</span> (left-to-right). Middle row: <span class="math notranslate nohighlight">\(q=0.5\)</span>. Bottom row: <span class="math notranslate nohighlight">\(q=1.0\)</span>.
+All subfigures have common color scale (velocity m/year), as shown in the right-most
+figure, with 100 m/year contour shown in all cases (solid black).</span></p>
+</div>
+<p>On a supercomputer, the <code class="docutils literal notranslate"><span class="pre">runparallel.sh</span></code> script generally should be modified to submit
+jobs to the scheduler. See example scripts <code class="docutils literal notranslate"><span class="pre">advanced/paramspawn.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">advanced/paramsubmit.sh</span></code> for a parameter study that does this. (But see your system
+administrator if you don’t know what a “job scheduler” is!) Of course, if you have a
+supercomputer then you can redo this parameter study on a 5 km grid.</p>
+<p>Results from these runs are seen in <a class="reference internal" href="#fig-ivolparamstudy"><span class="std std-numref">Fig. 12</span></a> and
+<a class="reference internal" href="#fig-paramstudy"><span class="std std-numref">Fig. 13</span></a>. In the former we see that the <span class="math notranslate nohighlight">\((0.5,3)\)</span> run simply continues the
+previous initialization run. In some other graphs we see abrupt initial changes, caused by
+abrupt parameter change, e.g. when the basal sliding becomes much more plastic (<span class="math notranslate nohighlight">\(q=0.1\)</span>).
+In all cases with <span class="math notranslate nohighlight">\(e=1\)</span> the flow slows and the sheet grows in volume as discharge
+decreases, while in all cases with <span class="math notranslate nohighlight">\(e=6\)</span> the flow accelerates and the sheet shrinks in
+volume as discharge increases.</p>
+<p>In <a class="reference internal" href="#fig-paramstudy"><span class="std std-numref">Fig. 13</span></a> we can compare the surface speed model results to
+observations. Roughly speaking, the ice softness parameter <span class="math notranslate nohighlight">\(e\)</span> has effects seen
+most-clearly by comparing the interior of the ice sheet; scan left-to-right for the
+<span class="math notranslate nohighlight">\(e=1,3,6\)</span> subfigures. The basal sliding exponent <span class="math notranslate nohighlight">\(q\)</span> has effects seen
+most-clearly by comparing flow along the very steep margin, especially in the southern
+half of the ice sheet; scan top-to-bottom for <span class="math notranslate nohighlight">\(q=0.1,0.5,1.0\)</span>, going from
+nearly-plastic at top to linear at bottom.</p>
+<p>From such figures we can make an informal assessment and comparison of the results, but
+objective assessment is important. Example objective functionals include:</p>
+<ol class="arabic simple">
+<li>compute the integral of the square (or other power) of the difference between the model
+and observed surface velocity <a class="reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id5">[62]</a>, or</li>
+<li>compute the model-observed differences between the histogram of the number of cells
+with a given surface speed <a class="reference internal" href="../../zzz_references_html.html#bkajs" id="id6">[126]</a>.</li>
+</ol>
+<p>Note that these functionals are measuring the effects of changing a small number of
+parameters, namely two parameters in the current study. So-called “inversion” might use
+the same objective functionals but with a much larger parameter space. Inversion is
+therefore capable of achieving much smaller objective measures <a class="reference internal" href="../../zzz_references_html.html#habermannetal2013" id="id7">[63]</a>,
+<a class="reference internal" href="../../zzz_references_html.html#larouretal2012" id="id8">[127]</a>, <a class="reference internal" href="../../zzz_references_html.html#priceetal2011" id="id9">[128]</a>, though at the cost of less understanding,
+perhaps, of the meaning of the optimal parameter values.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>See <a class="reference internal" href="../parameters/index.html#sec-parameter-list"><span class="std std-ref">Configuration parameters</span></a> for the full list.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="grid-sequencing.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="../highlevelview/index.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Getting started: a Greenland ice sheet example</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="input-data.html">Input data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-1.html">First run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-1-watching.html">Watching the first run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-2.html">Second run: a better ice-dynamics model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-3.html">Third run: higher resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-4.html">Fourth run: paleo-climate model spin-up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grid-sequencing.html">Grid sequencing</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">An ice dynamics parameter study</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

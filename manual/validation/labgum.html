@@ -1,0 +1,216 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>An SIA flow model for a table-top laboratory experiment &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="An SSA flow model for the Ross Ice Shelf in Antarctica" href="ross.html" />
+    <link rel="prev" title="Validation case studies" href="index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="an-sia-flow-model-for-a-table-top-laboratory-experiment">
+<span id="sec-labgum"></span><h1>An SIA flow model for a table-top laboratory experiment<a class="headerlink" href="#an-sia-flow-model-for-a-table-top-laboratory-experiment" title="Permalink to this headline">¶</a></h1>
+<p>Though there are additional complexities to the flow of real ice sheets, an ice sheet is a
+shear-thinning fluid with a free surface. PISM ought to be able to model such flows in
+some generality. We test that ability here by comparing PISM’s isothermal SIA numerical
+model to a laboratory observations of a 1% Xanthan gum suspension in water in a
+table-top, moving-margin experiment by R. Sayag and M. Worster
+<a class="reference internal" href="../../zzz_references_html.html#sayagworster2013" id="id1">[135]</a>, <a class="reference internal" href="../../zzz_references_html.html#sayagpeglerworster2012" id="id2">[136]</a>. The “gum” fluid is more shear-thinning
+than ice, and it has much lower absolute viscosity values, but it has the same density.
+This flow has total mass <span class="math notranslate nohighlight">\(\sim 1\)</span> kg, compared to <span class="math notranslate nohighlight">\(\sim 10^{18}\)</span> kg for the Greenland ice
+sheet.</p>
+<p>We compare our numerical results to the “constant-flux” experiment from
+<a class="reference internal" href="../../zzz_references_html.html#sayagworster2013" id="id3">[135]</a>. <a class="reference internal" href="#fig-labgumexperiment"><span class="std std-numref">Fig. 30</span></a> shows the experimental setup by
+reproducing Figures 2(c) and 2(d) from that reference. A pump pushes the translucent
+blue-dyed fluid through a round 8 mm hole in the middle of a clear table-top at a mass
+rate of about 3 gm/s. The downward-pointing camera, which produced the right-hand figure,
+allows measurement of the location of margin of the “ice cap”, and in particular of its
+radius. The measured radii data are the black dots in <a class="reference internal" href="#fig-labgumresult"><span class="std std-numref">Fig. 31</span></a>.</p>
+<div class="figure" id="fig-labgumexperiment">
+<img alt="../../_images/labgumexperiment.png" src="../../_images/labgumexperiment.png" />
+<p class="caption"><span class="caption-number">Fig. 30 </span><span class="caption-text">Reproduction of Figures 2(c) and 2(d) from <a class="reference internal" href="../../zzz_references_html.html#sayagworster2013" id="id4">[135]</a>. Left: experimental
+apparatus used for “constant-flux release” experiment. Right: snapshot of constant-flux
+experiment (plan view), showing an axisymmetric front.</span></p>
+</div>
+<p>The closest glaciological analog would be an ice sheet on a flat bed fed by positive basal
+mass balance (i.e. “refreeze”) underneath the dome, but with zero mass balance elsewhere
+on the lower and upper surfaces. However, noting that the mass-continuity equation is
+vertically-integrated, we may model the input flux (mass balance) as arriving at the
+<em>top</em> of the ice sheet, to use PISM’s climate-input mechanisms. The flow though the
+input hole is simply modeled as constant across the hole, so the input “climate” uses
+<code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span></code> with a field <code class="docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>, in the bootstrapping
+file, which is a positive constant in the hole and zero outside. While our replacement of
+flow into the base by mass balance at the top represents a very large change in the
+vertical component of the velocity field, we still see good agreement in the overall shape
+of the “ice sheet”, and specifically in the rate of margin advance.</p>
+<p>Sayag &amp; Worster estimate Glen exponent <span class="math notranslate nohighlight">\(n = 5.9\)</span> and a softness coefficient <span class="math notranslate nohighlight">\(A = 9.7
+\times 10^{-9}\,\text{Pa}^{-5.9}\,\text{s}^{-1}\)</span> for the flow law of their gum suspension,
+using regression of laboratory measurements of the radius. (Compare PISM defaults <span class="math notranslate nohighlight">\(n=3\)</span>
+and <span class="math notranslate nohighlight">\(A\approx 4\times 10^{-25}\,\text{Pa}^{-3}\,\text{s}^{-1}\)</span> for ice.) Setting the Sayag
+&amp; Worster values is one of several changes to the configuration parameters, compared to
+PISM ice sheet defaults, which are done in part by overriding parameters at run time by
+using the <code class="docutils literal notranslate"><span class="pre">-config_override</span></code> option. See <code class="docutils literal notranslate"><span class="pre">examples/labgum/preprocess.py</span></code> for
+the generation of a configuration <code class="docutils literal notranslate"><span class="pre">.nc</span></code> file with these settings.</p>
+<p>To run the example on the default 10 mm grid, first do</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./preprocess.py
+</pre></div>
+</div>
+<p>and then do a run for 746 model seconds <a class="reference internal" href="../../zzz_references_html.html#sayagworster2013" id="id5">[135]</a> on the 10 mm grid on a
+<span class="math notranslate nohighlight">\(520\,\text{mm}\,\times 520\,\text{mm}\)</span> square domain using 4 processors:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./rungum.sh 4 52 &amp;&gt; out.lab52 &amp;
+</pre></div>
+</div>
+<p>This run generates text file <code class="docutils literal notranslate"><span class="pre">out.lab52</span></code>, diagnostic files <code class="docutils literal notranslate"><span class="pre">ts_lab52.nc</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ex_lab52.nc</span></code>, and final output <code class="docutils literal notranslate"><span class="pre">lab52.nc</span></code>. This run took about 5 minutes on
+a 2013 laptop, thus roughly real time! When it is done, you can compare the modeled radius
+to the experimental data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./showradius.py -o r52.png -d constantflux3.txt ts_lab52.nc
+</pre></div>
+</div>
+<p>You can also redo the whole thing on higher resolution grids (here: 5 and 2.5 mm), here
+using 6 MPI processes if the runs are done simultaneously, and when it is done after
+several hours, make a combined figure just like <a class="reference internal" href="#fig-labgumresult"><span class="std std-numref">Fig. 31</span></a>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./preprocess.py -Mx 104 -o initlab104.nc
+./preprocess.py -Mx 208 -o initlab208.nc
+./rungum.sh 2 104 &amp;&gt; out.lab104 &amp;
+./rungum.sh 4 208 &amp;&gt; out.lab208 &amp;
+./showradius.py -o foo.png -d constantflux3.txt ts_lab*.nc
+</pre></div>
+</div>
+<div class="figure" id="fig-labgumresult">
+<img alt="../../_images/labgumradius.png" src="../../_images/labgumradius.png" />
+<p class="caption"><span class="caption-number">Fig. 31 </span><span class="caption-text">Radius <span class="math notranslate nohighlight">\(r_N(t)\)</span> for runs with 10 mm (<code class="docutils literal notranslate"><span class="pre">ts_lab52.nc</span></code>), 5 mm (<code class="docutils literal notranslate"><span class="pre">ts_lab104.nc</span></code>), and 2.5
+mm (<code class="docutils literal notranslate"><span class="pre">ts_lab208.nc</span></code>) grids, compared to observations from Sayag &amp; Worster’s
+<a class="reference internal" href="../../zzz_references_html.html#sayagworster2013" id="id6">[135]</a> table-top “ice cap” (gravity current) made from a 1% Xanthan
+gum suspension, as shown in Figure <a class="reference internal" href="#fig-labgumexperiment"><span class="std std-numref">Fig. 30</span></a>.</span></p>
+</div>
+<p>We see that on the coarsest grid the modeled volume has “steps” because the margin
+advances discretely. Note we are computing the radius by first computing the fluid-covered
+area <span class="math notranslate nohighlight">\(a\)</span> on the cartesian grid, and then using <span class="math notranslate nohighlight">\(a=\pi r^2\)</span> to compute the radius.</p>
+<p>Results are better on finer grids, especially at small times, because the input hole has
+radius of only 8 mm. Furthermore this “ice cap” has radius comparable to the hole for the
+first few model seconds. The early evolution is thus distinctly non-shallow, but we see
+that increasing the model resolution reduces most of the observation-model difference. In
+fact there is little need for “higher-order” stresses because the exact similarity
+solution of the shallow continuum equations, used by Sayag &amp; Worster, closely-fits the
+data even for small radius and time (see <a class="reference internal" href="../../zzz_references_html.html#sayagworster2013" id="id7">[135]</a>, Figure 4).</p>
+<p>In any case, the large-time observations are very closely-fit by the numerical results at
+all grid resolutions. We have used the Glen-law parameters <span class="math notranslate nohighlight">\(n,A\)</span> as calculated by Sayag &amp;
+Worster, but one could do parameter-fitting to get the “best” values if desired. In
+particular, roughly speaking, <span class="math notranslate nohighlight">\(n\)</span> controls the slope of the results in
+<a class="reference internal" href="#fig-labgumresult"><span class="std std-numref">Fig. 31</span></a> and <span class="math notranslate nohighlight">\(A\)</span> controls their vertical displacement.</p>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="index.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="ross.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Validation case studies</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">An SIA flow model for a table-top laboratory experiment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ross.html">An SSA flow model for the Ross Ice Shelf in Antarctica</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

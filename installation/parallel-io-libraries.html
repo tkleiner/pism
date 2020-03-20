@@ -1,0 +1,400 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installing parallel I/O libraries &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation Cookbook" href="cookbook.html" />
+    <link rel="prev" title="Required tools and libraries" href="prerequisites.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="installing-parallel-i-o-libraries">
+<span id="sec-install-parallel-io-libs"></span><h1>Installing parallel I/O libraries<a class="headerlink" href="#installing-parallel-i-o-libraries" title="Permalink to this headline">¶</a></h1>
+<p>High-resolution simulations (e.g. modeling the entire Greenland ice sheet using the 900 m
+resolution and a grid of 1700 by 3000 points) can produce huge amounts of data and I/O can
+become a bottleneck.</p>
+<p>PISM supports several parallel I/O approaches that take advantage of parallel <a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF</a>,
+<a class="reference external" href="https://parallel-netcdf.github.io/">PnetCDF</a>, and NCAR <a class="reference external" href="https://ncar.github.io/ParallelIO/">ParallelIO</a>. The administrators of your HPC system should be able to
+help you install these libraries, but it may be easier to install them in the “home”
+directory instead.</p>
+<p>This section describes the steps needed to build</p>
+<ul class="simple">
+<li>NetCDF with parallel I/O based on HDF5 (needed to use PISM’s option <code class="option docutils literal notranslate"><span class="pre">-o_format</span>
+<span class="pre">netcdf4_parallel</span></code>),</li>
+<li>PNetCDF (needed to use PISM’s option <code class="option docutils literal notranslate"><span class="pre">-o_format</span> <span class="pre">pnetfdf</span></code>),</li>
+<li>ParallelIO (needed to use options <code class="option docutils literal notranslate"><span class="pre">-o_format</span> <span class="pre">pio_netcdf4p</span></code>,
+<code class="option docutils literal notranslate"><span class="pre">-o_format</span> <span class="pre">pio_netcdf4c</span></code>, <code class="option docutils literal notranslate"><span class="pre">-o_format</span> <span class="pre">pio_pnetcdf</span></code>, <code class="option docutils literal notranslate"><span class="pre">-o_format</span> <span class="pre">pio_netcdf</span></code>).</li>
+</ul>
+<p>Scripts below install libraries in <code class="docutils literal notranslate"><span class="pre">~/local/library_name</span></code>, using
+<code class="docutils literal notranslate"><span class="pre">~/local/build/library_name</span></code> to build them.</p>
+<p>Section <a class="reference internal" href="pism.html#sec-install-local-libraries"><span class="std std-ref">Building PISM with libraries in non-standard locations</span></a> explains how build PISM with these libraries.</p>
+<p>Section <a class="reference internal" href="../manual/practical-usage/input-output.html#sec-pism-io-performance"><span class="std std-ref">PISM’s I/O performance</span></a> explains how to use them in PISM.</p>
+<div class="section" id="installing-hdf5-based-parallel-netcdf">
+<span id="sec-install-parallel-netcdf"></span><h2>Installing HDF5-based parallel NetCDF<a class="headerlink" href="#installing-hdf5-based-parallel-netcdf" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-hdf5">
+<span id="sec-install-hdf5"></span><h3>Installing  HDF5<a class="headerlink" href="#installing-hdf5" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Install HDF5 1.10.5 with parallel I/O in ~/local/hdf5,</span>
+<span class="c1"># using ~/local/build/hdf5 as the build directory.</span>
+
+<span class="nv">version</span><span class="o">=</span><span class="m">1</span>.10.5
+<span class="nv">prefix</span><span class="o">=</span><span class="nv">$HOME</span>/local/hdf5
+<span class="nv">build_dir</span><span class="o">=</span>~/local/build/hdf5
+<span class="nv">hdf5_site</span><span class="o">=</span>https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10
+<span class="nv">url</span><span class="o">=</span><span class="si">${</span><span class="nv">hdf5_site</span><span class="si">}</span>/hdf5-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>/src/hdf5-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
+
+mkdir -p <span class="si">${</span><span class="nv">build_dir</span><span class="si">}</span>
+<span class="nb">pushd</span> <span class="si">${</span><span class="nv">build_dir</span><span class="si">}</span>
+
+wget -nc <span class="si">${</span><span class="nv">url</span><span class="si">}</span>
+tar xzf hdf5-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
+
+<span class="nb">pushd</span> hdf5-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>
+
+<span class="nv">CC</span><span class="o">=</span>mpicc <span class="nv">CFLAGS</span><span class="o">=</span>-w ./configure <span class="se">\</span>
+  --disable-static <span class="se">\</span>
+  --enable-parallel <span class="se">\</span>
+  --prefix<span class="o">=</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span> <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee hdf5_configure.log
+
+make all <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee hdf5_compile.log
+make install <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee hdf5_install.log
+
+<span class="nb">popd</span>
+<span class="nb">popd</span>
+</pre></div>
+</td></tr></table></div>
+<p>To compile parallel HDF5 one should use the MPI compiler wrapper <code class="docutils literal notranslate"><span class="pre">mpicc</span></code> and run
+<code class="docutils literal notranslate"><span class="pre">configure</span></code> with the option <code class="docutils literal notranslate"><span class="pre">--enable-parallel</span></code>. The flag <code class="docutils literal notranslate"><span class="pre">-w</span></code> is not important: it
+hides numerous compiler warnings emitted when building HDF5.</p>
+</div>
+<div class="section" id="installing-netcdf">
+<span id="sec-install-netcdf"></span><h3>Installing NetCDF<a class="headerlink" href="#installing-netcdf" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Install parallel NetCDF using parallel HDF5 in ~/local/hdf5 and</span>
+<span class="c1"># ~/local/build/netcdf as a build directory.</span>
+
+<span class="nv">hdf5</span><span class="o">=</span>~/local/hdf5
+
+<span class="nv">version</span><span class="o">=</span><span class="m">4</span>.7.3
+<span class="nv">prefix</span><span class="o">=</span><span class="nv">$HOME</span>/local/netcdf
+<span class="nv">build_dir</span><span class="o">=</span>~/local/build/netcdf
+<span class="nv">url</span><span class="o">=</span>ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-c-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
+
+mkdir -p <span class="si">${</span><span class="nv">build_dir</span><span class="si">}</span>
+<span class="nb">pushd</span> <span class="si">${</span><span class="nv">build_dir</span><span class="si">}</span>
+
+wget -nc <span class="si">${</span><span class="nv">url</span><span class="si">}</span>
+tar zxf netcdf-c-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
+
+<span class="nb">pushd</span> netcdf-c-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>
+
+<span class="nv">CC</span><span class="o">=</span>mpicc <span class="nv">CPPFLAGS</span><span class="o">=</span>-I<span class="si">${</span><span class="nv">hdf5</span><span class="si">}</span>/include <span class="nv">LDFLAGS</span><span class="o">=</span>-L<span class="si">${</span><span class="nv">hdf5</span><span class="si">}</span>/lib ./configure <span class="se">\</span>
+        --enable-netcdf4 <span class="se">\</span>
+        --disable-dap <span class="se">\</span>
+        --prefix<span class="o">=</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span> <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee netcdf_configure.log
+
+make all <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee netcdf_compile.log
+make install <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee netcdf_install.log
+
+<span class="nb">popd</span>
+<span class="nb">popd</span>
+</pre></div>
+</td></tr></table></div>
+<p>Here we use the same compiler wrapper and set <code class="docutils literal notranslate"><span class="pre">CPPFLAGS</span></code> and <code class="docutils literal notranslate"><span class="pre">LDFLAGS</span></code> to select the
+parallel HDF5 library installed earlier. The option <code class="docutils literal notranslate"><span class="pre">--enable-netcdf4</span></code> is required for
+parallel I/O; <code class="docutils literal notranslate"><span class="pre">--disable-dap</span></code> is not required (it disables a NetCDF feature not used by
+PISM).</p>
+</div>
+</div>
+<div class="section" id="installing-pnetcdf">
+<span id="sec-install-pnetcdf"></span><h2>Installing PnetCDF<a class="headerlink" href="#installing-pnetcdf" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Install PnetCDF 1.12.0 in ~/local/pnetcdf,</span>
+<span class="c1"># using ~/local/build/pnetcdf as a build directory.</span>
+
+<span class="nv">version</span><span class="o">=</span><span class="m">1</span>.12.0
+<span class="nv">prefix</span><span class="o">=</span><span class="nv">$HOME</span>/local/pnetcdf
+<span class="nv">build_dir</span><span class="o">=</span>~/local/build/pnetcdf/
+<span class="nv">url</span><span class="o">=</span>https://parallel-netcdf.github.io/Release/pnetcdf-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
+
+mkdir -p <span class="si">${</span><span class="nv">build_dir</span><span class="si">}</span>
+<span class="nb">pushd</span> <span class="si">${</span><span class="nv">build_dir</span><span class="si">}</span>
+
+wget -nc <span class="si">${</span><span class="nv">url</span><span class="si">}</span>
+tar xzf pnetcdf-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
+
+<span class="nb">pushd</span> pnetcdf-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>
+
+./configure <span class="se">\</span>
+      --prefix<span class="o">=</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span> <span class="se">\</span>
+      --enable-shared <span class="se">\</span>
+      --disable-static <span class="se">\</span>
+      --disable-cxx <span class="se">\</span>
+      --disable-fortran
+
+make all
+make install
+
+<span class="nb">popd</span>
+<span class="nb">popd</span>
+</pre></div>
+</td></tr></table></div>
+<p>Here we disable PnetCDF’s C++ and Fortran APIs and build the shared library.</p>
+</div>
+<div class="section" id="installing-ncar-parallelio">
+<span id="sec-install-parallelio"></span><h2>Installing NCAR ParallelIO<a class="headerlink" href="#installing-ncar-parallelio" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Install NCAR ParallelIO in ~/local/parallelio</span>
+<span class="c1"># using parallel NetCDF and PnetCDF installed in ~/local/netcdf</span>
+<span class="c1"># and ~/local/pnetcdf. Uses ~/local/build/parallelio</span>
+<span class="c1"># as a build directory.</span>
+
+<span class="nv">netcdf_prefix</span><span class="o">=</span>~/local/netcdf
+<span class="nv">pnetcdf_prefix</span><span class="o">=</span>~/local/pnetcdf
+
+<span class="nv">url</span><span class="o">=</span>https://github.com/NCAR/ParallelIO.git
+<span class="nv">build</span><span class="o">=</span>~/local/build/parallelio
+<span class="nv">prefix</span><span class="o">=</span><span class="nv">$HOME</span>/local/parallelio
+
+rm -rf <span class="si">${</span><span class="nv">build</span><span class="si">}</span>
+mkdir -p <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/build <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/sources
+
+git clone --depth<span class="o">=</span><span class="m">1</span> -b master <span class="si">${</span><span class="nv">url</span><span class="si">}</span> <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/sources
+
+<span class="nb">pushd</span> <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/build
+
+<span class="nv">CC</span><span class="o">=</span>mpicc cmake <span class="se">\</span>
+  -DCMAKE_C_FLAGS<span class="o">=</span><span class="s2">&quot;-fPIC&quot;</span> <span class="se">\</span>
+  -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span> <span class="se">\</span>
+  -DNetCDF_PATH<span class="o">=</span><span class="si">${</span><span class="nv">netcdf_prefix</span><span class="si">}</span> <span class="se">\</span>
+  -DPnetCDF_PATH<span class="o">=</span><span class="si">${</span><span class="nv">pnetcdf_prefix</span><span class="si">}</span> <span class="se">\</span>
+  -DPIO_ENABLE_FORTRAN<span class="o">=</span><span class="m">0</span> <span class="se">\</span>
+  -DPIO_ENABLE_TIMING<span class="o">=</span><span class="m">0</span> <span class="se">\</span>
+  <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/sources
+
+make install
+
+<span class="nb">popd</span>
+</pre></div>
+</td></tr></table></div>
+<p>Here we use CMake’s variable <code class="docutils literal notranslate"><span class="pre">CMAKE_FIND_ROOT_PATH</span></code> to tell CMake to use libraries in
+<code class="docutils literal notranslate"><span class="pre">~/local/netcdf</span></code> and <code class="docutils literal notranslate"><span class="pre">~/local/pnetcdf</span></code>, to install in <code class="docutils literal notranslate"><span class="pre">~/local/parallelio</span></code>, and to
+disable ParallelIO features not used by PISM.</p>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="prerequisites.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="cookbook.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installing PISM</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html">Required tools and libraries</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installing parallel I/O libraries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-hdf5-based-parallel-netcdf">Installing HDF5-based parallel NetCDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-pnetcdf">Installing PnetCDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-ncar-parallelio">Installing NCAR ParallelIO</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html">Installation Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html">Quick tests of the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html#next-steps">Next steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Rebuilding PISM documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

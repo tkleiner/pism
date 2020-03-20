@@ -1,0 +1,462 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Example: A regional model of the Jakobshavn outlet glacier in Greenland &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configuration parameters" href="../parameters/index.html" />
+    <link rel="prev" title="An SSA flow model for the Ross Ice Shelf in Antarctica" href="../validation/ross.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="example-a-regional-model-of-the-jakobshavn-outlet-glacier-in-greenland">
+<span id="sec-jako"></span><h1>Example: A regional model of the Jakobshavn outlet glacier in Greenland<a class="headerlink" href="#example-a-regional-model-of-the-jakobshavn-outlet-glacier-in-greenland" title="Permalink to this headline">¶</a></h1>
+<p>Jakobshavn Isbrae is a fast-flowing outlet glacier in western Greenland that drains
+approximately 7% of the area of the Greenland ice sheet. It experienced a large
+acceleration following the loss of its floating tongue in the 1990s
+<a class="reference internal" href="../../zzz_references_html.html#joughinabdalatifahnestock" id="id1">[54]</a>, an event which seems to have been driven by warmer
+ocean temperatures <a class="reference internal" href="../../zzz_references_html.html#hollandetal2008" id="id2">[55]</a>. Because it is thick, has a steep surface
+slope, has a deep trough in its bedrock topography (Figure <a class="reference internal" href="#fig-jako-basin-topg"><span class="std std-numref">Fig. 33</span></a>),
+and has a thick layer of low-viscosity temperate ice at its base <a class="reference internal" href="../../zzz_references_html.html#luethietal2009" id="id3">[56]</a>,
+this ice flow is different from the ice streams in West Antarctica or Northeast Greenland
+<a class="reference internal" href="../../zzz_references_html.html#trufferechelmeyer" id="id4">[46]</a>.</p>
+<p>This section describes how to build a PISM regional model of this outlet glacier
+<a class="reference internal" href="../../zzz_references_html.html#dellagiustina2011" id="id5">[57]</a> using scripts from <code class="docutils literal notranslate"><span class="pre">examples/jako/</span></code>. The same strategy should
+work for other outlet glaciers. We also demonstrate the PISM regional mode <code class="docutils literal notranslate"><span class="pre">pismr</span>
+<span class="pre">-regional</span></code>, and Python <a class="reference external" href="https://github.com/pism/regional-tools">drainage-basin-delineation tools</a> which can be
+downloaded from the PISM source code website. Such regional models allow modest-size
+computers to run high resolution models <a class="footnote-reference" href="#id16" id="id6">[1]</a> and large ensembles. Regional analysis is
+justified if detailed data is available for the region.</p>
+<p>The geometric data used here is the SeaRISE <a class="reference internal" href="../../zzz_references_html.html#bindschadler2013searise" id="id7">[58]</a> 1 km dataset
+for the whole Greenland ice sheet. It contains bedrock topography from recent CReSIS radar
+in the Jakobshavn area. We also use the SeaRISE 5 km data set which has climatic mass
+balance from the Greenland-region climate model RACMO <a class="reference internal" href="../../zzz_references_html.html#ettemaetal2009" id="id8">[59]</a>.</p>
+<p>A regional ice flow model generally needs ice flow and stress boundary conditions. For
+this we use a 5 km grid, whole ice sheet, spun-up model state from PISM, described in
+<a class="reference internal" href="../std-greenland/index.html#sec-start"><span class="std std-ref">Getting started: a Greenland ice sheet example</span></a> of this <em>Manual</em>. You can download the large NetCDF result from
+the PISM website, or you can generate it by running a script from <a class="reference internal" href="../std-greenland/index.html#sec-start"><span class="std std-ref">Getting started: a Greenland ice sheet example</span></a>.</p>
+<div class="figure" id="fig-jako-basin-topg">
+<img alt="../../_images/jako-mask-topg.png" src="../../_images/jako-mask-topg.png" />
+<p class="caption"><span class="caption-number">Fig. 33 </span><span class="caption-text">A <code class="docutils literal notranslate"><span class="pre">regional-tools</span></code> script computes a drainage basin mask from the surface DEM (left;
+Modis background) and from a user-identified terminus rectangle (blue). The regional
+model can exploit high-resolution bedrock elevations inland from Jakobshavn fjord
+(right; meters asl).</span></p>
+</div>
+<div class="section" id="get-the-drainage-basin-delineation-tool">
+<h2>Get the drainage basin delineation tool<a class="headerlink" href="#get-the-drainage-basin-delineation-tool" title="Permalink to this headline">¶</a></h2>
+<p>The drainage basin tool <code class="docutils literal notranslate"><span class="pre">regional-tools</span></code> is at <a class="reference external" href="https://github.com/pism/regional-tools">https://github.com/pism/regional-tools</a>.
+Get it using <code class="docutils literal notranslate"><span class="pre">git</span></code> and set it up as directed in its <code class="docutils literal notranslate"><span class="pre">README.md</span></code>. Then come back to the
+<code class="docutils literal notranslate"><span class="pre">examples/jako/</span></code> directory and link the script. Here is the quick summary:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/usr/local/                                      <span class="c1"># the location you want</span>
+git clone https://github.com/pism/regional-tools.git
+<span class="nb">cd</span> regional-tools/
+python setup.py install                              <span class="c1"># may add &quot;sudo&quot; or &quot;--user&quot;</span>
+<span class="nb">cd</span> PISM/examples/jako/
+ln -s ~/usr/local/regional-tools/pism_regional.py .  <span class="c1"># symbolic link to tool</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="preprocess-the-data-and-get-the-whole-ice-sheet-model-file">
+<h2>Preprocess the data and get the whole ice sheet model file<a class="headerlink" href="#preprocess-the-data-and-get-the-whole-ice-sheet-model-file" title="Permalink to this headline">¶</a></h2>
+<p>Script <code class="docutils literal notranslate"><span class="pre">preprocess.sh</span></code> downloads and cleans the 1 km SeaRISE data, an 80 Mb file called
+<code class="docutils literal notranslate"><span class="pre">Greenland1km.nc</span></code>. <a class="footnote-reference" href="#id17" id="id9">[2]</a> The script also downloads the SeaRISE 5 km data set
+<code class="docutils literal notranslate"><span class="pre">Greenland_5km_v1.1.nc</span></code>, which contains the RACMO surface mass balance field (not
+present in the 1 km data set). If you have already run the example in <a class="reference internal" href="../std-greenland/index.html#sec-start"><span class="std std-ref">Getting started: a Greenland ice sheet example</span></a>
+then you already have this file and you can link to it to avoid downloading:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ln -s ../std-greenland/Greenland_5km_v1.1.nc
+</pre></div>
+</div>
+<p>The same script also preprocesses a pre-computed 5 km grid PISM model result
+<code class="docutils literal notranslate"><span class="pre">g5km_gridseq.nc</span></code> for the whole ice sheet. This provides the boundary conditions, and
+the thermodynamical initial condition, for the regional flow model we are building. If you
+have already generated it by running the script in section <a class="reference internal" href="../std-greenland/grid-sequencing.html#sec-gridseq"><span class="std std-ref">Grid sequencing</span></a> then link
+to it,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ln -s ../std-greenland/g5km_gridseq.nc
+</pre></div>
+</div>
+<p>Otherwise running <code class="docutils literal notranslate"><span class="pre">preprocess.sh</span></code> will download it. Because it is about 0.6 Gb this may
+take some time.</p>
+<p>So now let’s actual run the preprocessing script:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./preprocess.sh
+</pre></div>
+</div>
+<p>Files <code class="docutils literal notranslate"><span class="pre">gr1km.nc</span></code>, <code class="docutils literal notranslate"><span class="pre">g5km_climate.nc</span></code>, and <code class="docutils literal notranslate"><span class="pre">g5km_bc.nc</span></code> will appear. These can be
+examined in the usual ways, for example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncdump -h gr1km.nc | less            # read metadata
+ncview gr1km.nc                      # view fields
+</pre></div>
+</div>
+<p>The boundary condition file <code class="docutils literal notranslate"><span class="pre">g5km_bc.nc</span></code> contains thermodynamical spun-up variables
+(<code class="docutils literal notranslate"><span class="pre">enthalpy,bmelt,bwat</span></code>) and boundary values for the sliding velocity
+(<code class="docutils literal notranslate"><span class="pre">u_ssa_bc,v_ssa_bc</span></code>); these have been extracted from <code class="docutils literal notranslate"><span class="pre">g5km_gridseq.nc</span></code>.</p>
+<p>None of the above actions is specific to Jakobshavn, though all are specific to Greenland.
+If your goal is to build a regional model of another outlet glacier in Greenland, then you
+may be able to use <code class="docutils literal notranslate"><span class="pre">preprocess.sh</span></code> as is. The SeaRISE 1 km data set has recent CReSIS
+bed topography data only for the vicinity of the Jakobshavn outlet, however, and it is
+otherwise just BEDMAP. Because outlet glacier flows are bed-topography-dominated,
+additional bed elevation data should be sought.</p>
+</div>
+<div class="section" id="identify-the-drainage-basin-for-the-modeled-outlet-glacier">
+<h2>Identify the drainage basin for the modeled outlet glacier<a class="headerlink" href="#identify-the-drainage-basin-for-the-modeled-outlet-glacier" title="Permalink to this headline">¶</a></h2>
+<p>Here we are going to extract a “drainage basin mask” from the surface elevation data (DEM)
+in <code class="docutils literal notranslate"><span class="pre">gr1km.nc</span></code>. The goal is to determine, in part, the locations outside of the drainage
+basin where boundary conditions taken from the precomputed whole ice sheet run can be
+applied to modeling the outlet glacier flow itself.</p>
+<p>The basin mask is determined by the gradient flow of the surface elevation. Thus
+generating the mask uses a highly-simplified ice dynamics model (namely: ice flows down
+the surface gradient). Once we have the mask, we will apply the full PISM model in the
+basin interior marked by the mask. Outside the basin mask we will apply simplified models
+or use the whole ice sheet results as boundary conditions.</p>
+<p>The script <code class="docutils literal notranslate"><span class="pre">pism_regional.py</span></code> computes the drainage basin mask based on a user choice of
+a “terminus rectangle”; see Figure <a class="reference internal" href="#fig-jako-basin-topg"><span class="std std-numref">Fig. 33</span></a>. There are two ways to
+use this script:</p>
+<ul>
+<li><p class="first">To use the graphical user interface (GUI) mode.</p>
+<p>Run</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>python pism_regional.py
+</pre></div>
+</div>
+<p>Select <code class="docutils literal notranslate"><span class="pre">gr1km.nc</span></code> to open. Once the topographic map appears in the Figure window, you
+may zoom enough to see the general outlet glacier area. Then select the button “Select
+terminus rectangle”. Use the mouse to select a small rectangle around the Jakobshavn
+terminus (calving front), or around the terminus of another glacier if you want to model
+that. Once you have a highlighted rectangle, select a “border width” of at least 50
+cells. <a class="footnote-reference" href="#id18" id="id10">[3]</a> Then click “Compute the drainage basin mask.” Because this is a large data
+set there will be some delay. (Multi-core users will see that an automatic parallel
+computation is done.) Finally click “Save the drainage basin mask” and save with your
+preferred name; we will assume it is called <code class="docutils literal notranslate"><span class="pre">jakomask.nc</span></code>. Then quit.</p>
+</li>
+<li><p class="first">To use the command-line interface.</p>
+<p>The command-line interface of <code class="docutils literal notranslate"><span class="pre">pism_regional.py</span></code> allows one to re-create the mask
+without changing the terminus rectangle choice. (It also avoids the slowness of the GUI
+mode for large data sets.) In fact, for repeatability, we will assume you have used this
+command to calculate the drainage basin:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>python pism_regional.py -i gr1km.nc -o jakomask.nc -x 360,382 -y 1135,1176 -b 50
+</pre></div>
+</div>
+<p>This call generates the red region in <a class="reference internal" href="#fig-jako-basin-topg"><span class="std std-numref">Fig. 33</span></a>. Options <code class="docutils literal notranslate"><span class="pre">-x</span> <span class="pre">A,B</span> <span class="pre">-y</span>
+<span class="pre">C,D</span></code> identify the grid index ranges of the terminus rectangle, and option <code class="docutils literal notranslate"><span class="pre">-b</span></code> sets
+the border width. To see more script options, run with <code class="docutils literal notranslate"><span class="pre">--help</span></code>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="cut-out-the-computational-domain-for-the-regional-model">
+<h2>Cut out the computational domain for the regional model<a class="headerlink" href="#cut-out-the-computational-domain-for-the-regional-model" title="Permalink to this headline">¶</a></h2>
+<p>We still need to “cut out” from the whole ice sheet geometry data <code class="docutils literal notranslate"><span class="pre">gr1km.nc</span></code> the
+computational domain for the regional model. The climate data file <code class="docutils literal notranslate"><span class="pre">g5km_climate.nc</span></code> and
+the boundary condition file <code class="docutils literal notranslate"><span class="pre">g5km_bc.nc</span></code> do not need this action because PISM’s coupling
+and SSA boundary condition codes already handle interpolation and/or subsampling for such
+data.</p>
+<p>You may have noticed that the text output from running <code class="docutils literal notranslate"><span class="pre">pism_regional.py</span></code> included a
+cutout command which uses <code class="docutils literal notranslate"><span class="pre">ncks</span></code> from the NCO tools. This command also appears as a
+global attribute of <code class="docutils literal notranslate"><span class="pre">jakomask.nc</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncdump -h jakomask.nc | grep cutout
+</pre></div>
+</div>
+<p>Copy and run the command that appears, something like</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncks -d x,299,918 -d y,970,1394 gr1km.nc jako.nc
+</pre></div>
+</div>
+<p>This command is also applied to the mask file; note the option <code class="docutils literal notranslate"><span class="pre">-A</span></code> for “append”:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncks -A -d x,299,918 -d y,970,1394 jakomask.nc jako.nc
+</pre></div>
+</div>
+<p>Now look at <code class="docutils literal notranslate"><span class="pre">jako.nc</span></code>, for example with “<code class="docutils literal notranslate"><span class="pre">ncview</span> <span class="pre">-minmax</span> <span class="pre">all</span> <span class="pre">jako.nc</span></code>”. This file is
+the full geometry data ready for a regional model. The field <code class="docutils literal notranslate"><span class="pre">ftt_mask</span></code> identifies the
+drainage basin, outside of which we will use simplified time-independent boundary
+conditions. Specifically, outside of the <code class="docutils literal notranslate"><span class="pre">ftt_mask</span></code> area, but within the computational
+domain defined by the extent of <code class="docutils literal notranslate"><span class="pre">jako.nc</span></code>, we will essentially keep the initial
+thickness. Inside the <code class="docutils literal notranslate"><span class="pre">ftt_mask</span></code> area all fields will evolve normally.</p>
+</div>
+<div class="section" id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>The previous steps starting with the command “<code class="docutils literal notranslate"><span class="pre">./preprocess.sh</span></code>” above, then using the
+command-line version of <code class="docutils literal notranslate"><span class="pre">pism_regional.py</span></code>, and then doing the <code class="docutils literal notranslate"><span class="pre">ncks</span></code> cut-out steps,
+are all accomplished in one script,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./quickjakosetup.sh
+</pre></div>
+</div>
+<p>Running this takes about a minute on a fast laptop, assuming data files are already
+downloaded.</p>
+</div>
+<div class="section" id="spinning-up-the-regional-model-on-a-5-km-grid">
+<h2>Spinning-up the regional model on a 5 km grid<a class="headerlink" href="#spinning-up-the-regional-model-on-a-5-km-grid" title="Permalink to this headline">¶</a></h2>
+<p>To run the PISM regional model we will need to know the number of grid points in the 1 km
+grid in <code class="docutils literal notranslate"><span class="pre">jako.nc</span></code>. Do this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncdump -h jako.nc |head
+    netcdf jako {
+    dimensions:
+      y = 425 ;
+      x = 620 ;
+    ...
+</pre></div>
+</div>
+<p>The grid has spacing of 1 km, so our computational domain is a 620 km by 425 km rectangle.
+A 2 km resolution, century-scale model run is easily achievable on a desktop or laptop
+computer, and that is our goal below. A lower 5 km resolution spin-up run, matching the
+resolution of the 5 km whole ice sheet state computed earlier, is also achievable on a
+small computer; we do that first.</p>
+<p>The boundary condition fields in <code class="docutils literal notranslate"><span class="pre">g5km_bc.nc</span></code>, from the whole ice sheet model result
+<code class="docutils literal notranslate"><span class="pre">g5km_gridseq.nc</span></code>, may or may not, depending on modeller intent, be spun-up adequately
+for the purposes of the regional model. For instance, the intention may be to study
+equilibrium states with model settings special to the region. Here, however we assume that
+some regional spin-up is needed, if for no other reason that the geometry used here (from
+the SeaRISE 1km data set) differs from that in the whole ice sheet model state.</p>
+<p>We will get first an equilibrium 5 km regional model, and then do a century run of a 2 km
+model based on that. While determining “equilibrium” requires a decision, of course, a
+standard satisfied here is that the ice volume in the region changes by less than 0.1
+percent in the final 100 model years. See <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code> in <code class="docutils literal notranslate"><span class="pre">ts_spunjako_0.nc</span></code>
+below.</p>
+<p>The 5 km grid <a class="footnote-reference" href="#id19" id="id11">[4]</a> uses <code class="docutils literal notranslate"><span class="pre">-Mx</span> <span class="pre">125</span> <span class="pre">-My</span> <span class="pre">86</span></code>. So now we do a basic run using 4 MPI
+processes:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./spinup.sh 4 125 86 &amp;&gt; out.spin5km &amp;
+</pre></div>
+</div>
+<p>You can read the <code class="docutils literal notranslate"><span class="pre">stdout</span></code> log file while it runs: “<code class="docutils literal notranslate"><span class="pre">less</span> <span class="pre">out.spin5km</span></code>”. The run takes
+about 4.4 processor-hours on a 2016 laptop. It produces three files which can be viewed
+(e.g. with <code class="docutils literal notranslate"><span class="pre">ncview</span></code>): <code class="docutils literal notranslate"><span class="pre">spunjako_0.nc</span></code>, <code class="docutils literal notranslate"><span class="pre">ts_spunjako_0.nc</span></code>, and <code class="docutils literal notranslate"><span class="pre">ex_spunjako_0.nc</span></code>.
+Some more comments on this run are appropriate:</p>
+<ul>
+<li><p class="first">Generally the regridding techniques used at the start of this spin-up run are
+recommended for regional modeling. Read the actual run command by</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PISM_DO=echo ./spinup.sh 4 125 86 | less
+</pre></div>
+</div>
+</li>
+<li><p class="first">We use <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">jako.nc</span> <span class="pre">-bootstrap</span></code>, so we get to choose our grid, and (as usual in PISM
+with <code class="docutils literal notranslate"><span class="pre">-bootstrap</span></code>) the fields are interpolated to our grid.</p>
+</li>
+<li><p class="first">A modestly-fine vertical grid with 20 m spacing is chosen, but even finer is
+recommended, especially to resolve the temperate ice layer in these outlet glaciers.</p>
+</li>
+<li><p class="first">There is an option <code class="option docutils literal notranslate"><span class="pre">-no_model_strip</span></code> <code class="docutils literal notranslate"><span class="pre">10</span></code> asking <code class="docutils literal notranslate"><span class="pre">pismr</span> <span class="pre">-regional</span></code> to put a 10
+km strip around edge of the computational domain. This strip is entirely outside of the
+drainage basin defined by <code class="docutils literal notranslate"><span class="pre">ftt_mask</span></code>. In this strip the thermodynamical spun-up
+variables <code class="docutils literal notranslate"><span class="pre">bmelt,tillwat,enthalpy,litho_temp</span></code> from <code class="docutils literal notranslate"><span class="pre">g5km_bc.nc</span></code> are held fixed and
+used as boundary conditions for the conservation of energy model. A key part of putting
+these boundary conditions into the model strip are the options</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-regrid_file g5km_bc.nc -regrid_vars bmelt,tillwat,enthalpy,litho_temp,vel_ssa_bc
+</pre></div>
+</div>
+</li>
+<li><p class="first">Dirichlet boundary conditions <code class="docutils literal notranslate"><span class="pre">u_ssa_bc,v_ssa_bc</span></code> are also regridded from
+<code class="docutils literal notranslate"><span class="pre">g5km_bc.nc</span></code> for the sliding SSA stress balance, and the option <code class="docutils literal notranslate"><span class="pre">-ssa_dirichlet_bc</span></code>
+then uses them during the run. The SSA equations are solved as usual except in the
+<code class="docutils literal notranslate"><span class="pre">no_model_strip</span></code> where these Dirichlet boundary conditions are used. Note that the
+velocity tangent to the north and south edges of the computational domain is
+significantly nonzero, which motivates this usage.</p>
+</li>
+<li><p class="first">The calving front of the glacier is handled by the following command-line options:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-front_retreat_file jako.nc -pik
+</pre></div>
+</div>
+<p>This choice uses the present-day ice extent, defined by SeaRISE data in
+<code class="docutils literal notranslate"><span class="pre">Greenland1km.nc</span></code>, to determine the location of the calving front (see
+<a class="reference internal" href="../modeling-choices/marine/calving.html#sec-prescribed-retreat"><span class="std std-ref">Prescribed front retreat</span></a>). Recalling that <code class="docutils literal notranslate"><span class="pre">-pik</span></code> includes <code class="docutils literal notranslate"><span class="pre">-cfbc</span></code>, we are
+applying a PIK mechanism for the stress boundary condition at the calving front. The
+other PIK mechanisms are largely inactive because prescribing the maximum ice extent,
+but they should do no harm (see section <a class="reference internal" href="../modeling-choices/marine/pik.html#sec-pism-pik"><span class="std std-ref">PIK options for marine ice sheets</span></a>).</p>
+</li>
+</ul>
+<div class="figure" id="fig-jako-csurf">
+<img alt="../../_images/jako-csurf.png" src="../../_images/jako-csurf.png" />
+<p class="caption"><span class="caption-number">Fig. 34 </span><span class="caption-text">Left: modeled surface speed at the end of a 2 km grid, 100 model year, steady
+present-day climate run. Right: observed surface speed, an average of four winter
+velocity maps (2000,2006–2008) derived from RADARSAT data, as included in the SeaRISE
+5 km data set <a class="reference internal" href="../../zzz_references_html.html#joughinetal2010" id="id12">[60]</a>, for the same region. Scales are in meters per
+year.</span></p>
+</div>
+</div>
+<div class="section" id="century-run-on-a-2-km-grid">
+<h2>Century run on a 2 km grid<a class="headerlink" href="#century-run-on-a-2-km-grid" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have a spun-up state, here is a 100 model year run on a 2 km grid with a 10 m
+grid in the vertical:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./century.sh 4 311 213 spunjako_0.nc &amp;&gt; out.2km_100a &amp;
+</pre></div>
+</div>
+<p>This run requires at least 6 GB of memory, and it takes about 16 processor-hours.</p>
+<p>It produces a file <code class="docutils literal notranslate"><span class="pre">jakofine_short.nc</span></code> almost immediately and then restarts from it
+because we need to regrid fields from the end of the previous 5 km regional run (in
+<code class="docutils literal notranslate"><span class="pre">spunjako_0.nc</span></code>) and then to “go back” and regrid the SSA boundary conditions from the 5
+km whole ice sheet results <code class="docutils literal notranslate"><span class="pre">g5km_bc.nc</span></code>. At the end of the run the final file
+<code class="docutils literal notranslate"><span class="pre">jakofine.nc</span></code> is produced. Also there is a time-series file <code class="docutils literal notranslate"><span class="pre">ts_jakofine.nc</span></code> with
+monthly scalar time-series and a spatial time-dependent file <code class="docutils literal notranslate"><span class="pre">ex_jakofine.nc</span></code>. The
+surface speed at the end of this run is shown in <a class="reference internal" href="#fig-jako-csurf"><span class="std std-numref">Fig. 34</span></a>, with a
+comparison to observations.</p>
+<p>Over this 100 year period the flow appears to be relatively steady state. Though this is
+not surprising because the climate forcing and boundary conditions are time-independent, a
+longer run reveals ongoing speed variability associated to subglacially-driven sliding
+cyclicity; compare <a class="reference internal" href="../../zzz_references_html.html#vanpeltoerlemans2012" id="id13">[61]</a>.</p>
+<p>The ice dynamics parameters chosen in <code class="docutils literal notranslate"><span class="pre">spinup.sh</span></code> and <code class="docutils literal notranslate"><span class="pre">century.sh</span></code>, especially the
+combination</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-topg_to_phi 15.0,40.0,-300.0,700.0 -till_effective_fraction_overburden 0.02 \
+   -pseudo_plastic -pseudo_plastic_q 0.25 -tauc_slippery_grounding_lines
+</pre></div>
+</div>
+<p>are a topic for a parameter study (compare <a class="reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id14">[62]</a>) or a
+study of their relation to inverse modeling results (e.g. <a class="reference internal" href="../../zzz_references_html.html#habermannetal2013" id="id15">[63]</a>).</p>
+</div>
+<div class="section" id="plotting-results">
+<h2>Plotting results<a class="headerlink" href="#plotting-results" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#fig-jako-csurf"><span class="std std-numref">Fig. 34</span></a> was generated using <a class="reference external" href="https://github.com/pism/pypismtools">pypismtools</a>, <a class="reference external" href="http://nco.sourceforge.net/">NCO</a> and <a class="reference external" href="https://code.mpimet.mpg.de/projects/cdo">CDO</a>.  Do</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncpdq -a time,z,y,x spunjako_0.nc jako5km.nc
+nc2cdo.py jako5km.nc
+cdo remapbil,jako5km.nc Greenland_5km_v1.1.nc Greenland_5km_v1.1_jako.nc  # FIXME: if fails, proceed?
+ncap2 -O -s &quot;velsurf_mag=surfvelmag*1.;&quot; Greenland_5km_v1.1_jako.nc \
+    Greenland_5km_v1.1_jako.nc
+basemap-plot.py -v velsurf_mag --singlerow -o jako-velsurf_mag.png jakofine.nc \
+    Greenland_5km_v1.1_jako.nc
+</pre></div>
+</div>
+<p>To choose a colormap <code class="docutils literal notranslate"><span class="pre">foo.cpt</span></code> add option <code class="docutils literal notranslate"><span class="pre">--colormap</span> <span class="pre">foo.cpt</span></code> in the last command.
+For this example <code class="docutils literal notranslate"><span class="pre">PyPISMTools/colormaps/Full_saturation_spectrum_CCW.cpt</span></code> was used.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id16" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[1]</a></td><td>PISM can also do 1 km runs for the whole Greenland ice sheet; see this <a class="reference external" href="https://pism-docs.org/wiki/doku.php?id=news:first1km">news item</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id17" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[2]</a></td><td>If this file is already present then no actual download occurs, and preprocessing
+proceeds. Thus: Do not worry about download time if you need to preprocess again.
+The same comment applies to other downloaded files.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id18" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[3]</a></td><td>This recommendation is somewhat Jakobshavn-specific. We want our model to have an
+ice-free down flow (western) boundary on the resulting computational domain for the
+modeled region.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[4]</a></td><td>Calculate <code class="docutils literal notranslate"><span class="pre">620/5</span> <span class="pre">+</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">425/5</span> <span class="pre">+</span> <span class="pre">1</span></code>, for example.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="../validation/ross.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="../index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="../parameters/index.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-drainage-basin-delineation-tool">Get the drainage basin delineation tool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess-the-data-and-get-the-whole-ice-sheet-model-file">Preprocess the data and get the whole ice sheet model file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#identify-the-drainage-basin-for-the-modeled-outlet-glacier">Identify the drainage basin for the modeled outlet glacier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cut-out-the-computational-domain-for-the-regional-model">Cut out the computational domain for the regional model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-start">Quick start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spinning-up-the-regional-model-on-a-5-km-grid">Spinning-up the regional model on a 5 km grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#century-run-on-a-2-km-grid">Century run on a 2 km grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-results">Plotting results</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

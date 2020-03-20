@@ -1,0 +1,197 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PETSc options for PISM users &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Utility and test scripts" href="scripts.html" />
+    <link rel="prev" title="Balancing the books" href="mass-conservation.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="petsc-options-for-pism-users">
+<span id="sec-petscoptions"></span><h1>PETSc options for PISM users<a class="headerlink" href="#petsc-options-for-pism-users" title="Permalink to this headline">¶</a></h1>
+<p>All PETSc programs including PISM accept command line options which control how PETSc
+distributes jobs among parallel processors, how it solves linear systems, what additional
+information it provides, and so on. The PETSc manual <a class="reference internal" href="../../zzz_references_html.html#petsc-user-ref" id="id1">[106]</a> is the complete
+reference on these options. We list some here that are useful to PISM users. They can be
+mixed in any order with PISM options.</p>
+<p>Both for PISM and PETSc options, there are ways of avoiding the inconvenience of long
+commands with many runtime options. Obviously, and as illustrated by examples in the
+previous sections, shell scripts can be set up to run PISM. But PETSc also provides two
+mechanisms to give runtime options without retyping at each run command.</p>
+<p>First, the environment variable <code class="docutils literal notranslate"><span class="pre">PETSC_OPTIONS</span></code> can be set. For example, a sequence of
+runs might need the same refined grid, and you might want to know if other options are
+read, ignored, or misspelled. Set (in Bash):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>export PETSC_OPTIONS=&quot;-Mx 101 -My 101 -Mz 51 -options_left&quot;
+</pre></div>
+</div>
+<p>The runs</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismv -test F -y 100
+pismv -test G -y 100
+</pre></div>
+</div>
+<p>then have the same refined grid in each run, and the runs report on which options were
+read.</p>
+<p>Alternatively, the file <code class="docutils literal notranslate"><span class="pre">.petscrc</span></code> is always read, if present, from the directory where
+PISM (i.e. the PETSc program) is started. It can have a list of options, one per line. In
+theory, these two PETSc mechanisms (<code class="docutils literal notranslate"><span class="pre">PETSC_OPTIONS</span></code> and <code class="docutils literal notranslate"><span class="pre">.petscrc</span></code>) can be used
+together.</p>
+<p>Now we address controls on how PETSc solves systems of linear equations, which uses the
+PETSc “KSP” component (Krylov methods). Such linear solves are needed each time the
+nonlinear SSA stress balance equations are used (e.g. with the option <code class="docutils literal notranslate"><span class="pre">-stress_balance</span>
+<span class="pre">ssa</span> <span class="pre">-ssa_method</span> <span class="pre">fd</span></code>).</p>
+<p>Especially for solving the SSA equations with high resolution on multiple processors, it
+is recommended that the option <code class="option docutils literal notranslate"><span class="pre">-ssafd_ksp_rtol</span></code> be set lower than its default value
+of <span class="math notranslate nohighlight">\(10^{-5}\)</span>. For example,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec -n 8 ssa_testi -Mx 3 -My 769 -ssa_method fd
+</pre></div>
+</div>
+<p>may fail to converge on a certain machine, but adding “<code class="docutils literal notranslate"><span class="pre">-ssafd_ksp_rtol</span> <span class="pre">1e-10</span></code>” works
+fine.</p>
+<p>There is also the question of solver <em>type</em>, using option <code class="option docutils literal notranslate"><span class="pre">-ssafd_ksp_type</span></code>. Based on
+one processor evidence from <code class="docutils literal notranslate"><span class="pre">ssa_testi</span></code>, the following are possible choices in the sense
+that they work and allow convergence at some reasonable rate: <code class="docutils literal notranslate"><span class="pre">cg</span></code>, <code class="docutils literal notranslate"><span class="pre">bicg</span></code>, <code class="docutils literal notranslate"><span class="pre">gmres</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bcgs</span></code>, <code class="docutils literal notranslate"><span class="pre">cgs</span></code>, <code class="docutils literal notranslate"><span class="pre">tfqmr</span></code>, <code class="docutils literal notranslate"><span class="pre">tcqmr</span></code>, and <code class="docutils literal notranslate"><span class="pre">cr</span></code>. It appears <code class="docutils literal notranslate"><span class="pre">bicg</span></code>, <code class="docutils literal notranslate"><span class="pre">gmres</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bcgs</span></code>, and <code class="docutils literal notranslate"><span class="pre">tfqmr</span></code>, at least, are all among the best. The default is <code class="docutils literal notranslate"><span class="pre">gmres</span></code>.</p>
+<p>Actually the KSP uses preconditioning. This aspect of the solve is critical for parallel
+scalability, but it gives results which are dependent on the number of processors. The
+preconditioner type can be chosen with <code class="option docutils literal notranslate"><span class="pre">-ssafd_pc_type</span></code>. Several choices are
+possible, but for solving the ice stream and shelf equations we recommend only
+<code class="docutils literal notranslate"><span class="pre">bjacobi</span></code>, <code class="docutils literal notranslate"><span class="pre">ilu</span></code>, and <code class="docutils literal notranslate"><span class="pre">asm</span></code>. Of these it is not currently clear which is fastest;
+they are all about the same for <code class="docutils literal notranslate"><span class="pre">ssa_testi</span></code> with high tolerances (e.g. <code class="docutils literal notranslate"><span class="pre">-ssafd_picard_rtol</span>
+<span class="pre">1e-7</span></code> <code class="docutils literal notranslate"><span class="pre">-ssafd_ksp_rtol</span> <span class="pre">1e-12</span></code>). The default (as set by PISM) is <code class="docutils literal notranslate"><span class="pre">bjacobi</span></code>. To force
+no preconditioning, which removes processor-number-dependence of results but may make the
+solves fail, use <code class="docutils literal notranslate"><span class="pre">-ssafd_pc_type</span> <span class="pre">none</span></code>.</p>
+<p>For the full list of PETSc options controlling the SSAFD solver, run</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ssa_testi -ssa_method fd -help | grep ssafd_ | less
+</pre></div>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="mass-conservation.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="scripts.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Practical usage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="netcdf-tools.html">Handling NetCDF files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="input-output.html">Input and output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-time-series.html">Saving time series of scalar diagnostic quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-diagnostics.html">Saving time series of spatially-varying diagnostic quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-snapshots.html">Saving re-startable snapshots of the model state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diagnostic-viewers.html">Run-time diagnostic viewers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters.html">PISM’s configuration parameters and how to change them</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regridding.html">Regridding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="signals.html">Signals, to control a running PISM model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="time-stepping.html">Understanding adaptive time-stepping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mass-conservation.html">Balancing the books</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">PETSc options for PISM users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scripts.html">Utility and test scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flowline.html">Using PISM for flow-line modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modifying-pism.html">Managing source code modifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ismip6.html">ISMIP6 Greenland</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

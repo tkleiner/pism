@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Rebuilding PISM documentation &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PISM User’s Manual" href="../manual/index.html" />
+    <link rel="prev" title="Quick tests of the installation" href="quick-tests.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="rebuilding-pism-documentation">
+<span id="sec-install-documentation"></span><h1>Rebuilding PISM documentation<a class="headerlink" href="#rebuilding-pism-documentation" title="Permalink to this headline">¶</a></h1>
+<p>You might want to rebuild the documentation from source, as PISM and its documentation
+evolve together. These tools are required:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Tool</th>
+<th class="head">Comment</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/installation.html">Sphinx</a></td>
+<td>needed to rebuild this Manual</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://sphinxcontrib-bibtex.readthedocs.io/en/latest/">sphinxcontrib.bibtex</a></td>
+<td>needed to rebuild this Manual and the documentation of PISM’s Python bindings
+(below)</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.latex-project.org/">LaTeX</a></td>
+<td>needed to rebuild the PDF version of this Manual, the PISM <em>Source Code Browser</em>, and the
+documentation of PISM’s Python bindings</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dvipng</span></code></td>
+<td>needed to rebuild the documentation of PISM’s Python bindings</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://personal.psu.edu/jcc8//software/latexmk-jcc/">Latexmk</a></td>
+<td>needed to rebuild the PDF version of this Manual</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.doxygen.nl">doxygen</a></td>
+<td>required to rebuild the PISM <em>Source Code Browser</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.graphviz.org/">graphviz</a></td>
+<td>required to rebuild the PISM <em>Source Code Browser</em></td>
+</tr>
+</tbody>
+</table>
+<p>On a Debian-based system you may be able to install these by running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install <span class="se">\</span>
+     sphinx python-sphinx <span class="se">\</span>
+     graphviz dvipng <span class="se">\</span>
+     texlive texlive-fonts-extra <span class="se">\</span>
+     latexmk
+
+sudo pip install sphinxcontrib-bibtex
+</pre></div>
+</div>
+<p>Click <a class="reference download internal" download="" href="../_downloads/1d0b7d498f96f2df73658dde7c23647e/install_docu_libraries.sh"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a> to download this file.</p>
+<p>(You may need to change this command to match your package system.)</p>
+<p>Note that if you install Sphinx using <a class="reference external" href="https://www.macports.org/">MacPorts</a>, you will install a version that
+corresponds to your Python version, and its executables will have names with suffixes
+corresponding to this version, e.g. <code class="docutils literal notranslate"><span class="pre">sphinx-build-2.7</span></code> rather than <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code> for
+Python 2.7. You will want to set up aliases so that the standard names work as well. To do
+this, run</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo port select sphinx py27-sphinx
+</pre></div>
+</div>
+<p>(replacing <code class="docutils literal notranslate"><span class="pre">py27-sphinx</span></code> with <code class="docutils literal notranslate"><span class="pre">py26-sphinx</span></code> for Python 2.6, etc.) If you opt not to do
+this, you can tell CMake the name of your Sphinx executable using</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cmake -DSPHINX_EXECUTABLE=sphinx-build-2.7 ...
+</pre></div>
+</div>
+<p>for example.</p>
+<div class="section" id="manual">
+<h2>Manual<a class="headerlink" href="#manual" title="Permalink to this headline">¶</a></h2>
+<p>To rebuild this manual, change to the PISM build directory and run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make manual_html <span class="c1"># for the HTML version of the manual</span>
+make manual_pdf  <span class="c1"># for the PDF version of the manual</span>
+</pre></div>
+</div>
+<p>The main page for this manual is then in <code class="docutils literal notranslate"><span class="pre">doc/sphinx/html/index.html</span></code> inside your build
+directory.</p>
+<p>The PDF manual will be in <code class="docutils literal notranslate"><span class="pre">doc/sphinx/pism_manual.pdf</span></code> in your build directory.</p>
+</div>
+<div class="section" id="source-code-browser">
+<h2>Source Code Browser<a class="headerlink" href="#source-code-browser" title="Permalink to this headline">¶</a></h2>
+<p>To rebuild the PISM <em>Source Code Browser</em>, change to the PISM build directory and run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make browser
+</pre></div>
+</div>
+<p>The main page for the documentation is then in <code class="docutils literal notranslate"><span class="pre">doc/browser/html/index.html</span></code> inside
+your build directory.</p>
+</div>
+<div class="section" id="documentation-for-pisms-python-bindings-and-inversion-tools">
+<h2>Documentation for PISM’s Python bindings and inversion tools<a class="headerlink" href="#documentation-for-pisms-python-bindings-and-inversion-tools" title="Permalink to this headline">¶</a></h2>
+<p>These bindings make scripting and interactive use of PISM possible, but many PISM users
+will not need them. Installing them is required to use PISM for inversion of surface
+velocities for basal shear stress and ice hardness. Building their documentation is
+strongly-recommended before use.</p>
+<p>To build the documentation of PISM’s Python bindings, change to the PISM build directory
+and run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make pismpython_docs
+</pre></div>
+</div>
+<p>The main page for the documentation is then in <code class="docutils literal notranslate"><span class="pre">doc/pismpython/html/index.html</span></code> inside
+your build directory. The documentation build can take some time while it builds a large
+number of small images from LaTeX formulas.</p>
+</div>
+<div class="section" id="re-building-documentation-without-pism-s-prerequisites">
+<h2>Re-building documentation without PISM’s prerequisites<a class="headerlink" href="#re-building-documentation-without-pism-s-prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>To build documentation on a system without PISM’s prerequisite libraries (such as MPI and
+PETSc), assuming that PISM sources are in <code class="docutils literal notranslate"><span class="pre">~/pism-stable</span></code>, do the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/pism-stable
+mkdir doc-build <span class="c1"># create a build directory</span>
+<span class="nb">cd</span> doc-build
+cmake ../doc
+</pre></div>
+</div>
+<p>then commands “<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">manual_html</span></code>”, “<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">manual_pdf</span></code>” and others (see above) will
+work as expected.</p>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="quick-tests.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="../manual/index.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installing PISM</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html">Required tools and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel-io-libraries.html">Installing parallel I/O libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html">Installation Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html">Quick tests of the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html#next-steps">Next steps</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Rebuilding PISM documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#manual">Manual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-code-browser">Source Code Browser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation-for-pisms-python-bindings-and-inversion-tools">Documentation for PISM’s Python bindings and inversion tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#re-building-documentation-without-pism-s-prerequisites">Re-building documentation without PISM’s prerequisites</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

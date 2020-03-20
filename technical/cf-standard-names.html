@@ -1,0 +1,349 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>CF standard names used by PISM &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="On the vertical coordinate in PISM, and a critical change of variable" href="vertchange.html" />
+    <link rel="prev" title="Technical notes" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="cf-standard-names-used-by-pism">
+<span id="sec-cf-standard-names"></span><h1>CF standard names used by PISM<a class="headerlink" href="#cf-standard-names-used-by-pism" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="existing-standard-names">
+<h2>Existing standard names<a class="headerlink" href="#existing-standard-names" title="Permalink to this headline">¶</a></h2>
+<p>We start by listing standard names from the CF Standard Name Table. The subset here is a
+small subset of the <a class="reference external" href="http://cfconventions.org/standard-names.html">table</a>; we list only</p>
+<ul class="simple">
+<li>those with “land_ice” in the name and</li>
+<li>those currently used by PISM</li>
+</ul>
+<p>The existing names starting with “land_ice” are believed to have all been submitted by
+Magnus Hagdorn to the CF committee circa 2003. The <a class="reference external" href="http://websrv.cs.umt.edu/isis/index.php/SeaRISE_Assessment">SeaRISE assessment process</a>
+now has a <a class="reference external" href="http://websrv.cs.umt.edu/isis/index.php/CF_standard_names_for_Glaciology_and_Ice-Sheet_Modeling">wiki on CF standard name use</a>, which to a
+significant extent duplicates content regarding proposed names on this page. That wiki is
+an evolving community standard, and it supercedes this page when it comes to actual
+evolving standards.</p>
+<p>Go to the <a class="reference external" href="http://cfeditor.ceda.ac.uk/proposals/1">CF Conventions</a> page for the list of proposed standard
+names under consideration.</p>
+<p>Because of the use of <a class="reference external" href="https://www.unidata.ucar.edu/software/udunits/">UDUNITS</a>, PISM input files do not have to have fields already in the
+canonical units. Rather, the units attribute has to be valid for UDUNITS conversion into
+the canonical units. Generally within PISM, the canonical units are used internally.</p>
+<table border="1" class="docutils" id="tab-standard-names">
+<caption><span class="caption-number">Table 48 </span><span class="caption-text">CF standard names used by PISM</span><a class="headerlink" href="#tab-standard-names" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">CF standard name</th>
+<th class="head">Canonical units (SI)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">bedrock_altitude</span></code></td>
+<td>m</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">floating_ice_sheet_area_fraction</span></code></td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">grounded_ice_sheet_area_fraction</span></code></td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_area_fraction</span></code></td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_melt_rate</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_temperature</span></code></td>
+<td>K</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_upward_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_x_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_y_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_calving_rate</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_lwe_basal_melt_rate</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_lwe_calving_rate</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_lwe_surface_specific_mass_balance</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_sigma_coordinate</span></code></td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_specific_mass_flux_due_to_calving_and_ice_front_melting</span></code></td>
+<td>kg m-2 s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_surface_specific_mass_balance_flux</span></code></td>
+<td>kg m-2 s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_surface_upward_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_surface_x_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_surface_y_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_temperature</span></code></td>
+<td>K</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_thickness</span></code></td>
+<td>m</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_vertical_mean_x_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_vertical_mean_y_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_x_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_y_velocity</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">latitude</span></code></td>
+<td>degree_north</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">longitude</span></code></td>
+<td>degree_east</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">magnitude_of_land_ice_basal_drag</span></code></td>
+<td>Pa</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">projection_x_coordinate</span></code></td>
+<td>m</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">projection_y_coordinate</span></code></td>
+<td>m</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">surface_altitude</span></code></td>
+<td>m</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">temperature_at_ground_level_in_snow_or_firn</span></code></td>
+<td>K</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tendency_of_bedrock_altitude</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_mass_due_to_basal_mass_balance</span></code></td>
+<td>kg s-1</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tendency_of_land_ice_thickness</span></code></td>
+<td>m s-1</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">upward_geothermal_heat_flux_at_ground_level</span></code></td>
+<td>W m-2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="proposed-standard-names">
+<h2><em>Proposed</em> standard names<a class="headerlink" href="#proposed-standard-names" title="Permalink to this headline">¶</a></h2>
+<p>These are <em>unofficially</em> proposed by Bueler and Aschwanden, for now.</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-number">Table 49 </span><span class="caption-text">Desired CF standard names</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="47%" />
+<col width="13%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Proposed name</th>
+<th class="head">Canonical units (SI)</th>
+<th class="head">Comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ice_shelf_basal_specific_mass_balance</span></code></td>
+<td>m s-1</td>
+<td>positive is loss of ice shelf mass (i.e. use outward normal from ice shelf)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ice_shelf_basal_temperature</span></code></td>
+<td>K</td>
+<td>absolute (not pressure-adjusted) temperature</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_age</span></code></td>
+<td>s</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_frictional_heating</span></code></td>
+<td>W m-2</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_material_yield_stress</span></code></td>
+<td>Pa</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_basal_material_friction_angle</span></code></td>
+<td>degree</td>
+<td>majority of standard names with “angle” use canonical units “degree”</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_surface_temperature_below_firn</span></code></td>
+<td>K</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_upward_velocity</span></code></td>
+<td>m s-1</td>
+<td>compare to CF names “upward_air_velocity” and “upward_sea_water_velocity”</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">lithosphere_temperature</span></code></td>
+<td>K</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">upward_geothermal_flux_in_lithosphere</span></code></td>
+<td>W m-2</td>
+<td>typically applied at depth in lithosphere; compare to
+“upward_geothermal_heat_flux_at_ground_level”</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">land_ice_specific_enthalpy</span></code></td>
+<td>J kg-1</td>
+<td>enthalpy is defined in PISM to be sensible plus latent heat, plus potential energy
+of pressure; there is a nontrivial issue of the scaling; the enthalpy value for
+273.15 K (cold) ice at atmospheric pressure is a possible standard</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">land_ice_liquid_fraction</span></code></td>
+<td>1</td>
+<td>liquid water fraction in ice, a pure number between 0 and 1; a diagnostic function
+of enthalpy</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="final-technical-notes">
+<h2>Final technical notes<a class="headerlink" href="#final-technical-notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>PISM also uses attributes <code class="docutils literal notranslate"><span class="pre">grid_mapping</span> <span class="pre">=</span> <span class="pre">&quot;mapping&quot;</span> <span class="pre">;</span></code> and <code class="docutils literal notranslate"><span class="pre">coordinates</span> <span class="pre">=</span> <span class="pre">&quot;lat</span> <span class="pre">lon&quot;;</span></code>
+on output variables that depend on <code class="docutils literal notranslate"><span class="pre">y,x</span></code>.</li>
+<li>Because PISM uses UDUNITS, it will write some variables in “glaciological units” instead
+of the SI units listed above, for instance velocities in m year-1 instead of m s-1. This
+is allowed under CF. When PISM reads such a field from a NetCDF file, the conversion is
+handled automatically by <a class="reference external" href="https://www.unidata.ucar.edu/software/udunits/">UDUNITS</a>.</li>
+</ul>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="index.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="vertchange.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Technical notes</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CF standard names used by PISM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#existing-standard-names">Existing standard names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#proposed-standard-names"><em>Proposed</em> standard names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#final-technical-notes">Final technical notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vertchange.html">On the vertical coordinate in PISM, and a critical change of variable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bed_roughness.html">Using Schoof’s parameterized bed roughness technique in PISM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssafd-cfbc.html">Calving front stress boundary condition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bombproof.html">BOMBPROOF, PISM’s numerical scheme for conservation of energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="steady-hydrology.html">Computing steady-state subglacial water flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_checklist.html">Release checklist</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

@@ -1,0 +1,226 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Saving time series of scalar diagnostic quantities &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Saving time series of spatially-varying diagnostic quantities" href="saving-diagnostics.html" />
+    <link rel="prev" title="Input and output" href="input-output.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="saving-time-series-of-scalar-diagnostic-quantities">
+<span id="sec-saving-time-series"></span><h1>Saving time series of scalar diagnostic quantities<a class="headerlink" href="#saving-time-series-of-scalar-diagnostic-quantities" title="Permalink to this headline">¶</a></h1>
+<p>It is also possible to save time-series of certain scalar diagnostic quantities using a
+combination of the options <code class="docutils literal notranslate"><span class="pre">-ts_file</span></code>, <code class="docutils literal notranslate"><span class="pre">-ts_times</span></code>, and <code class="docutils literal notranslate"><span class="pre">-ts_vars</span></code>. For example,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i foo.nc -y 1e4 -o output.nc -ts_file time-series.nc \
+      -ts_times 0:1:1e4 -ts_vars ice_volume_glacierized,ice_area_glacierized_grounded
+</pre></div>
+</div>
+<p>will run for 10000 years, saving total ice volume and grounded ice area to
+<code class="docutils literal notranslate"><span class="pre">time-series.nc</span></code> <em>yearly</em>. See tables <a class="reference internal" href="#tab-time-series-opts"><span class="std std-numref">Table 30</span></a> for the list of
+options and <a class="reference internal" href="../diagnostics/index.html#sec-ts-vars"><span class="std std-ref">Scalar time-series</span></a> for the full list of supported time-series.</p>
+<p>Note that, similarly to the snapshot-saving code (section <a class="reference internal" href="saving-snapshots.html#sec-snapshots"><span class="std std-ref">Saving re-startable snapshots of the model state</span></a>), this
+mechanism does not affect adaptive time-stepping. Here, however, PISM will save exactly
+the number of time-series records requested.</p>
+<p>Omitting the <code class="docutils literal notranslate"><span class="pre">-ts_vars</span></code> option makes PISM save <em>all</em> available variables listed in
+<a class="reference internal" href="../diagnostics/index.html#sec-ts-vars"><span class="std std-ref">Scalar time-series</span></a>. Because scalar time-series take minimal storage space, compared to
+spatially-varying data, this is usually a reasonable choice. Run PISM with the
+<code class="option docutils literal notranslate"><span class="pre">-list_diagnostics</span></code> option to see the list of all available time-series.</p>
+<p>If the file <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code>, specified by <code class="docutils literal notranslate"><span class="pre">-ts_file</span> <span class="pre">foo.nc</span></code>, already exists then by default
+the existing file will be moved to <code class="docutils literal notranslate"><span class="pre">foo.nc~</span></code> and the new time series will go into
+<code class="docutils literal notranslate"><span class="pre">foo.nc</span></code>. To append the time series onto the end of the existing file, use option
+<code class="docutils literal notranslate"><span class="pre">-ts_append</span></code>.</p>
+<p>PISM buffers time-series data and writes it at the end of the run, once 10000 values are
+stored, or when an <code class="docutils literal notranslate"><span class="pre">-extra_file</span></code> is saved, whichever comes first. Sending an <code class="docutils literal notranslate"><span class="pre">USR1</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">USR2</span></code>) signal to a PISM process flushes these buffers, making it possible to
+monitor the run. (See section <a class="reference internal" href="signals.html#sec-signal"><span class="std std-ref">Signals, to control a running PISM model</span></a> for more about PISM’s signal handling.)</p>
+<table border="1" class="colwidths-given docutils" id="tab-time-series-opts">
+<caption><span class="caption-number">Table 30 </span><span class="caption-text">Command-line options controlling saving scalar time-series</span><a class="headerlink" href="#tab-time-series-opts" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ts_file</span></code></td>
+<td>Specifies the file to save to.</td>
+</tr>
+<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ts_times</span></code></td>
+<td>Specifies times to save at as a MATLAB-style range <span class="math notranslate nohighlight">\(a:\Delta t:b\)</span>, a
+comma-separated list, or a keyword (<code class="docutils literal notranslate"><span class="pre">hourly</span></code>, <code class="docutils literal notranslate"><span class="pre">daily</span></code>, <code class="docutils literal notranslate"><span class="pre">monthly</span></code>,
+<code class="docutils literal notranslate"><span class="pre">yearly</span></code>). See section <a class="reference internal" href="saving-diagnostics.html#sec-saving-diagnostics"><span class="std std-ref">Saving time series of spatially-varying diagnostic quantities</span></a>.</td>
+</tr>
+<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ts_vars</span></code></td>
+<td>Comma-separated list of variables. Omitting this option is equivalent to listing
+the <em>all</em> variables.</td>
+</tr>
+<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ts_append</span></code></td>
+<td>Append time series to file if it already exists. No effect if file does not yet
+exist.</td>
+</tr>
+</tbody>
+</table>
+<p>Besides the above information on usage, here are comments on the physical significance of
+several scalar diagnostics:</p>
+<ul class="simple">
+<li>For each variable named <code class="docutils literal notranslate"><span class="pre">..._flux</span></code>, positive values mean ice sheet mass gain.</li>
+<li>PISM reports ice volume, ice mass, and several other quantities for “glacierized” areas.
+These quantities do not include contributions from areas where the ice thickness is
+equal to or below the value of the configuration parameter
+<code class="docutils literal notranslate"><span class="pre">output.ice_free_thickness_standard</span></code> (in meters). Corresponding quantities without the
+suffix <em>do</em> include areas with a thin, “seasonal” ice cover.</li>
+<li>Ice volume and area are computed and then split among floating and grounded portions:
+<code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code> <span class="math notranslate nohighlight">\(\mapsto\)</span> (<code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_shelf</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_grounded</span></code>) while <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized</span></code> <span class="math notranslate nohighlight">\(\mapsto\)</span>
+(<code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_shelf</span></code>, <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_grounded</span></code>). The volumes have units
+<span class="math notranslate nohighlight">\(m^3\)</span> and the areas have units <span class="math notranslate nohighlight">\(m^2\)</span>.</li>
+<li>The thermodynamic state of the ice sheet can be assessed, in part, by the amount of cold
+or temperate (“<code class="docutils literal notranslate"><span class="pre">temp</span></code>”) ice. Thus there is another splitting: <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code>
+<span class="math notranslate nohighlight">\(\mapsto\)</span> (<code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_cold</span></code>, <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_temperate</span></code>) and
+<code class="docutils literal notranslate"><span class="pre">ice_area_glacierized</span></code> <span class="math notranslate nohighlight">\(\mapsto\)</span>
+(<code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_cold_base</span></code>, <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_temperate_base</span></code>).</li>
+<li>The sea level rise potential <code class="variable docutils literal notranslate"><span class="pre">sea_level_rise_potential</span></code> is the increase in sea
+level (in meters) that would result from melting all the grounded ice not displacing sea
+water and distributing the corresponding <em>fresh water</em> volume uniformly over the entire
+global ocean (<span class="math notranslate nohighlight">\(362.5 \cdot 10^6\, km^2\)</span>, see <a class="reference internal" href="../../zzz_references_html.html#cogley2011" id="id1">[99]</a>). This follows the
+definition used in the SeaRISE project <a class="reference internal" href="../../zzz_references_html.html#bindschadler2013searise" id="id2">[58]</a>.</li>
+<li>Fields <code class="docutils literal notranslate"><span class="pre">max_diffusivity</span></code> and <code class="docutils literal notranslate"><span class="pre">max_hor_vel</span></code> relate to PISM time-stepping. These
+quantities appear in per-time-step form in the standard output from PISM (i.e. at
+default verbosity). <code class="docutils literal notranslate"><span class="pre">max_diffusivity</span></code> determines the length of the mass continuity
+sub-steps for the SIA stress balance (sub-)model. <code class="docutils literal notranslate"><span class="pre">max_hor_vel</span></code> determines the
+CFL-type restriction for mass continuity and conservation of energy contributions of the
+SSA stress balance (i.e. sliding) velocity.</li>
+</ul>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="input-output.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="saving-diagnostics.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Practical usage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="netcdf-tools.html">Handling NetCDF files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="input-output.html">Input and output</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Saving time series of scalar diagnostic quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-diagnostics.html">Saving time series of spatially-varying diagnostic quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-snapshots.html">Saving re-startable snapshots of the model state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diagnostic-viewers.html">Run-time diagnostic viewers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters.html">PISM’s configuration parameters and how to change them</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regridding.html">Regridding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="signals.html">Signals, to control a running PISM model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="time-stepping.html">Understanding adaptive time-stepping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mass-conservation.html">Balancing the books</a></li>
+<li class="toctree-l3"><a class="reference internal" href="petsc-options.html">PETSc options for PISM users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scripts.html">Utility and test scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flowline.html">Using PISM for flow-line modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modifying-pism.html">Managing source code modifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ismip6.html">ISMIP6 Greenland</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

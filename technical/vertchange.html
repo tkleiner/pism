@@ -1,0 +1,275 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>On the vertical coordinate in PISM, and a critical change of variable &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using Schoof’s parameterized bed roughness technique in PISM" href="bed_roughness.html" />
+    <link rel="prev" title="CF standard names used by PISM" href="cf-standard-names.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="on-the-vertical-coordinate-in-pism-and-a-critical-change-of-variable">
+<span id="sec-vertchange"></span><h1>On the vertical coordinate in PISM, and a critical change of variable<a class="headerlink" href="#on-the-vertical-coordinate-in-pism-and-a-critical-change-of-variable" title="Permalink to this headline">¶</a></h1>
+<p>In PISM all fields in the ice, including enthalpy, age, velocity, and so on, evolve within
+an ice fluid domain of <em>changing geometry</em>. See <a class="reference internal" href="#fig-freebdry"><span class="std std-numref">Fig. 38</span></a>. In
+particular, the upper and lower surfaces of the ice fluid move with respect to the geoid.</p>
+<div class="figure" id="fig-freebdry">
+<img alt="../_images/tempbdryfig.png" src="../_images/tempbdryfig.png" />
+<p class="caption"><span class="caption-number">Fig. 38 </span><span class="caption-text">The ice fluid domain evolves, with both the upper and lower surfaces in motion with
+respect to the geoid.</span></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">FIXME: This figure should show the floating case too.</p>
+</div>
+<p>The <span class="math notranslate nohighlight">\((x,y,z)\)</span> coordinates in <a class="reference internal" href="#fig-freebdry"><span class="std std-numref">Fig. 38</span></a> are supposed to be from an orthogonal
+coordinate system with <span class="math notranslate nohighlight">\(z\)</span> in the direction anti-parallel to gravity, so this is a
+flat-earth approximation. In practice, the data inputs to PISM are in some particular
+projection, of course.</p>
+<p>We make a change of the independent variable <span class="math notranslate nohighlight">\(z\)</span> which simplifies how PISM deals
+with the changing geometry of the ice, especially in the cases of a non-flat or moving
+bed. We replace the vertical coordinate relative to the geoid with the vertical coordinate
+relative to the base of the ice. Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}s = \begin{cases}
+       z - b(x,y,t), &amp; \text{ice is grounded}, \\
+       z - \frac{\rho_i}{\rho_o} H(x,y,t), &amp; \text{ice is floating;}
+    \end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(H = h - b\)</span> is the ice thickness and <span class="math notranslate nohighlight">\(\rho_i, \rho_o\)</span> are densities of
+ice and ocean, respectively.</p>
+<p>Now we make the change of variables</p>
+<div class="math notranslate nohighlight">
+\[(x,y,z,t) \mapsto (x,y,s,t)\]</div>
+<p>throughout the PISM code. This replaces <span class="math notranslate nohighlight">\(z=b\)</span> by <span class="math notranslate nohighlight">\(s=0\)</span> as the equation of the
+base surface of the ice. The ice fluid domain in the new coordinates only has a free upper
+surface as shown in <a class="reference internal" href="#fig-sfreebdry"><span class="std std-numref">Fig. 39</span></a>.</p>
+<div class="figure" id="fig-sfreebdry">
+<img alt="../_images/stempbdryfig.png" src="../_images/stempbdryfig.png" />
+<p class="caption"><span class="caption-number">Fig. 39 </span><span class="caption-text">In (x,y,s) space the ice fluid domain only has an upper surface which moves,
+<span class="math notranslate nohighlight">\(s=H(x,y,t)\)</span>. Compare to <a class="reference internal" href="#fig-freebdry"><span class="std std-numref">Fig. 38</span></a>.</span></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">FIXME: This figure should show the floating case too, and bedrock.”</p>
+</div>
+<p>In PISM the computational domain (region)</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{R}=\left\{(x,y,s)\big| -L_x\le x \le L_x, -L_y\le y \le L_y, -Lb_z \le s \le
+L_z\right\}\]</div>
+<p>is divided into a three-dimensional grid. See <code class="docutils literal notranslate"><span class="pre">IceGrid</span></code>.</p>
+<p>The change of variable <span class="math notranslate nohighlight">\(z\to s\)</span> used here <em>is not</em> the <a class="reference internal" href="../zzz_references_html.html#jenssen" id="id1">[146]</a> change of variable
+<span class="math notranslate nohighlight">\(\tilde s=(z-b)/H\)</span> . That change causes the conservation of energy equation to
+become singular at the boundaries of the ice sheet. Specifically, the Jenssen change
+replaces the vertical conduction term by a manifestly-singular term at ice sheet margins
+where <span class="math notranslate nohighlight">\(H\to 0\)</span>, because</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial^2 E}{\partial z^2} = \frac{1}{H^2}
+\frac{\partial^2 E}{\partial \tilde s^2}.\]</div>
+<p>A singular coefficient of this type can be assumed to affect the stability of all
+time-stepping schemes. The current change <span class="math notranslate nohighlight">\(s=z-b\)</span> has no such singularizing effect
+though the change does result in added advection terms in the conservation of energy
+equation, which we now address. See <a class="reference internal" href="bombproof.html#sec-bombproof"><span class="std std-ref">BOMBPROOF, PISM’s numerical scheme for conservation of energy</span></a> for more general
+considerations about the conservation of energy equation.</p>
+<p>The new coordinates <span class="math notranslate nohighlight">\((x,y,s)\)</span> are not orthogonal.</p>
+<p>Recall that if <span class="math notranslate nohighlight">\(f=f(x,y,z,t)\)</span> is a function written in the old variables and if
+<span class="math notranslate nohighlight">\(\tilde f(x,y,s,t)=f(x,y,z(x,y,s,t),t)\)</span> is the “same” function written in the new
+variables, equivalently <span class="math notranslate nohighlight">\(f(x,y,z,t)=\tilde f(x,y,s(x,y,z,t),t)\)</span> , then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\newcommand{\Diff}[2]{ \frac{\mathrm{d}#1}{\mathrm{d}#2} }
+\newcommand{\diff}[2]{ \frac{\partial #1}{\partial #2} }
+\newcommand{\var}[2]{ {#1}_{\text{#2}} }
+\newcommand{\h}[1]{ \var{h}{#1} }
+\newcommand{\T}[1]{ \var{T}{#1} }
+\newcommand{\m}[1]{ \var{m}{#1} }
+\newcommand{\ms}[1]{ \var{m^{*}}{#1} }
+\newcommand{\psw}{p_{\text{ocean}}}
+\newcommand{\pice}{p_{\text{ice}}}
+\newcommand{\pmelange}{p_{\text{melange}}}
+\newcommand{\n}{\mathbf{n}}
+\newcommand{\nx}{\n_{x}}
+\newcommand{\ny}{\n_{y}}
+\newcommand{\phimin}{\phi_{\mathrm{min}}}
+\newcommand{\phimax}{\phi_{\mathrm{max}}}
+\newcommand{\bmin}{b_{\mathrm{min}}}
+\newcommand{\bmax}{b_{\mathrm{max}}}
+\newcommand{\bq}{\mathbf{q}}
+\newcommand{\Up}[2]{\operatorname{Up}\left(#1\big|#2\right)}
+\newcommand{\uppair}[2]{\left\{\begin{matrix} #1 \\ #2 \end{matrix}\right\}}
+\newcommand{\div}{\nabla \cdot}
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\Wtill}{W_{\mathrm{till}}}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\diff{f}{x} = \diff{\tilde f}{x} + \diff{\tilde f}{s} \diff{s}{x} = \diff{\tilde f}{x}
+- \diff{\tilde f}{s} \diff{b}{x}.\]</div>
+<p>Similarly,</p>
+<div class="math notranslate nohighlight">
+\[\diff{f}{y} = \diff{\tilde f}{y} - \diff{\tilde f}{s} \diff{b}{y},\]</div>
+<div class="math notranslate nohighlight">
+\[\diff{f}{t} = \diff{\tilde f}{t} - \diff{\tilde f}{s} \diff{b}{t}.\]</div>
+<p>On the other hand,</p>
+<div class="math notranslate nohighlight">
+\[\diff{f}{z} = \diff{\tilde f}{s}.\]</div>
+<p>The following table records some important changes to formulae related to conservation of
+energy:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{ll}
+  \textbf{old}  &amp; \textbf{new} \\
+  P=\rho g(h-z) &amp; P=\rho g(H-s) \\
+  \diff{E}{t}   &amp; \diff{E}{t}-\diff{E}{s}\diff{b}{t} \\
+  \nabla E      &amp; \nabla E- \diff{E}{s}\nabla b \\
+  \rho_i\left(\diff{E}{t}+\mathbf{U}\cdot\nabla E + w\diff{E}{z}\right)=\frac{k_i}{c_i} \frac{\partial^2 E}{\partial z^2} + Q &amp; \rho_i\left(\diff{E}{t} + \mathbf{U}\cdot\nabla E + \left(w-\diff{b}{t}-\mathbf{U}\cdot\nabla b\right)\diff{E}{s}\right) = \frac{k_i}{c_i} \frac{\partial^2 E}{\partial s^2} + Q
+\end{array}\end{split}\]</div>
+<p>Note <span class="math notranslate nohighlight">\(E\)</span> is the ice enthalpy and <span class="math notranslate nohighlight">\(T\)</span> is the ice temperature (which is a
+function of the enthalpy; see <code class="docutils literal notranslate"><span class="pre">EnthalpyConverter</span></code>), <span class="math notranslate nohighlight">\(P\)</span> is the ice pressure
+(assumed hydrostatic), <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> is the depth-dependent horizontal velocity, and
+<span class="math notranslate nohighlight">\(Q\)</span> is the strain-heating term.</p>
+<p>Now the vertical velocity is computed by
+<code class="docutils literal notranslate"><span class="pre">StressBalance::compute_vertical_velocity(...)</span></code>. In the old coordinates
+<span class="math notranslate nohighlight">\((x,y,z,t)\)</span> it has this formula:</p>
+<div class="math notranslate nohighlight">
+\[w(z) = -\int_b^z \diff{u}{x}(z') + \diff{v}{y}(z')\,dz' + \diff{b}{t}
++ \mathbf{U}_b \cdot \nabla b - S.\]</div>
+<p>Here <span class="math notranslate nohighlight">\(S\)</span> is the basal melt rate, positive when ice is being melted. We have used the
+basal kinematical equation and integrated the incompressibility statement</p>
+<div class="math notranslate nohighlight">
+\[\diff{u}{x} + \diff{v}{y} + \diff{w}{z} = 0.\]</div>
+<p>In the new coordinates we have</p>
+<div class="math notranslate nohighlight">
+\[w(s) = -\int_0^s \diff{u}{x}(s') + \diff{v}{y}(s')\,ds'
++ \mathbf{U}(s) \cdot \nabla b + \diff{b}{t} - S.\]</div>
+<p>(Note that the term <span class="math notranslate nohighlight">\(\mathbf{U}(s) \cdot \nabla b\)</span> evaluates the horizontal velocity
+at level <span class="math notranslate nohighlight">\(s\)</span> and not at the base.)</p>
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\tilde w(x,y,s,t) = w(s) - \diff{b}{t}-\mathbf{U}(s)\cdot\nabla b.\]</div>
+<p>This quantity is the vertical velocity of the ice <em>relative to the location on the bed
+immediately below it</em>. In particular, <span class="math notranslate nohighlight">\(\tilde w=0\)</span> for a slab sliding down a
+non-moving inclined plane at constant horizontal velocity, if there is no basal melt rate.
+Also, <span class="math notranslate nohighlight">\(\tilde w(s=0)\)</span> is nonzero only if there is basal melting or freeze-on, i.e.
+when <span class="math notranslate nohighlight">\(S\ne 0\)</span>. Within PISM, <span class="math notranslate nohighlight">\(\tilde w\)</span> is written with name <span class="math notranslate nohighlight">\(wvel_rel\)</span> into an
+input file. Comparing the last two equations, we see how
+<code class="docutils literal notranslate"><span class="pre">StressBalance::compute_vertical_velocity(...)</span></code> computes <span class="math notranslate nohighlight">\(\tilde w\)</span> :</p>
+<div class="math notranslate nohighlight">
+\[\tilde w(s) = -\int_0^s \diff{u}{x}(s') + \diff{v}{y}(s')\,ds' - S.\]</div>
+<p>The conservation of energy equation is now, in the new coordinate <span class="math notranslate nohighlight">\(s\)</span> and
+newly-defined relative vertical velocity,</p>
+<div class="math notranslate nohighlight">
+\[\rho_i \left(\diff{E}{t} + \mathbf{U}\cdot\nabla E + \tilde w \diff{E}{s}\right)
+= \frac{k_i}{c_i} \frac{\partial^2 E}{\partial s^2} + Q.\]</div>
+<p>Thus it looks just like the conservation of energy equation in the original vertical
+velocity <span class="math notranslate nohighlight">\(z\)</span>. This is the form of the equation solved by <code class="docutils literal notranslate"><span class="pre">EnthalpyModel</span></code> using
+<code class="docutils literal notranslate"><span class="pre">enthSystemCtx::solve()</span></code>.</p>
+<p>Under option <code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">big</span></code>, all of these vertical velocity fields are available as
+fields in the output NetCDF file. The vertical velocity relative to the geoid, as a
+three-dimensional field, is written as the diagnostic variable <code class="docutils literal notranslate"><span class="pre">wvel</span></code>. This is the
+“actual” vertical velocity <span class="math notranslate nohighlight">\(w = \tilde w + \diff{b}{t} + \mathbf{U}(s)\cdot\nabla b\)</span>
+. Its surface value is written as <code class="docutils literal notranslate"><span class="pre">wvelsurf</span></code>, and its basal value as <code class="docutils literal notranslate"><span class="pre">wvelbase</span></code>. The
+relative vertical velocity <span class="math notranslate nohighlight">\(\tilde w\)</span> is written to the NetCDF output file as
+<code class="docutils literal notranslate"><span class="pre">wvel_rel</span></code>.</p>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="cf-standard-names.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="bed_roughness.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Technical notes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cf-standard-names.html">CF standard names used by PISM</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">On the vertical coordinate in PISM, and a critical change of variable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bed_roughness.html">Using Schoof’s parameterized bed roughness technique in PISM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssafd-cfbc.html">Calving front stress boundary condition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bombproof.html">BOMBPROOF, PISM’s numerical scheme for conservation of energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="steady-hydrology.html">Computing steady-state subglacial water flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_checklist.html">Release checklist</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

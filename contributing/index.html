@@ -1,0 +1,186 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Contributing to PISM &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Submitting bug reports" href="bug-reporting.html" />
+    <link rel="prev" title="Release checklist" href="../technical/release_checklist.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="contributing-to-pism">
+<span id="sec-contributing"></span><h1>Contributing to PISM<a class="headerlink" href="#contributing-to-pism" title="Permalink to this headline">¶</a></h1>
+<p>Bug reports, contributions of code, documentation, and tests are always appreciated.</p>
+<p>You will need a <a class="reference external" href="https://github.com/">GitHub</a> account and some familiarity with <a class="reference external" href="https://git-scm.com/">Git</a><a class="footnote-reference" href="#id2" id="id1">[1]</a>.</p>
+<p>Please see <a class="reference internal" href="bug-reporting.html#sec-bug-reports"><span class="std std-ref">Submitting bug reports</span></a> for bug reporting guidelines.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By submitting code, the contributor gives irretrievable consent to the redistribution
+and modification of the contributed source code as described in the PISM’s open source
+license.</p>
+</div>
+<p>Contributions are preferred via pull requests to <a class="reference external" href="https://github.com/pism/pism">https://github.com/pism/pism</a>.</p>
+<ol class="arabic">
+<li><p class="first"><a class="reference external" href="https://help.github.com/en/articles/fork-a-repo">Fork PISM’s repository.</a></p>
+</li>
+<li><p class="first">Create a branch that will contain your changes.</p>
+</li>
+<li><p class="first">Implement proposed changes.</p>
+<ol class="loweralpha simple">
+<li>Make changes to the code or documentation (or both).</li>
+<li>Test your changes.</li>
+<li>Add verification or regression tests (optional but <strong>strongly encouraged</strong>).</li>
+<li>Update documentation, if necessary.</li>
+<li>Update the change log <code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code>. If your contribution contains a bug fix,
+please describe the bug and its effects.</li>
+</ol>
+</li>
+<li><p class="first"><a class="reference external" href="https://help.github.com/en/articles/creating-a-pull-request">Create a pull request</a> and make sure to <a class="reference external" href="https://help.github.com/en/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork">allow
+edits from maintainers.</a></p>
+<p>Every time you push your code to <a class="reference external" href="https://github.com/">GitHub</a> <a class="reference external" href="https://circleci.com/">CircleCI</a> will</p>
+<ul class="simple">
+<li>build it with pedantic compiler settings, treating all compiler warnings as errors</li>
+<li>run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> in the build directory.</li>
+</ul>
+<p>Please make sure all tests pass (you will get an e-mail if there was a failure).</p>
+</li>
+</ol>
+<p>If you are planning a large contribution we encourage you to open an issue at
+<a class="reference external" href="https://github.com/pism/pism/issues">https://github.com/pism/pism/issues</a> or e-mail us at <a class="reference external" href="mailto:uaf-pism&#37;&#52;&#48;alaska&#46;edu">uaf-pism<span>&#64;</span>alaska<span>&#46;</span>edu</a> and interact with us frequently to ensure
+that your effort is well-directed.</p>
+<p>When working on a large contribution it is essential to stay in touch with PISM’s
+maintainers.</p>
+<p>We urge you to use a version control system and give PISM maintainers access to a
+repository containing your code. We realize that your group’s policy may make it
+impossible to put the code in a public repository. However, it is very easy to set up a
+private repository instead.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Working in isolation will lead to a waste of many person-hours of effort once your work
+is ready to be merged into PISM.</p>
+</div>
+<p>See sections listed below for various technical details.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bug-reporting.html">Submitting bug reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coding_guidelines.html">PISM coding guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git-introduction.html">Git introduction for PISM developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git-branches.html">Git branches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development-workflow.html">Development workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to.html">How do I…?</a></li>
+</ul>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Please see <a class="reference internal" href="git-introduction.html#sec-git-introduction"><span class="std std-ref">Git introduction for PISM developers</span></a> for a brief introduction and <a class="reference external" href="https://git-scm.com/doc">Git
+documentation</a> for more.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="../technical/release_checklist.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="bug-reporting.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to PISM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bug-reporting.html">Submitting bug reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coding_guidelines.html">PISM coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git-introduction.html">Git introduction for PISM developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git-branches.html">Git branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development-workflow.html">Development workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how-to.html">How do I…?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

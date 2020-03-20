@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Managing model time &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples and corresponding options" href="examples.html" />
+    <link rel="prev" title="Climate forcing" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="managing-model-time">
+<span id="sec-model-time"></span><h1>Managing model time<a class="headerlink" href="#managing-model-time" title="Permalink to this headline">¶</a></h1>
+<p>Most of PISM only needs to know how long the current time step is. The climate forcing
+(reporting) code, on the other hand, uses time in a precise manner to provide (and report)
+the correct values at the right time. For example: the February mass balance should be
+used for 28 days (except during leap years) and not <span class="math notranslate nohighlight">\(365/12 = 30.4167\)</span> days.</p>
+<div class="section" id="periodic-forcing">
+<span id="sec-periodic-forcing"></span><h2>Periodic forcing<a class="headerlink" href="#periodic-forcing" title="Permalink to this headline">¶</a></h2>
+<p>All components reading time-dependent forcing data from files can interpret it as
+“periodic”. The length of the period (in years) is specified using a <code class="option docutils literal notranslate"><span class="pre">-..._period</span></code>
+option. For example, to prescribe a periodic climate which has the same values each year
+but which includes inter-annual variations, using the <code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span></code> option, set:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-surface given -surface_given_period 1 -surface_given_file forcing.nc
+</pre></div>
+</div>
+<p>Each component has a unique command-line option prefix for a <code class="option docutils literal notranslate"><span class="pre">-..._period</span></code> option.
+Please refer to corresponding sections for allowed prefixes.</p>
+<p>If forcing data has the period other than one year it is also necessary to specify the
+“starting time” using the <code class="option docutils literal notranslate"><span class="pre">-..._reference_year</span></code> option.</p>
+<p>For example, to use a 20 year long climate record as periodic climate starting at the
+beginning of the model year 10, do</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-surface given -surface_given_period 20 -surface_given_file forcing.nc \
+-surface_given_reference_year 10
+</pre></div>
+</div>
+<p>Note that the reference year is given in <em>model years</em>, not calendar years.</p>
+<p>The <code class="variable docutils literal notranslate"><span class="pre">time</span></code> variable in a forcing file that is to be used as periodic should start at
+<span class="math notranslate nohighlight">\(0\)</span>. (In other words, time in a file with periodic forcing data is <em>time since the
+beginning of a period</em>.) Please see the <a class="reference internal" href="../manual/modeling-choices/computational/time.html#sec-time"><span class="std std-ref">Model time</span></a> for a discussion of time units
+appropriate in forcing files.</p>
+</div>
+<div class="section" id="using-time-bounds-in-forcing-data">
+<span id="sec-time-bounds"></span><h2>Using time bounds in forcing data<a class="headerlink" href="#using-time-bounds-in-forcing-data" title="Permalink to this headline">¶</a></h2>
+<p>PISM interprets climate forcing data as piecewise-constant in time. A forcing file is
+required to contain time bounds corresponding to each record.</p>
+<p>PISM follows the CF (Climate and Forecasting) meta-data conventions. The <code class="docutils literal notranslate"><span class="pre">ncdump</span> <span class="pre">-h</span></code>
+output from a conforming file would look similar to:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>netcdf forcing {
+dimensions:
+        time = UNLIMITED ; // (214 currently)
+        nv = 2 ;
+variables:
+        double time(time) ;
+                time:units = &quot;seconds since 2000-1-1&quot; ;
+                time:axis = &quot;T&quot; ;
+                time:bounds = &quot;time_bounds&quot; ;
+                time:calendar = &quot;gregorian&quot; ;
+                time:long_name = &quot;time&quot; ;
+        double nv(nv) ;
+        double time_bounds(time, nv) ;
+</pre></div>
+</div>
+<p>The <code class="variable docutils literal notranslate"><span class="pre">time_bounds</span></code> variable stores the starting and the ending time for each interval
+in the forcing. This variable is assumed to have the same units as the <code class="variable docutils literal notranslate"><span class="pre">time</span></code>
+variable it is associated with, which is why its arguments are not set in this example.</p>
+<p>Please see the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a> document for details.</p>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="index.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="examples.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Climate forcing</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Managing model time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#periodic-forcing">Periodic forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-time-bounds-in-forcing-data">Using time bounds in forcing data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples and corresponding options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing if forcing data is used correctly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surface.html">Surface mass and energy process model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atmosphere.html">Atmosphere model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ocean.html">Ocean model components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

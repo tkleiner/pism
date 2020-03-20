@@ -1,0 +1,357 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PISM User’s Manual &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Getting started: a Greenland ice sheet example" href="std-greenland/index.html" />
+    <link rel="prev" title="Rebuilding PISM documentation" href="../installation/documentation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="pism-user-s-manual">
+<span id="sec-users-manual"></span><h1>PISM User’s Manual<a class="headerlink" href="#pism-user-s-manual" title="Permalink to this headline">¶</a></h1>
+<p>Welcome!  All information about PISM is online at the home page</p>
+<blockquote>
+<div><a class="reference external" href="https://pism-docs.org">https://pism-docs.org</a></div></blockquote>
+<p>Please see the extensive lists of PISM publications and applications at that page.</p>
+<p>This User’s Manual gives examples of how to run PISM using publicly-available data for:
+the whole Greenland ice sheet, the Jakobshavn outlet glacier in Greenland, the Ross ice
+shelf in Antarctica, and a number of simplified geometry tests. It documents all the
+PISM’s command-line options and configuration parameters. It summarizes the continuum
+models used by PISM, and it illustrates how PISM’s numerical approximations are verified.</p>
+<p>See the <a class="reference internal" href="../installation/index.html#sec-installation"><span class="std std-ref">Installation Manual</span></a> for how to download the PISM source
+code and install it, along with needed libraries. The <a class="reference internal" href="../climate_forcing/index.html#sec-climate-forcing"><span class="std std-ref">Climate Forcing Manual</span></a> extends this Manual to cover additional couplings to atmosphere and
+ocean models and data.</p>
+<p>Users who want to understand more deeply how PISM is designed, or who want to extend it,
+will need to go beyond what is described here. See the <a class="reference external" href="https://pism-docs.org/doxy/html/index.html">Source Code Browser</a>, which is online for the latest stable version. It can be generated from
+source code as described in <a class="reference internal" href="../installation/documentation.html#sec-install-documentation"><span class="std std-ref">Rebuilding PISM documentation</span></a>. It gives a complete view of the
+class/object structure of the PISM source code.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">PISM is an ongoing research project. Ice sheet modeling requires many choices. Please
+don’t trust the results of PISM or any other ice sheet model without a fair amount of
+exploration. Also, please don’t expect all your questions to be answered here. <a class="reference external" href="mailto:uaf-pism&#37;&#52;&#48;alaska&#46;edu">Write to
+us</a> with questions.</p>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="std-greenland/index.html">Getting started: a Greenland ice sheet example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/input-data.html">Input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/run-1.html">First run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/run-1-watching.html">Watching the first run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/run-2.html">Second run: a better ice-dynamics model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/run-3.html">Third run: higher resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/run-4.html">Fourth run: paleo-climate model spin-up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/grid-sequencing.html">Grid sequencing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/parameter-study.html">An ice dynamics parameter study</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="highlevelview/index.html">Ice dynamics, the PISM view</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="highlevelview/stress-balance-models.html">Two stress balance models: SIA and SSA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="highlevelview/model-hierarchy.html">A hierarchy of simplifying assumptions for grounded ice flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="highlevelview/evolutionary-vs-diagnostic.html">Evolutionary versus diagnostic modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="highlevelview/climate-inputs.html">Climate inputs, and their interface with ice dynamics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="initialization/index.html">Initialization and bootstrapping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="initialization/restarting.html">Initialization from a saved model state</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="initialization/restarting.html#i-file-format"><code class="docutils literal notranslate"><span class="pre">-i</span></code> file format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="initialization/bootstrapping.html">Bootstrapping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="initialization/bootstrapping.html#bootstrap-file-format"><code class="docutils literal notranslate"><span class="pre">-bootstrap</span></code> file format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modeling-choices/index.html">Modeling choices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/computational/index.html">Model domain, grid, and time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/computational/box.html">Computational box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/computational/grid.html">Spatial grid</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/computational/grid.html#grid-registration">Grid registration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/computational/grid.html#grid-projections">Grid projections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/computational/grid.html#parallel-domain-distribution">Parallel domain distribution</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/computational/time.html">Model time</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/computational/time.html#calendars">Calendars</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/computational/time.html#re-starting-an-interrupted-run-using-time-file">Re-starting an interrupted run using <code class="docutils literal notranslate"><span class="pre">-time_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/computational/time.html#diagnostic-computations">Diagnostic computations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/dynamics/index.html">Ice dynamics and thermodynamics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/dynamics/stress-balance.html">Choosing the stress balance</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/dynamics/stress-balance.html#controlling-the-ssa-stress-balance-model">Controlling the SSA stress balance model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/dynamics/stress-balance.html#controlling-the-sia-stress-balance-model">Controlling the SIA stress balance model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/dynamics/stress-balance.html#weertman-style-sliding">Weertman-style sliding</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/dynamics/rheology.html">Ice rheology</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/dynamics/rheology.html#choosing-the-flow-laws-for-sia-and-ssa-stress-balances">Choosing the flow laws for SIA and SSA stress balances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/dynamics/rheology.html#choose-enhancement-factor-and-exponent">Choose enhancement factor and exponent</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/dynamics/surface-gradient.html">Surface gradient method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/dynamics/energy-balance.html">Modeling conservation of energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/dynamics/age.html">Computing ice age</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/subglacier/index.html">The subglacier</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/subglacier/basal-strength.html">Controlling basal strength</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/subglacier/basal-strength.html#choosing-the-sliding-law">Choosing the sliding law</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modeling-choices/subglacier/basal-strength.html#lateral-drag">Lateral drag</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/subglacier/basal-strength.html#determining-the-yield-stress">Determining the yield stress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/subglacier/basal-strength.html#determining-the-effective-pressure">Determining the effective pressure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modeling-choices/subglacier/basal-strength.html#controlling-minimum-effective-pressure">Controlling minimum effective pressure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/subglacier/hydrology.html">Subglacial hydrology</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/subglacier/hydrology.html#the-default-model-hydrology-null">The default model: <code class="docutils literal notranslate"><span class="pre">-hydrology</span> <span class="pre">null</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modeling-choices/subglacier/hydrology.html#steady-state-flow-model">“Steady state flow” model</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/subglacier/hydrology.html#the-mass-conserving-model-hydrology-routing">The mass-conserving model: <code class="docutils literal notranslate"><span class="pre">-hydrology</span> <span class="pre">routing</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/subglacier/bed-deformation.html">Earth deformation models</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/subglacier/bed-deformation.html#point-wise-isostasy">Point-wise isostasy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/subglacier/bed-deformation.html#lingle-clark">Lingle-Clark</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/subglacier/bed-roughness.html">Parameterization of bed roughness in the SIA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/marine/index.html">Marine ice sheet modeling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/marine/pik.html">PIK options for marine ice sheets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/pik.html#stress-condition-at-calving-fronts">Stress condition at calving fronts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/pik.html#partially-filled-cells-at-the-boundaries-of-ice-shelves">Partially-filled cells at the boundaries of ice shelves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/pik.html#iceberg-removal">Iceberg removal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/pik.html#sub-grid-treatment-of-the-grounding-line-position">Sub-grid treatment of the grounding line position</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/marine/mask.html">Flotation criterion, mask, and sea level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/marine/calving.html">Calving and front retreat</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/calving.html#eigen-calving">Eigen calving</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/calving.html#von-mises-stress-calving">Von Mises stress calving</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/calving.html#additional-calving-methods">Additional calving methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/marine/calving.html#prescribed-front-retreat">Prescribed front retreat</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/marine/melange.html">Modeling melange back-pressure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/regional/index.html">Modeling individual outlet glaciers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/regional/index.html#energy">Energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/regional/index.html#stress-balance">Stress balance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modeling-choices/regional/index.html#mass-continuity">Mass continuity</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/regional/index.html#mass-balance-adjustment">Mass balance adjustment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modeling-choices/regional/index.html#calving">Calving</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/disabling.html">Disabling sub-models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/hard-choices.html">Dealing with more difficult modeling choices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="practical-usage/index.html">Practical usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/netcdf-tools.html">Handling NetCDF files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/input-output.html">Input and output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/input-output.html#pism-s-i-o-performance">PISM’s I/O performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/saving-time-series.html">Saving time series of scalar diagnostic quantities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/saving-diagnostics.html">Saving time series of spatially-varying diagnostic quantities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/saving-snapshots.html">Saving re-startable snapshots of the model state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/diagnostic-viewers.html">Run-time diagnostic viewers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/parameters.html">PISM’s configuration parameters and how to change them</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/parameters.html#managing-parameter-studies">Managing parameter studies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/parameters.html#saving-pism-s-configuration-for-post-processing">Saving PISM’s configuration for post-processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/regridding.html">Regridding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/signals.html">Signals, to control a running PISM model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/time-stepping.html">Understanding adaptive time-stepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/mass-conservation.html">Balancing the books</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/mass-conservation.html#d-diagnostics">2D diagnostics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="practical-usage/mass-conservation.html#comments">Comments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/mass-conservation.html#scalar-diagnostics">Scalar diagnostics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="practical-usage/mass-conservation.html#id4">Comments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/mass-conservation.html#mass-accounting-in-subglacial-hydrology-models">Mass accounting in subglacial hydrology models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/mass-conservation.html#mass-accounting-in-the-pdd-model">Mass accounting in the PDD model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/petsc-options.html">PETSc options for PISM users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/scripts.html">Utility and test scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/flowline.html">Using PISM for flow-line modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/modifying-pism.html">Managing source code modifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/ismip6.html">ISMIP6 Greenland</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/ismip6.html#top-surface-mass-balance-and-temperature">Top surface mass balance and temperature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/ismip6.html#frontal-melt-parameterization">Frontal melt parameterization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/ismip6.html#parameterized-front-retreat">Parameterized front retreat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="practical-usage/ismip6.html#output-variables">Output variables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simplified-geometry/index.html">Simplified geometry experiments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simplified-geometry/eismint-2.html">EISMINT II</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simplified-geometry/mismip.html">MISMIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simplified-geometry/mismip3d.html">MISMIP3d</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="verification/index.html">Verification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="verification/convergence-figures.html">Sample convergence plots</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="validation/index.html">Validation case studies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="validation/labgum.html">An SIA flow model for a table-top laboratory experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation/ross.html">An SSA flow model for the Ross Ice Shelf in Antarctica</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="validation/ross.html#preprocessing-input-data">Preprocessing input data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation/ross.html#diagnostic-computation-of-ice-shelf-velocity">Diagnostic computation of ice shelf velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation/ross.html#extending-this-example-to-other-ice-shelves">Extending this example to other ice shelves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validation/ross.html#prognostic-modelling-using-eigencalving">Prognostic modelling using eigencalving</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#get-the-drainage-basin-delineation-tool">Get the drainage basin delineation tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#preprocess-the-data-and-get-the-whole-ice-sheet-model-file">Preprocess the data and get the whole ice sheet model file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#identify-the-drainage-basin-for-the-modeled-outlet-glacier">Identify the drainage basin for the modeled outlet glacier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#cut-out-the-computational-domain-for-the-regional-model">Cut out the computational domain for the regional model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#quick-start">Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#spinning-up-the-regional-model-on-a-5-km-grid">Spinning-up the regional model on a 5 km grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#century-run-on-a-2-km-grid">Century run on a 2 km grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html#plotting-results">Plotting results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics/index.html">Diagnostic quantities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics/index.html#spatially-variable-fields">Spatially-variable fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics/index.html#scalar-time-series">Scalar time-series</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="../installation/documentation.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="std-greenland/index.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PISM User’s Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practical-usage/index.html">Practical usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

@@ -1,0 +1,323 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Building PISM &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Common build problems and solutions" href="common-problems.html" />
+    <link rel="prev" title="Building PETSc" href="petsc.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="building-pism">
+<span id="sec-install-pism"></span><h1>Building PISM<a class="headerlink" href="#building-pism" title="Permalink to this headline">¶</a></h1>
+<p>To make sure that the key PETSc and MPI prerequisites work properly together, so that you
+can run PISM in parallel, you might want to make sure that the correct <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> can be
+found, by setting your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. For instance, if you used the option
+<code class="docutils literal notranslate"><span class="pre">--download-mpich=1</span></code> in the PETSc configure, the MPI <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory will have a path
+like <code class="docutils literal notranslate"><span class="pre">$PETSC_DIR/$PETSC_ARCH/bin</span></code>. Thus the following lines might appear in your
+<code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">.profile</span></code>, if not there already:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PETSC_DIR</span><span class="o">=</span>/home/user/petsc-3.10.2/
+<span class="nb">export</span> <span class="nv">PETSC_ARCH</span><span class="o">=</span>opt
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PETSC_DIR</span>/<span class="nv">$PETSC_ARCH</span>/bin/:<span class="nv">$PATH</span>
+</pre></div>
+</div>
+<p>From now on we will assume that the <code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> and <code class="docutils literal notranslate"><span class="pre">PETSC_DIR</span></code> variables are set.</p>
+<p>Follow these steps to build PISM:</p>
+<ol class="arabic">
+<li><p class="first">Get the latest source for PISM using the <a class="reference external" href="https://git-scm.com/">Git</a> version control system:</p>
+<p>Check <a class="reference external" href="https://pism-docs.org/wiki/doku.php">PISM’s website</a> for the latest version of PISM.</p>
+<p id="git-clone">Run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone git://github.com/pism/pism.git pism-stable
+</pre></div>
+</div>
+<p>A directory called “<code class="docutils literal notranslate"><span class="pre">pism-stable</span></code>” will be created. Note that in the future when you
+enter that directory, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code> will update to the latest revision of PISM. <a class="footnote-reference" href="#id5" id="id1">[1]</a></p>
+</li>
+<li><p class="first">Build PISM:<a class="footnote-reference" href="#id6" id="id2">[2]</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p pism-stable/build
+<span class="nb">cd</span> pism-stable/build
+<span class="nv">PISM_INSTALL_PREFIX</span><span class="o">=</span>~/pism <span class="nv">CC</span><span class="o">=</span>mpicc <span class="nv">CXX</span><span class="o">=</span>mpicxx cmake ..
+make install
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">pism-stable</span></code> is the directory containing PISM source code while <code class="docutils literal notranslate"><span class="pre">~/pism</span></code> is
+the directory PISM will be installed into.</p>
+<p>Variables <code class="docutils literal notranslate"><span class="pre">CC</span></code> and <code class="docutils literal notranslate"><span class="pre">CXX</span></code> specify MPI compiler wrappers provided by your MPI
+installation.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When using MPI’s compiler wrappers, make sure that <code class="docutils literal notranslate"><span class="pre">mpicc</span></code> and <code class="docutils literal notranslate"><span class="pre">mpicxx</span></code> you
+select were used to compile the PETSc library: <em>PISM and PETSc have to use the same
+MPI installation.</em></p>
+</div>
+<p>All the temporary files created during the build process will be in
+<code class="docutils literal notranslate"><span class="pre">pism-stable/build</span></code> created above.</p>
+<p>Commands above will configure PISM to be installed in <code class="docutils literal notranslate"><span class="pre">~/pism/bin</span></code> and
+<code class="docutils literal notranslate"><span class="pre">~/pism/lib/</span></code> then compile and install all its executables and scripts.</p>
+<p>If your operating system does not support shared libraries<a class="footnote-reference" href="#id7" id="id3">[3]</a>, then set
+<code class="docutils literal notranslate"><span class="pre">Pism_LINK_STATICALLY</span></code> to “ON”. This can be done by either running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -DPism_LINK_STATICALLY<span class="o">=</span>ON ..
+</pre></div>
+</div>
+<p>or by using <code class="docutils literal notranslate"><span class="pre">ccmake</span></code><a class="footnote-reference" href="#id8" id="id4">[4]</a> run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ccmake ..
+</pre></div>
+</div>
+<p>and then change <code class="docutils literal notranslate"><span class="pre">Pism_LINK_STATICALLY</span></code> (and then press <code class="docutils literal notranslate"><span class="pre">c</span></code> to “configure” and <code class="docutils literal notranslate"><span class="pre">g</span></code>
+to “generate Makefiles”). Then run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>.</p>
+<p>Object files created during the build process (located in the <code class="docutils literal notranslate"><span class="pre">build</span></code> sub-directory)
+are not automatically deleted after installing PISM, so run “<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>” if space
+is an issue. You can also delete the build directory altogether if you are not planning
+on re-compiling PISM.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>When using Intel’s compiler high optimization settings such as <code class="docutils literal notranslate"><span class="pre">-O3</span></code>, <code class="docutils literal notranslate"><span class="pre">-fp-model</span>
+<span class="pre">precise</span></code> may be needed to get reproducible model results. Set it using <code class="docutils literal notranslate"><span class="pre">ccmake</span></code>
+or by setting <code class="docutils literal notranslate"><span class="pre">CFLAGS</span></code> and <code class="docutils literal notranslate"><span class="pre">CXXFLAGS</span></code> environment variables when building PISM’s
+prerequisites and PISM itself.</p>
+<div class="last highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;-fp-model precise&quot;</span>
+<span class="nb">export</span> <span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-fp-model precise&quot;</span>
+cmake <span class="o">[</span>other options<span class="o">]</span> ..
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>To achieve best performance it can be useful to tell the compiler to target the
+“native” architecture. (This gives it permission to use CPU instructions that may
+not work on older CPUs.)</p>
+<div class="last highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;-march=native&quot;</span>
+<span class="nb">export</span> <span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-march=native&quot;</span>
+cmake <span class="o">[</span>other options<span class="o">]</span> ..
+</pre></div>
+</div>
+</div>
+</li>
+<li><p class="first">PISM executables can be run most easily by adding the <code class="docutils literal notranslate"><span class="pre">bin/</span></code> sub-directory in your
+selected install path (<code class="docutils literal notranslate"><span class="pre">~/pism/bin</span></code> in the example above) to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. For
+instance, this command can be done in the <a class="reference external" href="http://www.gnu.org/software/bash/">Bash</a> shell or in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>~/pism/bin:<span class="nv">$PATH</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Now see section <a class="reference internal" href="quick-tests.html#sec-install-quick-tests"><span class="std std-ref">Quick tests of the installation</span></a> or <a class="reference internal" href="../manual/std-greenland/index.html#sec-start"><span class="std std-ref">Getting started: a Greenland ice sheet example</span></a> to continue.</p>
+</li>
+</ol>
+<div class="section" id="pism-s-build-time-configuration">
+<span id="sec-install-pism-cmake-options"></span><h2>PISM’s build-time configuration<a class="headerlink" href="#pism-s-build-time-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Some of PISM’s features (the ones requiring additional libraries, for example) need to be
+enabled when building PISM. This section lists important build-time options.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code></td>
+<td>“build type”: set to “Debug” for development</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></td>
+<td>build shared (as opposed to static) libraries (this is the default)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">Pism_LINK_STATICALLY</span></code></td>
+<td>set CMake flags to try to ensure that everything is linked statically</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">Pism_LOOK_FOR_LIBRARIES</span></code></td>
+<td>specifies whether PISM should look for libraries (disable this on Crays)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">Pism_BUILD_EXTRA_EXECS</span></code></td>
+<td>build additional executables (needed to run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">Pism_BUILD_PYTHON_BINDINGS</span></code></td>
+<td>build PISM’s Python bindingd; requires <code class="docutils literal notranslate"><span class="pre">petsc4py</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">Pism_USE_PROJ</span></code></td>
+<td>use the <a class="reference external" href="https://proj.org/">PROJ</a> library to compute latitudes and longitudes of grid points</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">Pism_USE_PIO</span></code></td>
+<td>use the <a class="reference external" href="https://ncar.github.io/ParallelIO/">ParallelIO</a> library to write output files</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">Pism_USE_PARALLEL_NETCDF4</span></code></td>
+<td>use <a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF</a> for parallel file I/O</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">Pism_USE_PNETCDF</span></code></td>
+<td>use <a class="reference external" href="https://parallel-netcdf.github.io/">PnetCDF</a> for parallel file I/O</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">Pism_DEBUG</span></code></td>
+<td>enables extra sanity checks in the code (this makes PISM a lot slower but simplifies development)</td>
+</tr>
+</tbody>
+</table>
+<p>To enable PISM’s use of <a class="reference external" href="https://proj.org/">PROJ</a>, for example, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -DPism_USE_PROJ <span class="o">[</span>other options<span class="o">]</span> ..
+</pre></div>
+</div>
+</div>
+<div class="section" id="building-pism-with-libraries-in-non-standard-locations">
+<span id="sec-install-local-libraries"></span><h2>Building PISM with libraries in non-standard locations<a class="headerlink" href="#building-pism-with-libraries-in-non-standard-locations" title="Permalink to this headline">¶</a></h2>
+<p>To build PISM with libraries installed in a non-standard location such as <code class="docutils literal notranslate"><span class="pre">~/local/</span></code>,
+use CMake’s variable <code class="docutils literal notranslate"><span class="pre">CMAKE_FIND_ROOT_PATH</span></code>. Set it to a semicolon-separated list of
+directories.</p>
+<p>For example, if <code class="docutils literal notranslate"><span class="pre">netcdf.h</span></code> is located in <code class="docutils literal notranslate"><span class="pre">~/local/netcdf/include/</span></code> and
+<code class="docutils literal notranslate"><span class="pre">libnetcdf.so</span></code> is in <code class="docutils literal notranslate"><span class="pre">~/local/netcdf/lib</span></code>, add <code class="docutils literal notranslate"><span class="pre">~/local/netcdf</span></code> to
+<code class="docutils literal notranslate"><span class="pre">CMAKE_FIND_ROOT_PATH</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -DCMAKE_FIND_ROOT_PATH<span class="o">=</span>~/local/netcdf <span class="o">[</span>other options<span class="o">]</span> ..
+</pre></div>
+</div>
+<p>To build PISM using parallel I/O libraries installed as described in
+<a class="reference internal" href="parallel-io-libraries.html#sec-install-parallel-io-libs"><span class="std std-ref">Installing parallel I/O libraries</span></a>, do this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -DCMAKE_FIND_ROOT_PATH<span class="o">=</span><span class="s2">&quot;~/local/netcdf;~/local/pnetcdf;~/local/parallelio&quot;</span> <span class="se">\</span>
+      -DPism_USE_PNETCDF <span class="se">\</span>
+      -DPism_USE_PARALLEL_NETCDF4 <span class="se">\</span>
+      -DPism_USE_PIO <span class="se">\</span>
+      ..
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Of course, after <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code> you will <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-C</span> <span class="pre">build</span> <span class="pre">install</span></code> to recompile and
+re-install PISM.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Please report any problems you meet at these build stages by <a class="reference external" href="mailto:uaf-pism&#37;&#52;&#48;alaska&#46;edu">sending us</a> the output.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>This might be necessary if you’re building on a Cray XT5 or a Sun Opteron Cluster,
+for example.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>Install the <code class="docutils literal notranslate"><span class="pre">cmake-curses-gui</span></code> package to get <code class="docutils literal notranslate"><span class="pre">ccmake</span></code> on <a class="reference external" href="https://ubuntu.com/desktop">Ubuntu</a>.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="petsc.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="cookbook.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="common-problems.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installing PISM</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html">Required tools and libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel-io-libraries.html">Installing parallel I/O libraries</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="cookbook.html">Installation Cookbook</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="debian.html">Installing prerequisites on Debian or Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arch.html">Installing prerequisites and building PISM on Arch Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="macos.html">Installing required libraries on macOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spack.html">Installing PISM using Spack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="petsc.html">Building PETSc</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Building PISM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-problems.html">Common build problems and solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html">Quick tests of the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-tests.html#next-steps">Next steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html">Rebuilding PISM documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

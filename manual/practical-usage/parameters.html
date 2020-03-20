@@ -1,0 +1,223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PISM’s configuration parameters and how to change them &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Regridding" href="regridding.html" />
+    <link rel="prev" title="Run-time diagnostic viewers" href="diagnostic-viewers.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="pism-s-configuration-parameters-and-how-to-change-them">
+<span id="sec-pism-defaults"></span><h1>PISM’s configuration parameters and how to change them<a class="headerlink" href="#pism-s-configuration-parameters-and-how-to-change-them" title="Permalink to this headline">¶</a></h1>
+<p>PISM’s behavior depends on values of many flags and physical parameters (see
+<a class="reference internal" href="../parameters/index.html#sec-parameter-list"><span class="std std-ref">Configuration parameters</span></a> for details). Most of parameters have default values <a class="footnote-reference" href="#id2" id="id1">[1]</a> which
+are read from the configuration file <code class="docutils literal notranslate"><span class="pre">pism_config.nc</span></code> in the <code class="docutils literal notranslate"><span class="pre">lib</span></code> sub-directory.</p>
+<p>It is possible to run PISM with an alternate configuration file using the <code class="option docutils literal notranslate"><span class="pre">-config</span></code>
+command-line option:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i foo.nc -y 1000 -config my_config.nc
+</pre></div>
+</div>
+<p>The file <code class="docutils literal notranslate"><span class="pre">my_config.nc</span></code> has to contain <em>all</em> of the flags and parameters present in
+<code class="docutils literal notranslate"><span class="pre">pism_config.nc</span></code>.</p>
+<p>The list of parameters is too long to include here; please see the
+<a class="reference internal" href="../parameters/index.html#sec-parameter-list"><span class="std std-ref">Configuration parameters</span></a> for an automatically-generated table describing them.</p>
+<p>Some command-line options <em>set</em> configuration parameters; some PISM executables have
+special parameter defaults. To examine what parameters were used in a particular run, look
+at the attributes of the <code class="docutils literal notranslate"><span class="pre">pism_config</span></code> variable in a PISM output file.</p>
+<div class="section" id="managing-parameter-studies">
+<span id="sec-parameter-studies"></span><h2>Managing parameter studies<a class="headerlink" href="#managing-parameter-studies" title="Permalink to this headline">¶</a></h2>
+<p>Keeping all PISM output files in a parameter study straight can be a challenge. If the
+parameters of interest were controlled using command-line options then one can use
+<code class="docutils literal notranslate"><span class="pre">ncdump</span> <span class="pre">-h</span></code> and look at the <code class="docutils literal notranslate"><span class="pre">history</span></code> global attribute.</p>
+<p>Alternatively, one can change parameter values by using an “overriding” configuration
+file. The <code class="option docutils literal notranslate"><span class="pre">-config_override</span></code> command-line option provides this alternative. A file
+used with this option can have a subset of the configuration flags and parameters present
+in <code class="docutils literal notranslate"><span class="pre">pism_config.nc</span></code>. Moreover, PISM adds the <code class="docutils literal notranslate"><span class="pre">pism_config</span></code> variable with values used in a
+run to the output file, making it easy to see which parameters were used.</p>
+<p>Here’s an example. Suppose we want to compare the dynamics of an ice-sheet on Earth to the
+same ice-sheet on Mars, where the only physical change was to the value of the
+acceleration due to gravity. Running</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i input.nc -y 1e5 -o earth.nc &lt;other PISM options&gt;
+</pre></div>
+</div>
+<p>produces the “Earth” result, since PISM’s defaults correspond to this planet. Next, we
+create <code class="docutils literal notranslate"><span class="pre">mars.cdl</span></code> containing the following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>netcdf mars {
+    variables:
+    byte pism_overrides;
+    pism_overrides:constants.standard_gravity = 3.728;
+    pism_overrides:constants.standard_gravity_doc = &quot;m s-2; standard gravity on Mars&quot;;
+}
+</pre></div>
+</div>
+<p>Notice that the variable name is <code class="docutils literal notranslate"><span class="pre">pism_overrides</span></code> and not <code class="docutils literal notranslate"><span class="pre">pism_config</span></code> above. Now</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncgen -o mars_config.nc mars.cdl
+pismr -i input.nc -y 1e5 -config_override mars_config.nc -o mars.nc &lt;other PISM options&gt;
+</pre></div>
+</div>
+<p>will create <code class="docutils literal notranslate"><span class="pre">mars.nc</span></code>, the result of the “Mars” run. Then we can use <code class="docutils literal notranslate"><span class="pre">ncdump</span></code> to see
+what was different about <code class="docutils literal notranslate"><span class="pre">mars.nc</span></code>:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>ncdump -h earth.nc | grep pism_config: &gt; earth_config.txt
+ncdump -h mars.nc | grep pism_config: &gt; mars_config.txt
+<span class="gh">diff -U 1 earth_config.txt mars_config.txt</span>
+<span class="gd">--- earth_config.txt 2015-05-08 12:44:43.000000000 -0800</span>
+<span class="gi">+++ mars_config.txt  2015-05-08 12:44:51.000000000 -0800</span>
+<span class="gu">@@ -734,3 +734,3 @@</span>
+                pism_config:ssafd_relative_convergence_units = &quot;1&quot; ;
+<span class="gd">-               pism_config:constants.standard_gravity_doc = &quot;acceleration due to gravity on Earth geoid&quot; ;</span>
+<span class="gi">+               pism_config:constants.standard_gravity_doc = &quot;m s-2; standard gravity on Mars&quot; ;</span>
+                pism_config:constants.standard_gravity_type = &quot;number&quot; ;
+<span class="gu">@@ -1057,3 +1057,3 @@</span>
+                pism_config:ssafd_relative_convergence = 0.0001 ;
+<span class="gd">-               pism_config:constants.standard_gravity = 9.81 ;</span>
+<span class="gi">+               pism_config:constants.standard_gravity = 3.728 ;</span>
+                pism_config:start_year = 0. ;
+</pre></div>
+</div>
+</div>
+<div class="section" id="saving-pism-s-configuration-for-post-processing">
+<span id="sec-saving-pism-config"></span><h2>Saving PISM’s configuration for post-processing<a class="headerlink" href="#saving-pism-s-configuration-for-post-processing" title="Permalink to this headline">¶</a></h2>
+<p>In addition to saving <code class="docutils literal notranslate"><span class="pre">pism_config</span></code> in the output file, PISM automatically adds this
+variable to all files it writes (snap shots, time series of scalar and spatially-varying
+diagnostic quantities, and backups). This may be useful for post-processing and analysis
+of parameter studies as the user has easy access to all configuration options, model
+choices, etc., without the need to keep run scripts around.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>For <code class="docutils literal notranslate"><span class="pre">pismr</span></code>, grid parameters <code class="docutils literal notranslate"><span class="pre">Mx</span></code>, <code class="docutils literal notranslate"><span class="pre">My</span></code>, that must be set at bootstrapping,
+are exceptions.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="diagnostic-viewers.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="regridding.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">PISM User’s Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../std-greenland/index.html">Getting started: a Greenland ice sheet example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../highlevelview/index.html">Ice dynamics, the PISM view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../initialization/index.html">Initialization and bootstrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modeling-choices/index.html">Modeling choices</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Practical usage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="netcdf-tools.html">Handling NetCDF files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="input-output.html">Input and output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-time-series.html">Saving time series of scalar diagnostic quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-diagnostics.html">Saving time series of spatially-varying diagnostic quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="saving-snapshots.html">Saving re-startable snapshots of the model state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diagnostic-viewers.html">Run-time diagnostic viewers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">PISM’s configuration parameters and how to change them</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regridding.html">Regridding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="signals.html">Signals, to control a running PISM model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="time-stepping.html">Understanding adaptive time-stepping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mass-conservation.html">Balancing the books</a></li>
+<li class="toctree-l3"><a class="reference internal" href="petsc-options.html">PETSc options for PISM users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scripts.html">Utility and test scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flowline.html">Using PISM for flow-line modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modifying-pism.html">Managing source code modifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ismip6.html">ISMIP6 Greenland</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../simplified-geometry/index.html">Simplified geometry experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../verification/index.html">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../validation/index.html">Validation case studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jakobshavn/index.html">Example: A regional model of the Jakobshavn outlet glacier in Greenland</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parameters/index.html">Configuration parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics/index.html">Diagnostic quantities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../climate_forcing/index.html">Climate forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>

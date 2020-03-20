@@ -1,0 +1,660 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Surface mass and energy process model components &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Atmosphere model components" href="atmosphere.html" />
+    <link rel="prev" title="Testing if forcing data is used correctly" href="testing.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+<div class="documentwrapper">
+  <div class="bodywrapper">
+    <div class="body" role="main">
+      
+  <div class="section" id="surface-mass-and-energy-process-model-components">
+<h1><a class="toc-backref" href="#id14">Surface mass and energy process model components</a><a class="headerlink" href="#surface-mass-and-energy-process-model-components" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#surface-mass-and-energy-process-model-components" id="id14">Surface mass and energy process model components</a><ul>
+<li><a class="reference internal" href="#the-invisible-model" id="id15">The “invisible” model</a></li>
+<li><a class="reference internal" href="#reading-top-surface-boundary-conditions-from-a-file" id="id16">Reading top-surface boundary conditions from a file</a></li>
+<li><a class="reference internal" href="#elevation-dependent-temperature-and-mass-balance" id="id17">Elevation-dependent temperature and mass balance</a></li>
+<li><a class="reference internal" href="#temperature-index-scheme" id="id18">Temperature-index scheme</a></li>
+<li><a class="reference internal" href="#pik" id="id19">PIK</a></li>
+<li><a class="reference internal" href="#scalar-temperature-offsets" id="id20">Scalar temperature offsets</a></li>
+<li><a class="reference internal" href="#adjustments-using-modeled-change-in-surface-elevation" id="id21">Adjustments using modeled change in surface elevation</a></li>
+<li><a class="reference internal" href="#mass-flux-adjustment" id="id22">Mass flux adjustment</a></li>
+<li><a class="reference internal" href="#using-climate-data-anomalies" id="id23">Using climate data anomalies</a></li>
+<li><a class="reference internal" href="#the-caching-modifier" id="id24">The caching modifier</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="the-invisible-model">
+<span id="sec-surface-simple"></span><h2><a class="toc-backref" href="#id15">The “invisible” model</a><a class="headerlink" href="#the-invisible-model" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">simple</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body">none</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::Simple</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>This is the simplest “surface model” available in PISM, enabled using <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">simple</span></code>.
+Its job is to re-interpret precipitation as climatic mass balance, and to re-interpret
+mean annual near-surface (2m) air temperature as the temperature of the ice at the depth
+at which firn processes cease to change the temperature of the ice. (I.e. the temperature
+<em>below</em> the firn.) This implies that there is no melt. Though primitive, this model
+component may be desired in cold environments (e.g. East Antarctic ice sheet) in which
+melt is negligible and heat from firn processes is ignored.</p>
+</div>
+<div class="section" id="reading-top-surface-boundary-conditions-from-a-file">
+<span id="sec-surface-given"></span><h2><a class="toc-backref" href="#id16">Reading top-surface boundary conditions from a file</a><a class="headerlink" href="#reading-top-surface-boundary-conditions-from-a-file" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code>, <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::Given</span></code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is the default choice.</p>
+</div>
+<p>This model component was created to force PISM with sampled (possibly periodic) climate
+data by reading ice upper surface boundary conditions from a file. These fields are
+provided directly to the ice dynamics code (see <a class="reference internal" href="../manual/highlevelview/climate-inputs.html#sec-climate-inputs"><span class="std std-ref">Climate inputs, and their interface with ice dynamics</span></a> for details).</p>
+<p>PISM will stop if variables <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code> (ice temperature at the ice surface
+but below firn) and <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> (top surface mass flux into the ice) are
+not present in the input file.</p>
+<p>Command-line options:</p>
+<ul class="simple">
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_given_file</span></code> prescribes an input file</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_given_period</span></code> (<em>years</em>) makes PISM interpret data in
+<code class="docutils literal notranslate"><span class="pre">-surface_given_file</span></code> as periodic. See <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_given_reference_year</span></code> sets the reference model year; see
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+</ul>
+<p>A file <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code> used with <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span> <span class="pre">-surface_given_file</span> <span class="pre">foo.nc</span></code> should contain
+several records. If this file contains one record (i.e. fields corresponding to one time
+value only), provided forcing data is interpreted as time-independent. The <code class="variable docutils literal notranslate"><span class="pre">time</span></code>
+variable should describe what model time these records correspond to; see
+<a class="reference internal" href="time.html#sec-model-time"><span class="std std-ref">Managing model time</span></a> for details.</p>
+<p>For example, to use monthly records and period of 1 year, create a file (say,
+“<code class="docutils literal notranslate"><span class="pre">foo.nc</span></code>”) with 12 records. The <code class="variable docutils literal notranslate"><span class="pre">time</span></code> variable may contain <span class="math notranslate nohighlight">\(0, 1, 2, 3,
+\dots, 11\)</span> and have the units of “month” <a class="footnote-reference" href="#id13" id="id1">[1]</a>. Then, run</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -surface given -surface_given_file foo.nc -surface_given_period 1
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last">
+<li><p class="first">This surface model <em>ignores</em> the atmosphere model selection made using the option
+<code class="option docutils literal notranslate"><span class="pre">-atmosphere</span></code>.</p>
+</li>
+<li><p class="first">PISM can handle files with virtually any number of records: it will read and store in
+memory at most <code class="config docutils literal notranslate"><span class="pre">input.forcing.buffer_size</span></code> records at any given time
+(default: 60, or 5 years’ worth of monthly fields).</p>
+</li>
+<li><p class="first">when preparing a file for use with this model, it is best to use the <code class="docutils literal notranslate"><span class="pre">t,y,x</span></code>
+variable storage order: files using this order can be read in faster than ones using
+the <code class="docutils literal notranslate"><span class="pre">t,x,y</span></code> order, for reasons <a class="reference internal" href="../manual/practical-usage/input-output.html#sec-pism-io-performance"><span class="std std-ref">explained in the User’s Manual</span></a>.</p>
+<p>To change the storage order in a NetCDF file, use <code class="docutils literal notranslate"><span class="pre">ncpdq</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ncpdq -a t,y,x input.nc output.nc
+</pre></div>
+</div>
+<p>will copy data from <code class="docutils literal notranslate"><span class="pre">input.nc</span></code> into <code class="docutils literal notranslate"><span class="pre">output.nc</span></code>, changing the storage order to
+<code class="docutils literal notranslate"><span class="pre">t,y,x</span></code> at the same time.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="elevation-dependent-temperature-and-mass-balance">
+<span id="sec-surface-elevation"></span><h2><a class="toc-backref" href="#id17">Elevation-dependent temperature and mass balance</a><a class="headerlink" href="#elevation-dependent-temperature-and-mass-balance" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">elevation</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body">none</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::Elevation</span></code></td>
+</tr>
+</tbody>
+</table>
+<div class="math notranslate nohighlight">
+\[\begin{split}\newcommand{\Diff}[2]{ \frac{\mathrm{d}#1}{\mathrm{d}#2} }
+\newcommand{\diff}[2]{ \frac{\partial #1}{\partial #2} }
+\newcommand{\var}[2]{ {#1}_{\text{#2}} }
+\newcommand{\h}[1]{ \var{h}{#1} }
+\newcommand{\T}[1]{ \var{T}{#1} }
+\newcommand{\m}[1]{ \var{m}{#1} }
+\newcommand{\ms}[1]{ \var{m^{*}}{#1} }
+\newcommand{\psw}{p_{\text{ocean}}}
+\newcommand{\pice}{p_{\text{ice}}}
+\newcommand{\pmelange}{p_{\text{melange}}}
+\newcommand{\n}{\mathbf{n}}
+\newcommand{\nx}{\n_{x}}
+\newcommand{\ny}{\n_{y}}
+\newcommand{\phimin}{\phi_{\mathrm{min}}}
+\newcommand{\phimax}{\phi_{\mathrm{max}}}
+\newcommand{\bmin}{b_{\mathrm{min}}}
+\newcommand{\bmax}{b_{\mathrm{max}}}
+\newcommand{\bq}{\mathbf{q}}
+\newcommand{\Up}[2]{\operatorname{Up}\left(#1\big|#2\right)}
+\newcommand{\uppair}[2]{\left\{\begin{matrix} #1 \\ #2 \end{matrix}\right\}}
+\newcommand{\div}{\nabla \cdot}
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\Wtill}{W_{\mathrm{till}}}\end{split}\]</div>
+<p>This surface model component parameterizes the ice surface temperature <span class="math notranslate nohighlight">\(T_{h}\)</span> =
+<code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code> and the mass balance <span class="math notranslate nohighlight">\(m\)</span> = <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> as
+<em>piecewise-linear</em> functions of surface elevation <span class="math notranslate nohighlight">\(h\)</span>.</p>
+<p>The option <code class="option docutils literal notranslate"><span class="pre">-ice_surface_temp</span></code> (<em>list of 4 numbers</em>) determines the surface
+temperature using the 4 parameters <span class="math notranslate nohighlight">\(\T{min}\)</span>, <span class="math notranslate nohighlight">\(\T{max}\)</span>, <span class="math notranslate nohighlight">\(\h{min}\)</span>,
+<span class="math notranslate nohighlight">\(\h{max}\)</span>. Let</p>
+<div class="math notranslate nohighlight">
+\[\diff{T}{h} = (\T{max} - \T{min}) / (\h{max} - \h{min})\]</div>
+<p>be the temperature gradient. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T(x,y) =
+\begin{cases}
+  \T{min}, &amp; h(x,y) \le \h{min}, \\
+  \T{min} + \diff{T}{h} \, (h(x,y) - \h{min}), &amp; \h{min} &lt; h(x,y) &lt; \h{max}, \\
+  \T{max}, &amp; \h{max} \le h(x,y).
+\end{cases}\end{split}\]</div>
+<p>The option <code class="option docutils literal notranslate"><span class="pre">-climatic_mass_balance</span></code> (<em>list of 5 numbers</em>) determines the surface mass
+balance using the 5 parameters <span class="math notranslate nohighlight">\(\m{min}\)</span>, <span class="math notranslate nohighlight">\(\m{max}\)</span>, <span class="math notranslate nohighlight">\(\h{min}\)</span>,
+<span class="math notranslate nohighlight">\(\h{ELA}\)</span>, <span class="math notranslate nohighlight">\(\h{max}\)</span>. Let</p>
+<div class="math notranslate nohighlight">
+\[\diff{\m{abl}}{h} = -\m{min} / (\h{max} - \h{min})\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\diff{\m{acl}}{h} = \m{max} / (\h{max} - \h{min})\]</div>
+<p>be the mass balance gradient in the ablation and in the accumulation area, respectively.
+Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}m(x,y) =
+\begin{cases}
+ \m{min}, &amp; h(x,y) \le \h{min}, \\
+ \diff{\m{abl}}{h} \, (h(x,y) - h_{\text{ELA}}), &amp;  \h{min} &lt; h(x,y) &lt; \h{max}, \\
+ \diff{\m{acl}}{h} \, (h(x,y) - h_{\text{ELA}}), &amp; \h{min} &lt; h(x,y) &lt; \h{max}, \\
+ \m{max}, &amp; \h{max} \le h(x,y).
+\end{cases}\end{split}\]</div>
+<p>The option <code class="option docutils literal notranslate"><span class="pre">-climatic_mass_balance_limits</span></code> (<em>list of 2 numbers</em>) limits the mass
+balance below <span class="math notranslate nohighlight">\(\h{min}\)</span> to <span class="math notranslate nohighlight">\(\ms{min}\)</span> and above <span class="math notranslate nohighlight">\(\h{max}\)</span> to
+<span class="math notranslate nohighlight">\(\ms{max}\)</span>, thus</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}m(x,y) =
+\begin{cases}
+ m^{*}_{\text{min}}, &amp; h(x,y) \le \h{min}, \\
+ \diff{\m{abl}}{h} \, (h(x,y) - h_{\text{ELA}}), &amp; \h{min} &lt; h(x,y) &lt; \h{max}, \\
+ \diff{\m{acl}}{h} \, (h(x,y) - h_{\text{ELA}}), &amp; \h{min} &lt; h(x,y) &lt; \h{max}, \\
+ m^{*}_{\text{max}}, &amp; \h{max} \le h(x,y).
+\end{cases}\end{split}\]</div>
+<p>Note: this surface model <em>ignores</em> the atmosphere model selection made using the
+<code class="option docutils literal notranslate"><span class="pre">-atmosphere</span></code> option.</p>
+</div>
+<div class="section" id="temperature-index-scheme">
+<span id="sec-surface-pdd"></span><h2><a class="toc-backref" href="#id18">Temperature-index scheme</a><a class="headerlink" href="#temperature-index-scheme" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">pdd</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">air_temp_sd</span></code>, <code class="variable docutils literal notranslate"><span class="pre">snow_depth</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::TemperatureIndex</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>The default PDD model used by PISM, turned on by option <code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">pdd</span></code>, is based on
+<a class="reference internal" href="../zzz_references_html.html#calovgreve05" id="id2">[17]</a> and EISMINT-Greenland intercomparison (see <a class="reference internal" href="../zzz_references_html.html#ritzeismint" id="id3">[7]</a>).</p>
+<p>Our model computes the solid (snow) precipitation rate using the air temperature threshold
+with a linear transition. All precipitation during periods with air temperatures above
+<code class="config docutils literal notranslate"><span class="pre">surface.pdd.air_temp_all_precip_as_rain</span></code> (default of <span class="math notranslate nohighlight">\(2^\circ C\)</span>) is interpreted as
+rain; all precipitation during periods with air temperatures below
+<code class="config docutils literal notranslate"><span class="pre">surface.pdd.air_temp_all_precip_as_snow</span></code> (default of <span class="math notranslate nohighlight">\(0^\circ C\)</span>) is interpreted as
+snow.</p>
+<p>For long-term simulations, a PDD model generally uses an idealized seasonal temperature
+cycle. “White noise” is added to this cycle to simulate additional daily variability
+associated to the vagaries of weather. This additional random variation is quite
+significant, as the seasonal cycle may never reach the melting point but that point may be
+reached with some probability, in the presence of the daily variability, and thus melt may
+occur. Concretely, a normally-distributed, mean zero random temperature increment is added
+to the seasonal cycle. There is no assumed spatial correlation of daily variability. The
+standard deviation of the daily variability is controlled by command-line options:</p>
+<ul class="simple">
+<li><code class="option docutils literal notranslate"><span class="pre">-pdd_sd_file</span></code>, which prescribes an input file containing <code class="variable docutils literal notranslate"><span class="pre">air_temp_sd</span></code></li>
+<li><code class="option docutils literal notranslate"><span class="pre">-pdd_sd_period</span></code> (<em>years</em>), which interprets its data as periodic; see
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-pdd_sd_reference_year</span></code>, which sets the reference model year; see
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+</ul>
+<p>A file <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code> used with <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">pdd</span> <span class="pre">-pdd_sd_file</span> <span class="pre">foo.nc</span></code> should contain standard
+deviation of near-surface air temperature in variable <code class="variable docutils literal notranslate"><span class="pre">air_temp_sd</span></code>, and the
+corresponding time coordinate in variable <code class="variable docutils literal notranslate"><span class="pre">time</span></code>. If <code class="docutils literal notranslate"><span class="pre">-pdd_sd_file</span></code> is not set,
+PISM uses a constant value for standard deviation, which is set by the
+configuration parameter <code class="config docutils literal notranslate"><span class="pre">surface.pdd.std_dev</span></code>. The default value is <span class="math notranslate nohighlight">\(5.0\)</span> degrees
+<a class="reference internal" href="../zzz_references_html.html#ritzeismint" id="id4">[7]</a>. However, this approach is not recommended as it induces significant
+errors in modeled surface mass balance in both ice-covered and ice-free regions
+<a class="reference internal" href="../zzz_references_html.html#rogozhinarau2014" id="id5">[18]</a>, <a class="reference internal" href="../zzz_references_html.html#seguinot2013" id="id6">[19]</a>.</p>
+<p>Over ice-covered grid cells, daily variability can also be parameterized as a linear
+function of near-surface air temperature <span class="math notranslate nohighlight">\(\sigma = a \cdot T + b\)</span> using the
+<code class="config docutils literal notranslate"><span class="pre">surface.pdd.std_dev_use_param</span></code> configuration flag, and the corresponding
+parameters <code class="config docutils literal notranslate"><span class="pre">surface.pdd.std_dev_param_a</span></code> and
+<code class="config docutils literal notranslate"><span class="pre">surface.pdd.std_dev_param_b</span></code>. This parametrization replaces prescribed standard
+deviation values over glacierized grid cells as defined by the <code class="variable docutils literal notranslate"><span class="pre">mask</span></code> variable (see
+<code class="config docutils literal notranslate"><span class="pre">geometry.ice_free_thickness_standard</span></code>). Default values for the slope <span class="math notranslate nohighlight">\(a\)</span> and
+intercept <span class="math notranslate nohighlight">\(b\)</span> were derived from the ERA-40 reanalysis over the Greenland ice sheet
+<a class="reference internal" href="../zzz_references_html.html#seguinotrogozhina2014" id="id7">[20]</a>.</p>
+<p>The number of positive degree days is computed as the magnitude of the temperature
+excursion above <span class="math notranslate nohighlight">\(0\!\phantom{|}^\circ \text{C}\)</span> multiplied by the duration (in days)
+when it is above zero.</p>
+<p>In PISM there are two methods for computing the number of positive degree days. The first
+computes only the expected value, by the method described in <a class="reference internal" href="../zzz_references_html.html#calovgreve05" id="id8">[17]</a>. This is
+the default when a PDD is chosen (i.e. option <code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">pdd</span></code>). The second is a Monte
+Carlo simulation of the white noise itself, chosen by adding the option <code class="option docutils literal notranslate"><span class="pre">-pdd_method</span>
+<span class="pre">random_process</span></code>. This Monte Carlo simulation adds the same daily variation at every point,
+though the seasonal cycle is (generally) location dependent. If repeatable randomness is
+desired use <code class="option docutils literal notranslate"><span class="pre">-pdd_method</span> <span class="pre">repeatable_random_process</span></code> instead.</p>
+<div class="figure" id="fig-pdd-model">
+<img alt="../_images/pdd-model-flowchart.png" src="../_images/pdd-model-flowchart.png" />
+<p class="caption"><span class="caption-number">Fig. 37 </span><span class="caption-text">PISM’s positive degree day model. <span class="math notranslate nohighlight">\(F_s\)</span> and <span class="math notranslate nohighlight">\(F_i\)</span> are PDD factors for snow
+and ice, respectively; <span class="math notranslate nohighlight">\(\theta_{\text{refreeze}}\)</span> is the refreeze fraction.</span></p>
+</div>
+<p>By default, the computation summarized in <a class="reference internal" href="#fig-pdd-model"><span class="std std-numref">Fig. 37</span></a> is performed every week.
+(This frequency is controlled by the parameter <code class="config docutils literal notranslate"><span class="pre">surface.pdd.max_evals_per_year</span></code>.)
+To compute mass balance during each week-long time-step, PISM keeps track of the current
+snow depth (using units of ice-equivalent thickness). This is necessary to determine if
+melt should be computed using the degree day factor for snow
+(<code class="config docutils literal notranslate"><span class="pre">surface.pdd.factor_snow</span></code>) or the corresponding factor for ice
+(<code class="config docutils literal notranslate"><span class="pre">surface.pdd.factor_ice</span></code>).</p>
+<p>A fraction of the melt controlled by the configuration parameter <code class="config docutils literal notranslate"><span class="pre">surface.pdd.refreeze</span></code>
+(<span class="math notranslate nohighlight">\(\theta_{\text{refreeze}}\)</span> in <a class="reference internal" href="#fig-pdd-model"><span class="std std-numref">Fig. 37</span></a>, default: <span class="math notranslate nohighlight">\(0.6\)</span>)
+refreezes. The user can select whether melted ice should be allowed to refreeze using the
+configuration flag <code class="config docutils literal notranslate"><span class="pre">surface.pdd.refreeze_ice_melt</span></code>.</p>
+<p>Since PISM does not have a principled firn model, the snow depth is set to zero at the
+beginning of the balance year. See <code class="config docutils literal notranslate"><span class="pre">surface.pdd.balance_year_start_day</span></code>. Default is
+<span class="math notranslate nohighlight">\(274\)</span>, corresponding to October 1<sup>st</sup>.</p>
+<p>Our PDD implementation is meant to be used with an atmosphere model implementing a cosine
+yearly cycle such as <code class="docutils literal notranslate"><span class="pre">searise_greenland</span></code> (section
+<a class="reference internal" href="atmosphere.html#sec-atmosphere-searise-greenland"><span class="std std-ref">SeaRISE-Greenland</span></a>), but it is not restricted to parameterizations
+like these.</p>
+<p>This code also implements latitude- and mean July temperature dependent ice and snow
+factors using formulas (6) and (7) in <a class="reference internal" href="../zzz_references_html.html#faustoetal2009" id="id9">[1]</a>; set <code class="option docutils literal notranslate"><span class="pre">-pdd_fausto</span></code> to enable.
+The default standard deviation of the daily variability (option <code class="option docutils literal notranslate"><span class="pre">-pdd_std_dev</span></code>) is
+2.53 degrees when <code class="option docutils literal notranslate"><span class="pre">-pdd_fausto</span></code> is set <a class="reference internal" href="../zzz_references_html.html#faustoetal2009" id="id10">[1]</a>. See also configuration
+parameters with the <code class="docutils literal notranslate"><span class="pre">surface.pdd.fausto</span></code> prefix.</p>
+<p>Note that when used with periodic climate data (air temperature and precipitation) that is
+read from a file (see section <a class="reference internal" href="atmosphere.html#sec-atmosphere-given"><span class="std std-ref">Reading boundary conditions from a file</span></a>), use of
+<code class="option docutils literal notranslate"><span class="pre">-timestep_hit_multiplies</span> <span class="pre">X</span></code> is recommended. (Here <span class="math notranslate nohighlight">\(X\)</span> is the length of the climate
+data period in years.)</p>
+<p>This model provides the following scalar:</p>
+<ul class="simple">
+<li><code class="variable docutils literal notranslate"><span class="pre">surface_accumulation_rate</span></code></li>
+<li><code class="variable docutils literal notranslate"><span class="pre">surface_melt_rate</span></code></li>
+<li><code class="variable docutils literal notranslate"><span class="pre">surface_runoff_rate</span></code></li>
+</ul>
+<p>and these 2D diagnostic quantities (averaged over reporting intervals; positive flux
+corresponds to ice gain):</p>
+<ul class="simple">
+<li><code class="variable docutils literal notranslate"><span class="pre">surface_accumulation_flux</span></code></li>
+<li><code class="variable docutils literal notranslate"><span class="pre">surface_melt_flux</span></code></li>
+<li><code class="variable docutils literal notranslate"><span class="pre">surface_runoff_flux</span></code></li>
+</ul>
+<p>This makes it easy to compare the surface mass balance computed by the model to its
+individual components:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SMB</span> <span class="o">=</span> <span class="n">surface_accumulation_flux</span> <span class="o">-</span> <span class="n">surface_runoff_flux</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pik">
+<span id="sec-surface-pik"></span><h2><a class="toc-backref" href="#id19">PIK</a><a class="headerlink" href="#pik" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">pik</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span>,
+<code class="variable docutils literal notranslate"><span class="pre">lat</span></code> (latitude), (degrees north)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::PIK</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>This surface model component implements the setup used in <a class="reference internal" href="../zzz_references_html.html#martinetal2011" id="id11">[3]</a>. The
+<code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> is read from an input (<code class="docutils literal notranslate"><span class="pre">-i</span></code>) file; the ice surface
+temperature is computed as a function of latitude (variable <code class="variable docutils literal notranslate"><span class="pre">lat</span></code>) and surface
+elevation (dynamically updated by PISM). See equation (1) in <a class="reference internal" href="../zzz_references_html.html#martinetal2011" id="id12">[3]</a>.</p>
+</div>
+<div class="section" id="scalar-temperature-offsets">
+<span id="sec-surface-delta-t"></span><h2><a class="toc-backref" href="#id20">Scalar temperature offsets</a><a class="headerlink" href="#scalar-temperature-offsets" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,delta_T</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::Delta_T</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>Command-line options:</p>
+<ul class="simple">
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_delta_T_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code>
+from.</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_delta_T_period</span></code> (<em>years</em>) sets the period of the forcing data (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>)</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_delta_T_reference_year</span></code> sets the reference year (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
+</ul>
+<p>The time-dependent scalar offsets <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> are added to <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code>
+computed by a surface model.</p>
+<p>Please make sure that <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> has the units of “<code class="docutils literal notranslate"><span class="pre">Kelvin</span></code>”.</p>
+<p>This modifier is identical to the corresponding atmosphere modifier, but applies offsets
+at a different stage in the computation of top-surface boundary conditions needed by the
+ice dynamics core.</p>
+</div>
+<div class="section" id="adjustments-using-modeled-change-in-surface-elevation">
+<span id="sec-surface-elevation-change"></span><h2><a class="toc-backref" href="#id21">Adjustments using modeled change in surface elevation</a><a class="headerlink" href="#adjustments-using-modeled-change-in-surface-elevation" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,elevation_change</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">surface_altitude</span></code> (CF standard name),</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::LapseRates</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">elevation_change</span></code> modifier adjusts ice-surface temperature and surface mass balance
+using modeled changes in surface elevation relative to a reference elevation read from a
+file.</p>
+<p>The surface temperature is modified using an elevation lapse rate
+<span class="math notranslate nohighlight">\(\gamma_T =\)</span> <code class="config docutils literal notranslate"><span class="pre">surface.elevation_change.temperature_lapse_rate</span></code>. Here</p>
+<div class="math notranslate nohighlight">
+\[\gamma_T = -\frac{dT}{dz}.\]</div>
+<p>Two methods of adjusting the SMB are available:</p>
+<ul>
+<li><p class="first">Scaling using an exponential factor</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{SMB} = \mathrm{SMB_{input}} \cdot \exp(C \cdot \Delta T),\]</div>
+<p>where <span class="math notranslate nohighlight">\(C =\)</span> <code class="config docutils literal notranslate"><span class="pre">surface.elevation_change.smb.exp_factor</span></code> and <span class="math notranslate nohighlight">\(\Delta T\)</span> is the
+temperature difference produced by applying
+<code class="config docutils literal notranslate"><span class="pre">surface.elevation_change.temperature_lapse_rate</span></code>.</p>
+<p>This mechanisms increases the SMB by <span class="math notranslate nohighlight">\(100(\exp(C) - 1)\)</span> percent for each degree of
+temperature increase.</p>
+<p>To use this method, set <code class="option docutils literal notranslate"><span class="pre">-smb_adjustment</span> <span class="pre">scale</span></code>.</p>
+</li>
+<li><p class="first">Elevation lapse rate for the SMB</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{SMB} = \mathrm{SMB_{input}} - \Delta h \cdot \gamma_M,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma_M =\)</span> <code class="config docutils literal notranslate"><span class="pre">surface.elevation_change.smb.lapse_rate</span></code> and <span class="math notranslate nohighlight">\(\Delta h\)</span> is the
+difference between modeled and reference surface elevations.</p>
+<p>To use this method, set <code class="option docutils literal notranslate"><span class="pre">-smb_adjustment</span> <span class="pre">shift</span></code>.</p>
+</li>
+</ul>
+<p>It uses the following options.</p>
+<ul class="simple">
+<li><code class="option docutils literal notranslate"><span class="pre">-temp_lapse_rate</span></code> gives the temperature lapse rate, in <span class="math notranslate nohighlight">\(K/km\)</span>. Note that we
+use the following definition of the temperature lapse rate:</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-smb_adjustment</span></code> chooses SMB lapse rate (<code class="docutils literal notranslate"><span class="pre">shift</span></code>) or SMB scaling (<code class="docutils literal notranslate"><span class="pre">scale</span></code>).</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-smb_exp_factor</span></code> specifies the exponential factor used to scale the SMB</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-smb_lapse_rate</span></code> gives the surface mass balance lapse rate, in <span class="math notranslate nohighlight">\(m/year/km\)</span>.
+Here, <span class="math notranslate nohighlight">\(\gamma_M=-\frac{dM}{dz}\)</span>.</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_elevation_change_file</span></code> specifies the file containing the reference surface
+elevation field (standard name: <code class="variable docutils literal notranslate"><span class="pre">surface_altitude</span></code>). This file can contain several
+surface elevation records to use lapse rate corrections relative to time-dependent
+surface. If one record is provided, the reference surface elevation is assumed to be
+time-independent.</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_elevation_change_period</span></code> gives the period, in model years, to use when
+interpreting data in the file given with <code class="docutils literal notranslate"><span class="pre">-surface_given_file</span></code>,</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_elevation_change_reference_year</span></code> takes the time <span class="math notranslate nohighlight">\(T\)</span> in model years. The
+record for <span class="math notranslate nohighlight">\(t\)</span> years in <code class="docutils literal notranslate"><span class="pre">-surface_given_file</span></code> is interpreted as corresponding to
+<span class="math notranslate nohighlight">\(t\)</span> years since <span class="math notranslate nohighlight">\(T\)</span>.</li>
+</ul>
+</div>
+<div class="section" id="mass-flux-adjustment">
+<span id="sec-surface-forcing"></span><h2><a class="toc-backref" href="#id22">Mass flux adjustment</a><a class="headerlink" href="#mass-flux-adjustment" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,forcing</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">thk</span></code> (ice thickness), <code class="variable docutils literal notranslate"><span class="pre">ftt_mask</span></code> (mask of zeros and ones; 1 where
+surface mass flux is adjusted and 0 elsewhere)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::ForceThickness</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">forcing</span></code> modifier implements a surface mass balance adjustment mechanism which
+forces the thickness of grounded ice to a target thickness distribution at the end of the
+run. The idea behind this mechanism is that spinup of ice sheet models frequently requires
+the surface elevation to come close to measured values at the end of a run. A simpler
+alternative to accomplish this, namely option <code class="docutils literal notranslate"><span class="pre">-no_mass</span></code>, represents an unmodeled,
+frequently large, violation of the mass continuity equation.</p>
+<p>In more detail, let <span class="math notranslate nohighlight">\(H_{\text{tar}}\)</span> be the target thickness. Let <span class="math notranslate nohighlight">\(H\)</span> be the
+time-dependent model thickness. The surface model component described here produces the
+term <span class="math notranslate nohighlight">\(M\)</span> in the mass continuity equation:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial H}{\partial t} = M - S - \nabla\cdot \mathbf{q}.\]</div>
+<p>(Other details of this equation do not concern us here.) The <code class="docutils literal notranslate"><span class="pre">forcing</span></code> modifier causes
+<span class="math notranslate nohighlight">\(M\)</span> to be adjusted by a multiple of the difference between the target thickness and
+the current thickness,</p>
+<div class="math notranslate nohighlight">
+\[\Delta M = \alpha (H_{\text{tar}} - H)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha&gt;0\)</span>. We are adding mass (<span class="math notranslate nohighlight">\(\Delta M&gt;0\)</span>) where
+<span class="math notranslate nohighlight">\(H_{\text{tar}} &gt; H\)</span> and ablating where <span class="math notranslate nohighlight">\(H_{\text{tar}} &lt; H\)</span>.</p>
+<p>Option <code class="option docutils literal notranslate"><span class="pre">-force_to_thickness_file</span></code> identifies the file containing the target ice
+thickness field <code class="docutils literal notranslate"><span class="pre">thk</span></code> and the mask <code class="docutils literal notranslate"><span class="pre">ftt_mask</span></code>. A basic run modifying surface model
+<code class="docutils literal notranslate"><span class="pre">given</span></code> would look like</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i foo.nc -surface given,forcing -force_to_thickness_file bar.nc
+</pre></div>
+</div>
+<p>In this case <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code> contains fields <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> and
+<code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code>, as normal for <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span></code>, and <code class="docutils literal notranslate"><span class="pre">bar.nc</span></code> contains fields
+<code class="variable docutils literal notranslate"><span class="pre">thk</span></code> which will serve as the target thickness and <code class="variable docutils literal notranslate"><span class="pre">ftt_mask</span></code> which defines the
+map plane area where this adjustment is applied. Option <code class="option docutils literal notranslate"><span class="pre">-force_to_thickness_alpha</span></code>
+adjusts the value of <span class="math notranslate nohighlight">\(\alpha\)</span>, which has a default value specified in the
+<a class="reference internal" href="../manual/parameters/index.html#sec-parameter-list"><span class="std std-ref">Configuration parameters</span></a>.</p>
+<p>In addition to this one can specify a multiplicative factor <span class="math notranslate nohighlight">\(C\)</span> used in areas where
+the target thickness field has less than
+<code class="option docutils literal notranslate"><span class="pre">-force_to_thickness_ice_free_thickness_threshold</span></code> meters of ice;
+<span class="math notranslate nohighlight">\(\alpha_{\text{ice free}} = C \times \alpha\)</span>. Use the
+<code class="option docutils literal notranslate"><span class="pre">-force_to_thickness_ice_free_alpha_factor</span></code> option to set <span class="math notranslate nohighlight">\(C\)</span>.</p>
+</div>
+<div class="section" id="using-climate-data-anomalies">
+<span id="sec-surface-anomaly"></span><h2><a class="toc-backref" href="#id23">Using climate data anomalies</a><a class="headerlink" href="#using-climate-data-anomalies" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,anomaly</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp_anomaly</span></code>,
+<code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance_anomaly</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::Anomaly</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>This modifier implements a spatially-variable version of <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,delta_T</span></code> which
+also applies time-dependent climatic mass balance anomalies.</p>
+<p>It takes the following options:</p>
+<ul class="simple">
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_anomaly_file</span></code> specifies a file containing variables
+<code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp_anomaly</span></code> and <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance_anomaly</span></code>.</li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_anomaly_period</span></code> (years) specifies the period of the forcing data, in
+model years; see <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a></li>
+<li><code class="option docutils literal notranslate"><span class="pre">-surface_anomaly_reference_year</span></code> specifies the reference year; see
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a></li>
+</ul>
+<p>See also to <code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,anomaly</span></code> (section <a class="reference internal" href="atmosphere.html#sec-atmosphere-anomaly"><span class="std std-ref">Using climate data anomalies</span></a>), which is
+similar, but applies anomalies at the atmosphere level.</p>
+</div>
+<div class="section" id="the-caching-modifier">
+<span id="sec-surface-cache"></span><h2><a class="toc-backref" href="#id24">The caching modifier</a><a class="headerlink" href="#the-caching-modifier" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,cache</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::surface::Cache</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="ocean.html#sec-ocean-cache"><span class="std std-ref">The caching modifier</span></a></td>
+</tr>
+</tbody>
+</table>
+<p>This modifier skips surface model updates, so that a surface model is called no more than
+every <code class="option docutils literal notranslate"><span class="pre">-surface.cache.update_interval</span></code> years. A time-step of <span class="math notranslate nohighlight">\(1\)</span> year is used every
+time a surface model is updated.</p>
+<p>This is useful in cases when inter-annual climate variability is important, but one year
+differs little from the next. (Coarse-grid paleo-climate runs, for example.)</p>
+<p>It takes the following options:</p>
+<ul class="simple">
+<li><code class="option docutils literal notranslate"><span class="pre">-surface.cache.update_interval</span></code> (<em>years</em>) Specifies the minimum interval between
+updates. PISM may take longer time-steps if the adaptive scheme allows it, though.</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id13" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>You can use other time units supported by <a class="reference external" href="https://www.unidata.ucar.edu/software/udunits/">UDUNITS</a>.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      <hr>
+      <table style="width: 100%">
+        <tr>
+          <td style="text-align: left; width: 30%">
+              <a class="reference internal" href="testing.html">Previous</a>
+          </td>
+          <td style="text-align: center; width: 30%">
+              <a class="reference internal" href="index.html">Up</a>
+          </td>
+          <td style="text-align: right; width: 30%">
+              <a class="reference internal" href="atmosphere.html">Next</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/pism-logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installing PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manual/index.html">PISM User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Climate forcing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="time.html">Managing model time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples and corresponding options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing if forcing data is used correctly</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Surface mass and energy process model components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-invisible-model">The “invisible” model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reading-top-surface-boundary-conditions-from-a-file">Reading top-surface boundary conditions from a file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#elevation-dependent-temperature-and-mass-balance">Elevation-dependent temperature and mass balance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#temperature-index-scheme">Temperature-index scheme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pik">PIK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scalar-temperature-offsets">Scalar temperature offsets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adjustments-using-modeled-change-in-surface-elevation">Adjustments using modeled change in surface elevation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mass-flux-adjustment">Mass flux adjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-climate-data-anomalies">Using climate data anomalies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-caching-modifier">The caching modifier</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="atmosphere.html">Atmosphere model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ocean.html">Ocean model components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/index.html">Technical notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contributing to PISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authorship.html">Authorship</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz_references_html.html">References</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      Git revision v1.0-1763-g6e08b4aa3
+      committed by Constantine Khrulev
+      on 2020-03-20 15:02:58 -0800 |
+      &copy; 2004--2020, the PISM authors.
+      
+    </div>
+  </body>
+</html>
