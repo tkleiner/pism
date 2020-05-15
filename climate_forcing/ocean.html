@@ -164,7 +164,9 @@ equations describing</p>
 </ol>
 <p>This model is described in <a class="reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id4">[11]</a> and <a class="reference internal" href="../zzz_references_html.html#hellmeretal1998" id="id5">[12]</a>.</p>
 <p>Inputs are potential temperature (variable <code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code>) and salinity (variable
-<code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>) read from a file.</p>
+<code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>) read from a file. A constant salinity (see
+<code class="config docutils literal notranslate"><span class="pre">constants.sea_water.salinity</span></code>) is used if the input file does not contain
+<code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>.</p>
 <p>No ocean circulation is modeled, so melt water computed by this model is not fed back into
 the surrounding ocean.</p>
 <p>This implementation uses different approximations of the temperature gradient at the base
@@ -576,9 +578,9 @@ updates. PISM may take longer time-steps if the adaptive scheme allows it, thoug
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1766-g5441b1431
+      Git revision v1.0-1770-gaa1e17d5c
       committed by Constantine Khrulev
-      on 2020-05-06 13:33:13 -0800 |
+      on 2020-05-14 17:33:06 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>
