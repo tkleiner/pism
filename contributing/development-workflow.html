@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Development workflow &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="How do I…?" href="how-to.html" />
     <link rel="prev" title="Git branches" href="git-branches.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -36,39 +36,42 @@
 <span id="sec-development-workflow"></span><h1><a class="toc-backref" href="#id7">Development workflow</a><a class="headerlink" href="#development-workflow" title="Permalink to this headline">¶</a></h1>
 <p>The recommended development workflow is:</p>
 <ol class="arabic simple">
-<li>When starting a new project, create a topic branch starting from <code class="docutils literal notranslate"><span class="pre">dev</span></code>. If you are
+<li><p>When starting a new project, create a topic branch starting from <code class="docutils literal notranslate"><span class="pre">dev</span></code>. If you are
 fixing a bug in a released version of PISM, create a topic branch starting from
-<code class="docutils literal notranslate"><span class="pre">master</span></code>.</li>
-<li>Make changes to the code or documentation (or both).<ol class="loweralpha">
-<li>Compile.</li>
-<li>Fix any compilation errors and warnings. Repeat until your code compiles without
-warnings.</li>
-<li>Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> and fix any test failures.</li>
-<li>Push your code to GitHub for review or to get help with b) and c).</li>
+<code class="docutils literal notranslate"><span class="pre">master</span></code>.</p></li>
+<li><p>Make changes to the code or documentation (or both).</p>
+<ol class="loweralpha simple">
+<li><p>Compile.</p></li>
+<li><p>Fix any compilation errors and warnings. Repeat until your code compiles without
+warnings.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> and fix any test failures.</p></li>
+<li><p>Push your code to GitHub for review or to get help with b) and c).</p></li>
 </ol>
 </li>
-<li>Add verification or regression tests.</li>
-<li>Test your code and repeat 2a–2c until all tests pass.</li>
-<li>Update documentation (if necessary).</li>
-<li>Update the change log <code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code>.<a class="footnote-reference" href="#id4" id="id1">[1]</a></li>
-<li>Merge new features into <code class="docutils literal notranslate"><span class="pre">dev</span></code> and fixes into <code class="docutils literal notranslate"><span class="pre">master</span></code> and <code class="docutils literal notranslate"><span class="pre">dev</span></code> (or submit a pull
-request).</li>
+<li><p>Add verification or regression tests.</p></li>
+<li><p>Test your code and repeat 2a–2c until all tests pass.</p></li>
+<li><p>Update documentation (if necessary).</p></li>
+<li><p>Update the change log <code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code>.<a class="footnote-reference brackets" href="#id4" id="id1">1</a></p></li>
+<li><p>Merge new features into <code class="docutils literal notranslate"><span class="pre">dev</span></code> and fixes into <code class="docutils literal notranslate"><span class="pre">master</span></code> and <code class="docutils literal notranslate"><span class="pre">dev</span></code> (or submit a pull
+request).</p></li>
 </ol>
 <p>This document covers the tools and approaches we found useful for the steps listed above.</p>
 <div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#development-workflow" id="id7">Development workflow</a><ul>
-<li><a class="reference internal" href="#setting-up-the-environment" id="id8">Setting up the environment</a></li>
-<li><a class="reference internal" href="#editing-source-code" id="id9">Editing source code</a></li>
-<li><a class="reference internal" href="#compiling-pism" id="id10">Compiling PISM</a></li>
-<li><a class="reference internal" href="#debugging" id="id11">Debugging</a><ul>
-<li><a class="reference internal" href="#issues-visible-in-parallel-runs-only" id="id12">Issues visible in parallel runs only</a></li>
-<li><a class="reference internal" href="#issues-caught-by-automatic-tests" id="id13">Issues caught by automatic tests</a></li>
+<li><p><a class="reference internal" href="#development-workflow" id="id7">Development workflow</a></p>
+<ul>
+<li><p><a class="reference internal" href="#setting-up-the-environment" id="id8">Setting up the environment</a></p></li>
+<li><p><a class="reference internal" href="#editing-source-code" id="id9">Editing source code</a></p></li>
+<li><p><a class="reference internal" href="#compiling-pism" id="id10">Compiling PISM</a></p></li>
+<li><p><a class="reference internal" href="#debugging" id="id11">Debugging</a></p>
+<ul>
+<li><p><a class="reference internal" href="#issues-visible-in-parallel-runs-only" id="id12">Issues visible in parallel runs only</a></p></li>
+<li><p><a class="reference internal" href="#issues-caught-by-automatic-tests" id="id13">Issues caught by automatic tests</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#writing-tests" id="id14">Writing tests</a></li>
-<li><a class="reference internal" href="#editing-pism-s-manual" id="id15">Editing PISM’s manual</a></li>
+<li><p><a class="reference internal" href="#writing-tests" id="id14">Writing tests</a></p></li>
+<li><p><a class="reference internal" href="#editing-pism-s-manual" id="id15">Editing PISM’s manual</a></p></li>
 </ul>
 </li>
 </ul>
@@ -78,16 +81,17 @@ request).</li>
 <p>The majority of interesting PISM runs are performed on supercomputers, but we <strong>do not</strong>
 recommend using supercomputers for development.</p>
 <blockquote>
-<div>Use a desktop (or a laptop) computer running Linux or macOS.</div></blockquote>
+<div><p>Use a desktop (or a laptop) computer running Linux or macOS.</p>
+</div></blockquote>
 <p>While you can use <code class="docutils literal notranslate"><span class="pre">SSH</span></code> to connect to a remote system to write, compile, and test your
 code, doing so will reduce your productivity when compared to using a computer you have
 physical access to.</p>
 <p>Any MPI implementation would work, but we prefer to use <a class="reference external" href="https://www.mpich.org/">MPICH</a> for PISM development. This
 MPI implementation</p>
 <ul class="simple">
-<li>has headers that compile without warnings,</li>
-<li>provides type checking for pointer arguments in MPI calls, and</li>
-<li>does not produce “false positives” when debugging memory access with <a class="reference external" href="http://www.valgrind.org/">Valgrind</a>.</li>
+<li><p>has headers that compile without warnings,</p></li>
+<li><p>provides type checking for pointer arguments in MPI calls, and</p></li>
+<li><p>does not produce “false positives” when debugging memory access with <a class="reference external" href="http://www.valgrind.org/">Valgrind</a>.</p></li>
 </ul>
 <p>When working on a fix for a stubborn bug it <em>may</em> be helpful to use PETSc compiled with
 debugging enabled (option <code class="docutils literal notranslate"><span class="pre">--with-debugging=1</span></code>), but in our experience this is rarely
@@ -105,29 +109,29 @@ overall productivity.</p>
     <span class="si">${</span><span class="nv">pism_source_dir</span><span class="si">}</span>
 </pre></div>
 </div>
-<table border="1" class="docutils" id="tab-cmake-development-flags">
-<caption><span class="caption-number">Table 51 </span><span class="caption-text">PISM’s configuration flags for development</span><a class="headerlink" href="#tab-cmake-development-flags" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="tab-cmake-development-flags">
+<caption><span class="caption-number">Table 48 </span><span class="caption-text">PISM’s configuration flags for development</span><a class="headerlink" href="#tab-cmake-development-flags" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col style="width: 50%" />
+<col style="width: 50%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Flag</th>
-<th class="head">Meaning</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Meaning</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Debug</span></code></td>
-<td>Enables pedantic compiler warnings</td>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Debug</span></code></p></td>
+<td><p>Enables pedantic compiler warnings</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-DPism_BUILD_EXTRA_EXECS=YES</span></code></td>
-<td>Build extra testing executables (needed by some of regression test)</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DPism_BUILD_EXTRA_EXECS=YES</span></code></p></td>
+<td><p>Build extra testing executables (needed by some of regression test)</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-DPism_BUILD_PYTHON_BINDINGS=YES</span></code></td>
-<td>Build PISM’s Python bindings (used by many regression tests)</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DPism_BUILD_PYTHON_BINDINGS=YES</span></code></p></td>
+<td><p>Build PISM’s Python bindings (used by many regression tests)</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-DPism_DEBUG=YES</span></code></td>
-<td>Enables extra sanity checks in PISM</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DPism_DEBUG=YES</span></code></p></td>
+<td><p>Enables extra sanity checks in PISM</p></td>
 </tr>
 </tbody>
 </table>
@@ -156,23 +160,24 @@ significantly speed up compilation.</p>
 <span id="sec-debugging-pism"></span><h2><a class="toc-backref" href="#id11">Debugging</a><a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
 <p>The first step in debugging an issue is <em>always</em> this:</p>
 <blockquote>
-<div>find the shortest simulation using the smallest possible grid that exhibits the
-problematic behavior.</div></blockquote>
+<div><p>find the shortest simulation using the smallest possible grid that exhibits the
+problematic behavior.</p>
+</div></blockquote>
 <p>It does not have to be <em>the</em> shortest simulation, but it should complete (or stop because
 of a failure) within seconds when running on the machine used for development.</p>
-<p>A debugger such as <a class="reference external" href="https://www.gnu.org/software/gdb/">GDB</a> or <a class="reference external" href="https://lldb.llvm.org/">LLDB</a> can be very useful.<a class="footnote-reference" href="#id5" id="id2">[2]</a> There are many online tutorials
+<p>A debugger such as <a class="reference external" href="https://www.gnu.org/software/gdb/">GDB</a> or <a class="reference external" href="https://lldb.llvm.org/">LLDB</a> can be very useful.<a class="footnote-reference brackets" href="#id5" id="id2">2</a> There are many online tutorials
 for both.</p>
 <p>You will need to know how to</p>
 <ul class="simple">
-<li>start a program,</li>
-<li>interrupt execution,</li>
-<li>set and remove a breakpoint,</li>
-<li>continue execution after stopping at a breakpoint,</li>
-<li>continue execution to the next line of the code,</li>
-<li>continue execution to the end of the current function call,</li>
-<li>step into a function call,</li>
-<li>print the value of a variable,</li>
-<li>print the stack trace.</li>
+<li><p>start a program,</p></li>
+<li><p>interrupt execution,</p></li>
+<li><p>set and remove a breakpoint,</p></li>
+<li><p>continue execution after stopping at a breakpoint,</p></li>
+<li><p>continue execution to the next line of the code,</p></li>
+<li><p>continue execution to the end of the current function call,</p></li>
+<li><p>step into a function call,</p></li>
+<li><p>print the value of a variable,</p></li>
+<li><p>print the stack trace.</p></li>
 </ul>
 <p>This basic set of debugging skills is often sufficient.</p>
 <p>Sometimes a failure happens in a loop that iterates over grid points and stepping through
@@ -190,8 +195,8 @@ in the code where you would like to stop if <code class="docutils literal notran
 <p>Some of the more troublesome bugs involve memory access errors (<em>segmentation fault</em>
 errors are often caused by these). Consider using <a class="reference external" href="http://www.valgrind.org/">Valgrind</a> to detect them.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Your code will run much, much slower when using Valgrind, so it is important to find
+<p class="admonition-title">Note</p>
+<p>Your code will run much, much slower when using Valgrind, so it is important to find
 a small test case reproducing the error.</p>
 </div>
 <div class="section" id="issues-visible-in-parallel-runs-only">
@@ -200,10 +205,9 @@ a small test case reproducing the error.</p>
 one. These bugs tend to be hard to fix and there is no definitive technique (or tool) that
 helps with this. Here are some tips, though.</p>
 <ul>
-<li><p class="first">Reduce the number of processes as much as possible. Most of the time the number of
-processes can be reduced all the way down to 2 (the smallest truly parallel case).</p>
-</li>
-<li><p class="first">Run PISM with the option <code class="docutils literal notranslate"><span class="pre">-start_in_debugger</span></code>. This will produce a number of terminal
+<li><p>Reduce the number of processes as much as possible. Most of the time the number of
+processes can be reduced all the way down to 2 (the smallest truly parallel case).</p></li>
+<li><p>Run PISM with the option <code class="docutils literal notranslate"><span class="pre">-start_in_debugger</span></code>. This will produce a number of terminal
 windows with <a class="reference external" href="https://www.gnu.org/software/gdb/">GDB</a>. You will need to <em>continue execution</em> (GDB’s command <code class="docutils literal notranslate"><span class="pre">c</span></code>) in all of
 the windows. If PISM freezes, interrupting execution and printing the stack trace would
 tell you where it got stuck.</p>
@@ -217,9 +221,8 @@ continue
 </div>
 <p>will set a breakpoint at <code class="docutils literal notranslate"><span class="pre">pism::RuntimeError::RuntimeError()</span></code> and continue execution.</p>
 </li>
-<li><p class="first">A parallel debugger such as TotalView may be helpful but requires a license. We don’t
-have experience with it and cannot give any advice.</p>
-</li>
+<li><p>A parallel debugger such as TotalView may be helpful but requires a license. We don’t
+have experience with it and cannot give any advice.</p></li>
 </ul>
 </div>
 <div class="section" id="issues-caught-by-automatic-tests">
@@ -237,7 +240,7 @@ and <a class="reference external" href="https://circleci.com/docs/2.0/local-cli/
 </div>
 <div class="section" id="writing-tests">
 <span id="sec-writing-tests"></span><h2><a class="toc-backref" href="#id14">Writing tests</a><a class="headerlink" href="#writing-tests" title="Permalink to this headline">¶</a></h2>
-<p>All contributions containing new features should contain tests for the new code.<a class="footnote-reference" href="#id6" id="id3">[3]</a></p>
+<p>All contributions containing new features should contain tests for the new code.<a class="footnote-reference brackets" href="#id6" id="id3">3</a></p>
 <p>A contribution fixing a bug should (ideally) contain a test that will ensure that it is
 fixed.</p>
 <p>Add verification tests (tests comparing results to an analytical solution) whenever
@@ -246,30 +249,27 @@ that compares computed results to a stored output from a trusted version of the 
 will make it easier to detect a regression, i.e. an undesirable change in model results.</p>
 <p>Here are some test writing tips:</p>
 <ul>
-<li><p class="first">Make sure that a verification test uses a grid that is not square (different number of
-grid points in <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> directions).</p>
-</li>
-<li><p class="first">If possible, write a test that performs a number of computations along a <em>refinement
-path</em> and compare the computed convergence rate to the theoretical one.</p>
-</li>
-<li><p class="first">Try to include tests ensuring that <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> directions are interchangeable: in most
+<li><p>Make sure that a verification test uses a grid that is not square (different number of
+grid points in <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> directions).</p></li>
+<li><p>If possible, write a test that performs a number of computations along a <em>refinement
+path</em> and compare the computed convergence rate to the theoretical one.</p></li>
+<li><p>Try to include tests ensuring that <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> directions are interchangeable: in most
 cases flow from left to right should behave the save as from bottom towards the top, etc.</p>
 <p>Here are two ways to do this:</p>
 <ul class="simple">
-<li>Repeat the test twice, the second time using transposed inputs, then transpose results
-and compare.</li>
-<li>Repeat the test twice, once using a refinement path along <code class="docutils literal notranslate"><span class="pre">x</span></code> and the second time
-along <code class="docutils literal notranslate"><span class="pre">y</span></code>; make sure that you see the same convergence rate.</li>
+<li><p>Repeat the test twice, the second time using transposed inputs, then transpose results
+and compare.</p></li>
+<li><p>Repeat the test twice, once using a refinement path along <code class="docutils literal notranslate"><span class="pre">x</span></code> and the second time
+along <code class="docutils literal notranslate"><span class="pre">y</span></code>; make sure that you see the same convergence rate.</p></li>
 </ul>
 </li>
-<li><p class="first">It is good to check if the implementation preserves symmetries if the setup has any.</p>
-</li>
+<li><p>It is good to check if the implementation preserves symmetries if the setup has any.</p></li>
 </ul>
 <p>Python bindings make it possible to test many PISM’s components in isolation from the rest
 of the code. See tests in <code class="docutils literal notranslate"><span class="pre">test/regression</span></code> for some examples.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This manual should cover PISM’s Python bindings. If you see this, please e-mail
+<p class="admonition-title">Note</p>
+<p>This manual should cover PISM’s Python bindings. If you see this, please e-mail
 <a class="reference external" href="mailto:uaf-pism&#37;&#52;&#48;alaska&#46;edu">uaf-pism<span>&#64;</span>alaska<span>&#46;</span>edu</a> and remind us to document them.</p>
 </div>
 </div>
@@ -291,24 +291,17 @@ inside your build directory.</p>
 <code class="docutils literal notranslate"><span class="pre">src/pism_config.cdl</span></code> and the PISM code itself. To make sure that they are up to date, run <code class="docutils literal notranslate"><span class="pre">make</span></code>
 in <code class="docutils literal notranslate"><span class="pre">doc/sphinx</span></code> and commit the changes.</p>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id4" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>See <a class="reference external" href="https://keepachangelog.com/">Keep a change log</a> for inspiration.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id5" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>In most cases a serial debugger is sufficient.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id6" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Contributions of tests for existing code are also welcome.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>See <a class="reference external" href="https://keepachangelog.com/">Keep a change log</a> for inspiration.</p>
+</dd>
+<dt class="label" id="id5"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>In most cases a serial debugger is sufficient.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Contributions of tests for existing code are also welcome.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -376,25 +369,23 @@ in <code class="docutils literal notranslate"><span class="pre">doc/sphinx</span
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

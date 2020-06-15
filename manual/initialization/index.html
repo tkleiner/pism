@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Initialization and bootstrapping &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Initialization from a saved model state" href="restarting.html" />
     <link rel="prev" title="Climate inputs, and their interface with ice dynamics" href="../highlevelview/climate-inputs.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -36,13 +36,13 @@
 <span id="sec-initboot"></span><h1>Initialization and bootstrapping<a class="headerlink" href="#initialization-and-bootstrapping" title="Permalink to this headline">¶</a></h1>
 <p>There are three ways to start PISM:</p>
 <ul class="simple">
-<li>option <code class="option docutils literal notranslate"><span class="pre">-i</span></code> reads a previously-saved “complete” PISM model state in a NetCDF file,
-or</li>
-<li>option <code class="option docutils literal notranslate"><span class="pre">-i</span></code> <code class="option docutils literal notranslate"><span class="pre">-bootstrap</span></code> reads an “incomplete” NetCDF file and uses heuristics
-to fill in needed fields, or</li>
-<li>one of the executables <code class="docutils literal notranslate"><span class="pre">pisms</span></code> or <code class="docutils literal notranslate"><span class="pre">pismv</span></code> is used to initialize simplified-geometry
+<li><p>option <code class="option docutils literal notranslate"><span class="pre">-i</span></code> reads a previously-saved “complete” PISM model state in a NetCDF file,
+or</p></li>
+<li><p>option <code class="option docutils literal notranslate"><span class="pre">-i</span></code> <code class="option docutils literal notranslate"><span class="pre">-bootstrap</span></code> reads an “incomplete” NetCDF file and uses heuristics
+to fill in needed fields, or</p></li>
+<li><p>one of the executables <code class="docutils literal notranslate"><span class="pre">pisms</span></code> or <code class="docutils literal notranslate"><span class="pre">pismv</span></code> is used to initialize simplified-geometry
 experiments or verification tests from formulas in the source code, and thus no input
-file is required.</li>
+file is required.</p></li>
 </ul>
 <p>One of the first two choices is required when using the executable <code class="docutils literal notranslate"><span class="pre">pismr</span></code>. Modeling
 usually starts with the <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">input.nc</span> <span class="pre">-bootstrap</span></code> option because real ice sheet
@@ -127,25 +127,23 @@ the <code class="option docutils literal notranslate"><span class="pre">-i</span
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

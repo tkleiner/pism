@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MISMIP3d &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Verification" href="../verification/index.html" />
     <link rel="prev" title="MISMIP" href="mismip.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -44,8 +44,9 @@ contrast to the flowline experiments, no (semi-)analytical solutions are availab
 compare to the numerical results.</p>
 <p>A full description of the MISMIP3d experiments can be found at</p>
 <blockquote>
-<div><a class="reference external" href="http://homepages.ulb.ac.be/~fpattyn/mismip3d/">http://homepages.ulb.ac.be/~fpattyn/mismip3d/</a></div></blockquote>
-<p>and the results are published in <a class="reference internal" href="../../zzz_references_html.html#mismip3d2013" id="id1">[119]</a>.</p>
+<div><p><a class="reference external" href="http://homepages.ulb.ac.be/~fpattyn/mismip3d/">http://homepages.ulb.ac.be/~fpattyn/mismip3d/</a></p>
+</div></blockquote>
+<p>and the results are published in <a class="bibtex reference internal" href="../../zzz_references_html.html#mismip3d2013" id="id1">[119]</a>.</p>
 <p>A complete set of MISMIP3d experiments consists of three runs: Firstly, a flowline
 solution on a linearly-sloped bed, similar to the flowline MISMIP experiments of the
 previous section, is run into a steady state (“standard experiment <code class="docutils literal notranslate"><span class="pre">Stnd</span></code>”). Then the
@@ -75,10 +76,10 @@ corresponds to a free-slip condition for the flow in x-direction. Though this ch
 the symmetric computational domain increases computational cost, it allows us to use
 standard PISM without fixing certain boundary conditions in the code. (That is, it avoids
 the issues addressed in the regional mode of PISM; see section <a class="reference internal" href="../jakobshavn/index.html#sec-jako"><span class="std std-ref">Example: A regional model of the Jakobshavn outlet glacier in Greenland</span></a>.)</p>
-<p>PISM participated in the MISMIP3d intercomparison project <a class="reference internal" href="../../zzz_references_html.html#mismip3d2013" id="id2">[119]</a> using version
+<p>PISM participated in the MISMIP3d intercomparison project <a class="bibtex reference internal" href="../../zzz_references_html.html#mismip3d2013" id="id2">[119]</a> using version
 pism0.5, and the exact results can be reproduced using that version. PISM’s results, and
 the role of resolution and the new subgrid grounding line interpolation scheme are
-discussed in <a class="reference internal" href="../../zzz_references_html.html#feldmannetal2014" id="id3">[84]</a>.</p>
+discussed in <a class="bibtex reference internal" href="../../zzz_references_html.html#feldmannetal2014" id="id3">[84]</a>.</p>
 <p>We observed a considerable improvement of the results with respect to the absolute
 grounding line positions compared to other models (e.g. the FE reference model Elmer/Ice)
 and to the reversibility when applying the subgrid grounding line interpolation method;
@@ -91,19 +92,19 @@ surface gradients in the MISMIP3d ice geometries. See <a class="reference intern
 comparison of SSA and SIA velocities in the MISMIP3D geometry. Note that both Figures
 <a class="reference internal" href="#fig-subgl"><span class="std std-numref">Fig. 23</span></a> and <a class="reference internal" href="#fig-compsiassa"><span class="std std-numref">Fig. 24</span></a> were generated with resolution of <span class="math notranslate nohighlight">\(\Delta
 x = \Delta y = 1\)</span> km.</p>
-<div class="figure" id="fig-subgl">
+<div class="figure align-default" id="fig-subgl">
 <img alt="../../_images/mismip3d-subgl.png" src="../../_images/mismip3d-subgl.png" />
 <p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">Comparison between the grounding lines of the higher-amplitude (“<code class="docutils literal notranslate"><span class="pre">P75</span></code>”) MISMIP3d
 experiments performed with PISM when using the subgrid grounding line interpolation
-method (left) or not using it (right). In both cases the SIA+SSA hybrid is used.</span></p>
+method (left) or not using it (right). In both cases the SIA+SSA hybrid is used.</span><a class="headerlink" href="#fig-subgl" title="Permalink to this image">¶</a></p>
 </div>
-<div class="figure" id="fig-compsiassa">
+<div class="figure align-default" id="fig-compsiassa">
 <img alt="../../_images/comp-SIA-SSA.png" src="../../_images/comp-SIA-SSA.png" />
 <p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">The SIA velocities are negligible in the MISMIP3d standard experiment (“<code class="docutils literal notranslate"><span class="pre">Stnd</span></code>”). The
 steady state ice geometry is plotted (black) together with the computed SSA velocity
 (red) and SIA velocity (blue). The SIA velocity reaches its maximum value of about
 <span class="math notranslate nohighlight">\(10\)</span> m/a at the grounding line, about two orders of magnitude less than the maximum of
-the SSA velocity.</span></p>
+the SSA velocity.</span><a class="headerlink" href="#fig-compsiassa" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 
@@ -173,25 +174,23 @@ the SSA velocity.</span></p>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

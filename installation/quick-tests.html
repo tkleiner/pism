@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick tests of the installation &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Rebuilding PISM documentation" href="documentation.html" />
     <link rel="prev" title="Common build problems and solutions" href="common-problems.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -37,7 +37,7 @@
 <p>Once you’re done with the installation, a few tests can confirm that PISM is functioning
 correctly.</p>
 <ol class="arabic">
-<li><p class="first">Try a MPI four process verification run:</p>
+<li><p>Try a MPI four process verification run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpiexec -n <span class="m">4</span> pismv -test G -y <span class="m">200</span>
 </pre></div>
 </div>
@@ -50,7 +50,7 @@ on your machine. (In that case MPI will just run multiple processes on the one
 processor.) This run will also produce a NetCDF output file <code class="docutils literal notranslate"><span class="pre">unnamed.nc</span></code>, which can
 be read and viewed by NetCDF tools.</p>
 </li>
-<li><p class="first">Try an EISMINT II run using the PETSc viewers (under the X window system):</p>
+<li><p>Try an EISMINT II run using the PETSc viewers (under the X window system):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pisms -y 5000 -view thk,temppabase,velsurf_mag
 </pre></div>
 </div>
@@ -61,7 +61,7 @@ sometimes required to enable MPI to use X, like this:</p>
 </div>
 <p>Also <code class="docutils literal notranslate"><span class="pre">-drawpause</span> <span class="pre">0.1</span></code> or similar may be needed if the figures are refreshing too fast.</p>
 </li>
-<li><p class="first">Run a basic suite of software tests. To do this, make sure that <a class="reference external" href="http://nco.sourceforge.net/">NCO</a> and Python
+<li><p>Run a basic suite of software tests. To do this, make sure that <a class="reference external" href="http://nco.sourceforge.net/">NCO</a> and Python
 packages <a class="reference external" href="https://www.numpy.org/">NumPy</a> and <a class="reference external" href="https://pypi.org/project/netCDF4">netcdf4-python</a> are installed. Also, the CMake flag
 <code class="docutils literal notranslate"><span class="pre">Pism_BUILD_EXTRA_EXECS</span></code> should be <code class="docutils literal notranslate"><span class="pre">ON</span></code>. Then run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make       <span class="c1"># do this if you changed something with CMake</span>
@@ -149,25 +149,23 @@ in your build directory.</p>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

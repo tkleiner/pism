@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EISMINT II &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="MISMIP" href="mismip.html" />
     <link rel="prev" title="Simplified geometry experiments" href="index.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -34,24 +34,24 @@
       
   <div class="section" id="eismint-ii">
 <span id="sec-eismintii"></span><h1>EISMINT II<a class="headerlink" href="#eismint-ii" title="Permalink to this headline">¶</a></h1>
-<p>There are seven experiments described in the published EISMINT II writeup <a class="reference internal" href="../../zzz_references_html.html#eismint00" id="id1">[21]</a>.
+<p>There are seven experiments described in the published EISMINT II writeup <a class="bibtex reference internal" href="../../zzz_references_html.html#eismint00" id="id1">[21]</a>.
 They are named A, B, C, D, F, G, and H. They have these common features:</p>
 <ul class="simple">
-<li>runs are for <span class="math notranslate nohighlight">\(2\times 10^5\)</span> years, with no prescribed time step;</li>
-<li>a <span class="math notranslate nohighlight">\(61\times 61\)</span> horizontal grid on a square domain (<span class="math notranslate nohighlight">\(1500\)</span> km side length) is prescribed;</li>
-<li>surface inputs (temperature and mass balance) have angular symmetry around the grid center;</li>
-<li>the bed is flat and does not move (no isostasy);</li>
-<li>the temperature in the bedrock is not modeled;</li>
-<li>only the cold (not polythermal) thermomechanically-coupled SIA is used <a class="reference internal" href="../../zzz_references_html.html#eismint00" id="id2">[21]</a>; and</li>
-<li>basal melt rates do not affect the evolution of the ice sheet.</li>
+<li><p>runs are for <span class="math notranslate nohighlight">\(2\times 10^5\)</span> years, with no prescribed time step;</p></li>
+<li><p>a <span class="math notranslate nohighlight">\(61\times 61\)</span> horizontal grid on a square domain (<span class="math notranslate nohighlight">\(1500\)</span> km side length) is prescribed;</p></li>
+<li><p>surface inputs (temperature and mass balance) have angular symmetry around the grid center;</p></li>
+<li><p>the bed is flat and does not move (no isostasy);</p></li>
+<li><p>the temperature in the bedrock is not modeled;</p></li>
+<li><p>only the cold (not polythermal) thermomechanically-coupled SIA is used <a class="bibtex reference internal" href="../../zzz_references_html.html#eismint00" id="id2">[21]</a>; and</p></li>
+<li><p>basal melt rates do not affect the evolution of the ice sheet.</p></li>
 </ul>
 <p>The experiments differ from each other in their various combinations of surface
 temperature and mass balance parameterizations. Experiments H and G involve basal sliding,
-under the physically-dubious SIA sliding rubric (<a class="reference internal" href="../../zzz_references_html.html#bbssasliding" id="id3">[25]</a>, Appendix B), while the
+under the physically-dubious SIA sliding rubric (<a class="bibtex reference internal" href="../../zzz_references_html.html#bbssasliding" id="id3">[25]</a>, Appendix B), while the
 others don’t. Four experiments start with zero ice (A,F,G,H), while the other experiments
 (B,C,D) start from the final state of experiment A.</p>
-<p>In addition to the seven experiments published in <a class="reference internal" href="../../zzz_references_html.html#eismint00" id="id4">[21]</a>, there were an additional
-five experiments described in the EISMINT II intercomparison description <a class="reference internal" href="../../zzz_references_html.html#eisiidescribe" id="id5">[108]</a>,
+<p>In addition to the seven experiments published in <a class="bibtex reference internal" href="../../zzz_references_html.html#eismint00" id="id4">[21]</a>, there were an additional
+five experiments described in the EISMINT II intercomparison description <a class="bibtex reference internal" href="../../zzz_references_html.html#eisiidescribe" id="id5">[108]</a>,
 labeled E, I, J, K, and L. These experiments share most features listed above, but with
 the following differences. Experiment E is the same as experiment A except that the peak
 of the accumulation, and also the low point of the surface temperature, are shifted by 100
@@ -59,56 +59,56 @@ km in both <span class="math notranslate nohighlight">\(x\)</span> and <span cla
 experiment A. Experiments I and J are similar to experiment A but with non-flat “trough”
 bed topography. Experiments K and L are similar to experiment C but with non-flat “mound”
 bed topography.</p>
-<p>See <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 41</span></a> for how to run all EISMINT II experiments in PISM.
-Experiments E – L are only documented in <a class="reference internal" href="../../zzz_references_html.html#eisiidescribe" id="id6">[108]</a>.</p>
-<table border="1" class="colwidths-given docutils" id="tab-eisii">
-<caption><span class="caption-number">Table 41 </span><span class="caption-text">Running the EISMINT II experiments in PISM. Use <code class="docutils literal notranslate"><span class="pre">-skip</span> <span class="pre">-skip_max</span> <span class="pre">5</span></code>, on
+<p>See <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 39</span></a> for how to run all EISMINT II experiments in PISM.
+Experiments E – L are only documented in <a class="bibtex reference internal" href="../../zzz_references_html.html#eisiidescribe" id="id6">[108]</a>.</p>
+<table class="colwidths-given docutils align-default" id="tab-eisii">
+<caption><span class="caption-number">Table 39 </span><span class="caption-text">Running the EISMINT II experiments in PISM. Use <code class="docutils literal notranslate"><span class="pre">-skip</span> <span class="pre">-skip_max</span> <span class="pre">5</span></code>, on
              the <span class="math notranslate nohighlight">\(61\times 61\)</span> default grid, for significant speedup.</span><a class="headerlink" href="#tab-eisii" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="71%" />
-<col width="29%" />
+<col style="width: 71%" />
+<col style="width: 29%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Command: “<code class="docutils literal notranslate"><span class="pre">pisms</span> <span class="pre">+</span></code>”</th>
-<th class="head">Relation to experiment A</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command: “<code class="docutils literal notranslate"><span class="pre">pisms</span> <span class="pre">+</span></code>”</p></th>
+<th class="head"><p>Relation to experiment A</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">A</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIA.nc</span></code></td>
-<td>&#160;</td>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">A</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIA.nc</span></code></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">B</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIB.nc</span></code></td>
-<td>warmer</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">B</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIB.nc</span></code></p></td>
+<td><p>warmer</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">C</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIC.nc</span></code></td>
-<td>less snow (lower accumulation)</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">C</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIC.nc</span></code></p></td>
+<td><p>less snow (lower accumulation)</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">D</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIID.nc</span></code></td>
-<td>smaller area of accumulation</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">D</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIID.nc</span></code></p></td>
+<td><p>smaller area of accumulation</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">F</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">81</span> <span class="pre">-Lz</span> <span class="pre">6000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIF.nc</span></code></td>
-<td>colder; famous spokes <a class="reference internal" href="../../zzz_references_html.html#bbl" id="id7">[26]</a></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">F</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">81</span> <span class="pre">-Lz</span> <span class="pre">6000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIF.nc</span></code></p></td>
+<td><p>colder; famous spokes <a class="bibtex reference internal" href="../../zzz_references_html.html#bbl" id="id7">[26]</a></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">G</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">201</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIG.nc</span></code></td>
-<td>sliding (regardless of temperature)</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">G</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">201</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIG.nc</span></code></p></td>
+<td><p>sliding (regardless of temperature)</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">H</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">201</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIH.nc</span></code></td>
-<td>melt-temperature activated sliding</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">H</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">201</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIH.nc</span></code></p></td>
+<td><p>melt-temperature activated sliding</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">E</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIE.nc</span></code></td>
-<td>shifted climate maps</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">E</span> <span class="pre">-i</span> <span class="pre">eisIIA.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIE.nc</span></code></p></td>
+<td><p>shifted climate maps</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">I</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIII.nc</span></code></td>
-<td>trough topography</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">I</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIII.nc</span></code></p></td>
+<td><p>trough topography</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">J</span> <span class="pre">-i</span> <span class="pre">eisIII.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIJ.nc</span></code></td>
-<td>trough topography and less snow</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">J</span> <span class="pre">-i</span> <span class="pre">eisIII.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIJ.nc</span></code></p></td>
+<td><p>trough topography and less snow</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">K</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIK.nc</span></code></td>
-<td>mound topography</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">K</span> <span class="pre">-Mx</span> <span class="pre">61</span> <span class="pre">-My</span> <span class="pre">61</span> <span class="pre">-Mz</span> <span class="pre">61</span> <span class="pre">-Lz</span> <span class="pre">5000</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIK.nc</span></code></p></td>
+<td><p>mound topography</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">L</span> <span class="pre">-i</span> <span class="pre">eisIIK.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIL.nc</span></code></td>
-<td>mound topography and less snow</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-eisII</span> <span class="pre">L</span> <span class="pre">-i</span> <span class="pre">eisIIK.nc</span> <span class="pre">-y</span> <span class="pre">2e5</span> <span class="pre">-o</span> <span class="pre">eisIIL.nc</span></code></p></td>
+<td><p>mound topography and less snow</p></td>
 </tr>
 </tbody>
 </table>
@@ -119,9 +119,9 @@ gives a grid spacing of <span class="math notranslate nohighlight">\(\sim 20 m\)
 levels are generally better. Alternatively these experiments can be done with an
 equally-spaced grid; in this case we suggest using enough vertical levels to give 20 m
 spacing, for example. When there is sliding, even more vertical resolution is recommended
-(see <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 41</span></a>). Also, the vertical extent must be sufficient so that when
+(see <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 39</span></a>). Also, the vertical extent must be sufficient so that when
 the ice thickness grows large, especially before thermo-softening brings it back down, the
-vertical grid is tall enough to include all the ice. <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 41</span></a> therefore
+vertical grid is tall enough to include all the ice. <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 39</span></a> therefore
 includes suggested settings of <code class="docutils literal notranslate"><span class="pre">-Lz</span></code>; experiment F is different because ice thickness
 increases with colder temperatures.</p>
 <p>These SIA-only simulations parallelize well. Very roughly, for the standard <span class="math notranslate nohighlight">\(61\times 61\)</span>
@@ -131,67 +131,67 @@ mechanism which avoids updating the temperature at each time step is effective, 
 like <code class="docutils literal notranslate"><span class="pre">-skip</span> <span class="pre">-skip_max</span> <span class="pre">5</span></code> are recommended.</p>
 <p>The EISMINT II experiments can be run with various modifications of the default settings.
 For instance, a twice-finer grid in the horizontal is “<code class="docutils literal notranslate"><span class="pre">-Mx</span> <span class="pre">121</span> <span class="pre">-My</span> <span class="pre">121</span></code>”.
-<a class="reference internal" href="#tab-eisiioptions"><span class="std std-numref">Table 42</span></a> lists some optional settings which are particular to the
+<a class="reference internal" href="#tab-eisiioptions"><span class="std std-numref">Table 40</span></a> lists some optional settings which are particular to the
 EISMINT II experiments.</p>
-<table border="1" class="colwidths-given docutils" id="tab-eisiioptions">
-<caption><span class="caption-number">Table 42 </span><span class="caption-text">Changing the default settings for EISMINT II</span><a class="headerlink" href="#tab-eisiioptions" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given docutils align-default" id="tab-eisiioptions">
+<caption><span class="caption-number">Table 40 </span><span class="caption-text">Changing the default settings for EISMINT II</span><a class="headerlink" href="#tab-eisiioptions" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="17%" />
-<col width="33%" />
-<col width="17%" />
-<col width="33%" />
+<col style="width: 17%" />
+<col style="width: 33%" />
+<col style="width: 17%" />
+<col style="width: 33%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Option</th>
-<th class="head">Default values [experiments]</th>
-<th class="head">Units</th>
-<th class="head">Meaning</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default values [experiments]</p></th>
+<th class="head"><p>Units</p></th>
+<th class="head"><p>Meaning</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-eisII</span></code></td>
-<td>A</td>
-<td>&#160;</td>
-<td>Choose single character name of EISMINT II <a class="reference internal" href="../../zzz_references_html.html#eismint00" id="id8">[21]</a> simplified geometry
-experiment. See <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 41</span></a>.</td>
+<tbody>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-eisII</span></code></p></td>
+<td><p>A</p></td>
+<td></td>
+<td><p>Choose single character name of EISMINT II <a class="bibtex reference internal" href="../../zzz_references_html.html#eismint00" id="id8">[21]</a> simplified geometry
+experiment. See <a class="reference internal" href="#tab-eisii"><span class="std std-numref">Table 39</span></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-Mmax</span></code></td>
-<td><p class="first">0.5 [ABDEFGHIK],</p>
-<p class="last">0.25 [CJL]</p>
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-Mmax</span></code></p></td>
+<td><p>0.5 [ABDEFGHIK],</p>
+<p>0.25 [CJL]</p>
 </td>
-<td><span class="math notranslate nohighlight">\(m / year\)</span></td>
-<td>max value of accumulation rate</td>
+<td><p><span class="math notranslate nohighlight">\(m / year\)</span></p></td>
+<td><p>max value of accumulation rate</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-Rel</span></code></td>
-<td><p class="first">450 [ABEFGHIK],</p>
-<p class="last">425 [CDJL]</p>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-Rel</span></code></p></td>
+<td><p>450 [ABEFGHIK],</p>
+<p>425 [CDJL]</p>
 </td>
-<td>km</td>
-<td>radial distance to equilibrium line</td>
+<td><p>km</p></td>
+<td><p>radial distance to equilibrium line</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-Sb</span></code></td>
-<td><span class="math notranslate nohighlight">\(10^{-2}\)</span> [<em>all</em>]</td>
-<td><span class="math notranslate nohighlight">\((m/year)/km\)</span></td>
-<td>radial gradient of accumulation rate</td>
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-Sb</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(10^{-2}\)</span> [<em>all</em>]</p></td>
+<td><p><span class="math notranslate nohighlight">\((m/year)/km\)</span></p></td>
+<td><p>radial gradient of accumulation rate</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ST</span></code></td>
-<td><span class="math notranslate nohighlight">\(1.67 \times 10^{-2}\)</span> [<em>all</em>]</td>
-<td>K/km</td>
-<td>radial gradient of surface temperature</td>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ST</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.67 \times 10^{-2}\)</span> [<em>all</em>]</p></td>
+<td><p>K/km</p></td>
+<td><p>radial gradient of surface temperature</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-Tmin</span></code></td>
-<td><p class="first">238.15 [ACDEGHIJKL],</p>
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-Tmin</span></code></p></td>
+<td><p>238.15 [ACDEGHIJKL],</p>
 <p>243.15 [B],</p>
-<p class="last">223.15 [F]</p>
+<p>223.15 [F]</p>
 </td>
-<td>K</td>
-<td>max of surface temperature</td>
+<td><p>K</p></td>
+<td><p>max of surface temperature</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-bmr_in_cont</span></code></td>
-<td>&#160;</td>
-<td>&#160;</td>
-<td>Include the basal melt rate in the mass continuity computation; overrides EISMINT
-II default.</td>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-bmr_in_cont</span></code></p></td>
+<td></td>
+<td></td>
+<td><p>Include the basal melt rate in the mass continuity computation; overrides EISMINT
+II default.</p></td>
 </tr>
 </tbody>
 </table>
@@ -264,25 +264,23 @@ II default.</td>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

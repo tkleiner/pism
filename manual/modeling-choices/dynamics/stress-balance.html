@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Choosing the stress balance &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Ice rheology" href="rheology.html" />
     <link rel="prev" title="Ice dynamics and thermodynamics" href="index.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -35,64 +35,64 @@
   <div class="section" id="choosing-the-stress-balance">
 <span id="sec-stressbalance"></span><h1>Choosing the stress balance<a class="headerlink" href="#choosing-the-stress-balance" title="Permalink to this headline">¶</a></h1>
 <p>The basic stress balance used for all grounded ice in PISM is the non-sliding,
-thermomechanically-coupled SIA <a class="reference internal" href="../../../zzz_references_html.html#bbl" id="id1">[26]</a>. For the vast majority of most ice sheets, as
+thermomechanically-coupled SIA <a class="bibtex reference internal" href="../../../zzz_references_html.html#bbl" id="id1">[26]</a>. For the vast majority of most ice sheets, as
 measured by area or volume, this is an appropriate model, which is an <span class="math notranslate nohighlight">\(O(\epsilon^2)\)</span>
 approximation to the Stokes model if <span class="math notranslate nohighlight">\(\epsilon\)</span> is the depth-to-length ratio of the ice
-sheet <a class="reference internal" href="../../../zzz_references_html.html#fowler" id="id2">[27]</a>.</p>
+sheet <a class="bibtex reference internal" href="../../../zzz_references_html.html#fowler" id="id2">[27]</a>.</p>
 <p>The shallow shelf approximation (SSA) stress balance applies to floating ice. See the Ross
 ice shelf example in section <a class="reference internal" href="../../validation/ross.html#sec-ross"><span class="std std-ref">An SSA flow model for the Ross Ice Shelf in Antarctica</span></a> for an example in which the SSA is only
 applied to floating ice.</p>
 <p>In PISM the SSA is also used to describe the sliding of grounded ice and the formation of
-ice streams <a class="reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id3">[25]</a>. Specifically for the SSA with “plastic” (Coulomb
+ice streams <a class="bibtex reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id3">[25]</a>. Specifically for the SSA with “plastic” (Coulomb
 friction) basal resistance, the locations of ice streams are determined as part of a free
-boundary problem of Schoof <a class="reference internal" href="../../../zzz_references_html.html#schoofstream" id="id4">[41]</a>, a model for emergent ice streams within a
+boundary problem of Schoof <a class="bibtex reference internal" href="../../../zzz_references_html.html#schoofstream" id="id4">[41]</a>, a model for emergent ice streams within a
 ice sheet and ice shelf system. This model explains ice streams through a combination of
 plastic till failure and SSA stress balance.</p>
 <p>This SSA description of ice streams is the preferred “sliding law” for the SIA
-<a class="reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id5">[25]</a>, <a class="reference internal" href="../../../zzz_references_html.html#winkelmannetal2011" id="id6">[33]</a>. The SSA should be combined with the SIA,
+<a class="bibtex reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id5">[25]</a>, <a class="bibtex reference internal" href="../../../zzz_references_html.html#winkelmannetal2011" id="id6">[33]</a>. The SSA should be combined with the SIA,
 in this way, in preference to classical SIA sliding laws which make the sliding velocity of ice a
 local function of the basal value of the driving stress. The resulting combination of SIA
-and SSA is a “hybrid” approximation of the Stokes model <a class="reference internal" href="../../../zzz_references_html.html#winkelmannetal2011" id="id7">[33]</a>. Option
+and SSA is a “hybrid” approximation of the Stokes model <a class="bibtex reference internal" href="../../../zzz_references_html.html#winkelmannetal2011" id="id7">[33]</a>. Option
 <code class="docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">ssa+sia</span></code> turns on this “hybrid” model. In this use of the SSA as a
 sliding law, floating ice is also subject to the SSA.</p>
 <p><a class="reference internal" href="#tab-stress-balance-choice"><span class="std std-numref">Table 9</span></a> describes the basic choice of stress balance.</p>
-<table border="1" class="colwidths-given docutils" id="tab-stress-balance-choice">
+<table class="colwidths-given docutils align-default" id="tab-stress-balance-choice">
 <caption><span class="caption-number">Table 9 </span><span class="caption-text">The basic choice of stress balance</span><a class="headerlink" href="#tab-stress-balance-choice" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="33%" />
-<col width="67%" />
+<col style="width: 33%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Option</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">none</span></code></td>
-<td>Turn off ice flow completely.</td>
+<tbody>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">none</span></code></p></td>
+<td><p>Turn off ice flow completely.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">sia</span></code> (default)</td>
-<td>Grounded ice flows by the non-sliding SIA. Floating ice does not flow, so this model
-is not recommended for marine ice sheets.</td>
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">sia</span></code> (default)</p></td>
+<td><p>Grounded ice flows by the non-sliding SIA. Floating ice does not flow, so this model
+is not recommended for marine ice sheets.</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">ssa</span></code></td>
-<td>Use the SSA model exclusively. Horizontal ice velocity is constant throughout ice
-columns.</td>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">ssa</span></code></p></td>
+<td><p>Use the SSA model exclusively. Horizontal ice velocity is constant throughout ice
+columns.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">prescribed_sliding</span></code></td>
-<td>Use the constant-in-time prescribed sliding velocity field read from a file set
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">prescribed_sliding</span></code></p></td>
+<td><p>Use the constant-in-time prescribed sliding velocity field read from a file set
 using <code class="option docutils literal notranslate"><span class="pre">-prescribed_sliding_file</span></code>, variables <code class="docutils literal notranslate"><span class="pre">ubar</span></code> and <code class="docutils literal notranslate"><span class="pre">vbar</span></code>.
-Horizontal ice velocity is constant throughout ice columns.</td>
+Horizontal ice velocity is constant throughout ice columns.</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">ssa+sia</span></code></td>
-<td>The recommended sliding law, which gives the SIA+SSA hybrid stress balance.
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">ssa+sia</span></code></p></td>
+<td><p>The recommended sliding law, which gives the SIA+SSA hybrid stress balance.
 Combines SSA-computed velocity, using pseudo-plastic till, with SIA-computed
-velocity according to the combination in <a class="reference internal" href="../../../zzz_references_html.html#winkelmannetal2011" id="id8">[33]</a>; similar to
-<a class="reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id9">[25]</a>. Floating ice uses SSA only.</td>
+velocity according to the combination in <a class="bibtex reference internal" href="../../../zzz_references_html.html#winkelmannetal2011" id="id8">[33]</a>; similar to
+<a class="bibtex reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id9">[25]</a>. Floating ice uses SSA only.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">prescribed_sliding+sia</span></code></td>
-<td>Use the constant-in-time prescribed sliding velocity in combination with the
-non-sliding SIA.</td>
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">prescribed_sliding+sia</span></code></p></td>
+<td><p>Use the constant-in-time prescribed sliding velocity in combination with the
+non-sliding SIA.</p></td>
 </tr>
 </tbody>
 </table>
@@ -111,60 +111,60 @@ pseudo-yield-stress in the case of power law sliding (section <a class="referenc
 and a (generally) spatially-varying till strength. The amount of stored basal water is
 modeled by the subglacial hydrology model (section <a class="reference internal" href="../subglacier/hydrology.html#sec-subhydro"><span class="std std-ref">Subglacial hydrology</span></a>) based on the basal
 melt rate which is, primarily, thermodynamically-determined (see <a class="reference internal" href="energy-balance.html#sec-energy"><span class="std std-ref">Modeling conservation of energy</span></a>).</p>
-<table border="1" class="colwidths-given docutils" id="tab-ssa-usage">
+<table class="colwidths-given docutils align-default" id="tab-ssa-usage">
 <caption><span class="caption-number">Table 10 </span><span class="caption-text">Choice of, and controls on, the numerical SSA stress balance.</span><a class="headerlink" href="#tab-ssa-usage" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="33%" />
-<col width="67%" />
+<col style="width: 33%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Option</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ssa_method</span></code> [ <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">|</span> <span class="pre">fem</span></code> ]</td>
-<td>Both finite difference (<code class="docutils literal notranslate"><span class="pre">fd</span></code>; the default) and finite element (<code class="docutils literal notranslate"><span class="pre">fem</span></code>) versions
+<tbody>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ssa_method</span></code> [ <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">|</span> <span class="pre">fem</span></code> ]</p></td>
+<td><p>Both finite difference (<code class="docutils literal notranslate"><span class="pre">fd</span></code>; the default) and finite element (<code class="docutils literal notranslate"><span class="pre">fem</span></code>) versions
 of the SSA numerical solver are implemented in PISM. The <code class="docutils literal notranslate"><span class="pre">fd</span></code> solver is the only
 one which allows PIK options (section <a class="reference internal" href="../marine/pik.html#sec-pism-pik"><span class="std std-ref">PIK options for marine ice sheets</span></a>). <code class="docutils literal notranslate"><span class="pre">fd</span></code> uses Picard
-iteration <a class="reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id10">[25]</a>, while <code class="docutils literal notranslate"><span class="pre">fem</span></code> uses a Newton method. The <code class="docutils literal notranslate"><span class="pre">fem</span></code> solver
-has surface velocity inversion capability <a class="reference internal" href="../../../zzz_references_html.html#habermannetal2013" id="id11">[63]</a>.</td>
+iteration <a class="bibtex reference internal" href="../../../zzz_references_html.html#bbssasliding" id="id10">[25]</a>, while <code class="docutils literal notranslate"><span class="pre">fem</span></code> uses a Newton method. The <code class="docutils literal notranslate"><span class="pre">fem</span></code> solver
+has surface velocity inversion capability <a class="bibtex reference internal" href="../../../zzz_references_html.html#habermannetal2013" id="id11">[63]</a>.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ssa_eps</span></code> (<span class="math notranslate nohighlight">\(10^{13}\)</span>)</td>
-<td>The numerical schemes for the SSA compute an effective viscosity <span class="math notranslate nohighlight">\(\nu\)</span> which
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-ssa_eps</span></code> (<span class="math notranslate nohighlight">\(10^{13}\)</span>)</p></td>
+<td><p>The numerical schemes for the SSA compute an effective viscosity <span class="math notranslate nohighlight">\(\nu\)</span> which
 depends on strain rates and ice hardness (thus temperature). The minimum value of
 the effective viscosity times the thickness (i.e. <span class="math notranslate nohighlight">\(\nu H\)</span>) largely determines the
 difficulty of solving the numerical SSA. This constant is added to keep <span class="math notranslate nohighlight">\(\nu H\)</span>
 bounded away from zero: <span class="math notranslate nohighlight">\(\nu H \to \nu H + \epsilon_{\text{SSA}}\)</span>, where
 <span class="math notranslate nohighlight">\(\epsilon_{\text{SSA}}\)</span> is set using this option. Units of <code class="option docutils literal notranslate"><span class="pre">ssa_eps</span></code> are
-<span class="math notranslate nohighlight">\(\text{Pa}\,\text{m}\,\text{s}\)</span>. Set to zero to turn off this lower bound.</td>
+<span class="math notranslate nohighlight">\(\text{Pa}\,\text{m}\,\text{s}\)</span>. Set to zero to turn off this lower bound.</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ssa_view_nuh</span></code></td>
-<td>View the product <span class="math notranslate nohighlight">\(\nu H\)</span> for your simulation as a runtime viewer (section
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ssa_view_nuh</span></code></p></td>
+<td><p>View the product <span class="math notranslate nohighlight">\(\nu H\)</span> for your simulation as a runtime viewer (section
 <a class="reference internal" href="../../practical-usage/diagnostic-viewers.html#sec-diagnostic-viewers"><span class="std std-ref">Run-time diagnostic viewers</span></a>). In a typical Greenland run we see a wide range of
 values for <span class="math notranslate nohighlight">\(\nu H\)</span> from <span class="math notranslate nohighlight">\(\sim 10^{14}\)</span> to <span class="math notranslate nohighlight">\(\sim 10^{20}\)</span>
-<span class="math notranslate nohighlight">\(\text{Pa}\,\text{m}\,\text{s}\)</span>.</td>
+<span class="math notranslate nohighlight">\(\text{Pa}\,\text{m}\,\text{s}\)</span>.</p></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="colwidths-given docutils" id="tab-ssafd-controls">
+<table class="colwidths-given docutils align-default" id="tab-ssafd-controls">
 <caption><span class="caption-number">Table 11 </span><span class="caption-text">Controls on the numerical iteration of the <code class="docutils literal notranslate"><span class="pre">-ssa_method</span> <span class="pre">fd</span></code> solver</span><a class="headerlink" href="#tab-ssafd-controls" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="33%" />
-<col width="67%" />
+<col style="width: 33%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Option</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ssafd_picard_maxi</span></code> (300)</td>
-<td>Set the maximum allowed number of Picard (nonlinear) iterations in solving the
-shallow shelf approximation.</td>
+<tbody>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ssafd_picard_maxi</span></code> (300)</p></td>
+<td><p>Set the maximum allowed number of Picard (nonlinear) iterations in solving the
+shallow shelf approximation.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ssafd_picard_rtol</span></code> (<span class="math notranslate nohighlight">\(10^{-4}\)</span>)</td>
-<td><p class="first">The Picard iteration computes a vertically-averaged effective viscosity which is
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-ssafd_picard_rtol</span></code> (<span class="math notranslate nohighlight">\(10^{-4}\)</span>)</p></td>
+<td><p>The Picard iteration computes a vertically-averaged effective viscosity which is
 used to solve the equations for horizontal velocity. Then the new velocities are
 used to recompute an effective viscosity, and so on. This option sets the relative
 change tolerance for the effective viscosity. The Picard iteration stops when
@@ -172,17 +172,17 @@ successive values <span class="math notranslate nohighlight">\(\nu^{(k)}\)</span
 satisfy</p>
 <div class="math notranslate nohighlight">
 \[\|(\nu^{(k)} - \nu^{(k-1)}) H\|_1 \le Z \|\nu^{(k)} H\|_1\]</div>
-<p class="last">where <span class="math notranslate nohighlight">\(Z=\)</span> <code class="docutils literal notranslate"><span class="pre">ssafd_picard_rtol</span></code>.</p>
+<p>where <span class="math notranslate nohighlight">\(Z=\)</span> <code class="docutils literal notranslate"><span class="pre">ssafd_picard_rtol</span></code>.</p>
 </td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ssafd_ksp_rtol</span></code> (<span class="math notranslate nohighlight">\(10^{-5}\)</span>)</td>
-<td>Set the relative change tolerance for the iteration inside the Krylov linear solver
-used at each Picard iteration.</td>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ssafd_ksp_rtol</span></code> (<span class="math notranslate nohighlight">\(10^{-5}\)</span>)</p></td>
+<td><p>Set the relative change tolerance for the iteration inside the Krylov linear solver
+used at each Picard iteration.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ssafd_max_speed</span></code> (<span class="math notranslate nohighlight">\(50 km/yr\)</span>)</td>
-<td>Limits computed SSA velocities: ice speed is capped at this limit after each Picard
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-ssafd_max_speed</span></code> (<span class="math notranslate nohighlight">\(50 km/yr\)</span>)</p></td>
+<td><p>Limits computed SSA velocities: ice speed is capped at this limit after each Picard
 iteration of the SSAFD solver. This may allow PISM to take longer time steps by
-ignoring high velocities at a few troublesome locations.</td>
+ignoring high velocities at a few troublesome locations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -192,22 +192,22 @@ ignoring high velocities at a few troublesome locations.</td>
 <p>The section <a class="reference internal" href="age.html#sec-age"><span class="std std-ref">Computing ice age</span></a> describes coupling SIA stress balance to the age of the ice.</p>
 <p>The section <a class="reference internal" href="surface-gradient.html#sec-gradient"><span class="std std-ref">Surface gradient method</span></a> covers available methods of computing the surface gradient.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>The explicit time stepping of the mass continuity equation in the case of the SIA flow
 comes with a severe restriction on time step length:</p>
 <div class="math notranslate nohighlight">
 \[\Delta t \le \frac{2 R}{D\left( 1/\Delta x^2 + 1/\Delta y^2 \right)}\]</div>
 <p>Here <span class="math notranslate nohighlight">\(D\)</span> is the maximum diffusivity of the SIA flow and <span class="math notranslate nohighlight">\(R\)</span> is
-<code class="config docutils literal notranslate"><span class="pre">time_stepping.adaptive_ratio</span></code>, a tuning parameter that further reduces the
+<a class="reference internal" href="../../parameters/index.html#config-time_stepping.adaptive_ratio"><code class="docutils literal notranslate"><span class="pre">time_stepping</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.adaptive_ratio</span></code></a>, a tuning parameter that further reduces the
 maximum allowed time step length.</p>
 <p>The maximum diffusivity <span class="math notranslate nohighlight">\(D\)</span> may be achieved at an isolated grid point near the ice
 margin. In this case it might make sense to limit the diffusivity of the SIA flow,
 sacrificing accuracy at a few grid points to increase time step length and reduce the
-computational cost. Set <code class="config docutils literal notranslate"><span class="pre">stress_balance.sia.limit_diffusivity</span></code> to enable this
+computational cost. Set <a class="reference internal" href="../../parameters/index.html#config-stress_balance.sia.limit_diffusivity"><code class="docutils literal notranslate"><span class="pre">stress_balance</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.sia</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.limit_diffusivity</span></code></a> to enable this
 mechanism.</p>
-<p class="last">When <code class="config docutils literal notranslate"><span class="pre">stress_balance.sia.limit_diffusivity</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code> PISM stops as soon as
+<p>When <a class="reference internal" href="../../parameters/index.html#config-stress_balance.sia.limit_diffusivity"><code class="docutils literal notranslate"><span class="pre">stress_balance</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.sia</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.limit_diffusivity</span></code></a> is <code class="docutils literal notranslate"><span class="pre">false</span></code> PISM stops as soon as
 the SIA diffusivity at any grid point exceeds
-<code class="config docutils literal notranslate"><span class="pre">stress_balance.sia.max_diffusivity</span></code>. We do this to make it easier to detect
+<a class="reference internal" href="../../parameters/index.html#config-stress_balance.sia.max_diffusivity"><code class="docutils literal notranslate"><span class="pre">stress_balance</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.sia</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.max_diffusivity</span></code></a>. We do this to make it easier to detect
 problematic model configurations: in many cases it does not make sense to continue a
 simulation if <span class="math notranslate nohighlight">\(D\)</span> is very large.</p>
 </div>
@@ -215,53 +215,53 @@ simulation if <span class="math notranslate nohighlight">\(D\)</span> is very la
 <div class="section" id="weertman-style-sliding">
 <span id="sec-weertman"></span><h2>Weertman-style sliding<a class="headerlink" href="#weertman-style-sliding" title="Permalink to this headline">¶</a></h2>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This kind of sliding is, in general, a bad idea. We implement it to simplify
+<p class="admonition-title">Warning</p>
+<p>This kind of sliding is, in general, a bad idea. We implement it to simplify
 comparisons of the “hybrid” model mentioned above to older studies using this
 parameterization.</p>
 </div>
-<p>PISM implements equation 5 from <a class="reference internal" href="../../../zzz_references_html.html#tomkin2007" id="id12">[75]</a>:</p>
+<p>PISM implements equation 5 from <a class="bibtex reference internal" href="../../../zzz_references_html.html#tomkin2007" id="id12">[75]</a>:</p>
 <div class="math notranslate nohighlight" id="equation-eq-weertman-sliding">
 <span class="eqno">(4)<a class="headerlink" href="#equation-eq-weertman-sliding" title="Permalink to this equation">¶</a></span>\[\mathbf{u}_s = \frac{2 A_s \beta_c (\rho g H)^{n}}{N - P} |\nabla h|^{n-1} \nabla h.\]</div>
-<table border="1" class="colwidths-given docutils" id="tab-weertman-notation">
+<table class="colwidths-given docutils align-default" id="tab-weertman-notation">
 <caption><span class="caption-number">Table 12 </span><span class="caption-text">Notation used in <a class="reference internal" href="#equation-eq-weertman-sliding">(4)</a></span><a class="headerlink" href="#tab-weertman-notation" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Variable</th>
-<th class="head">Meaning</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Meaning</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(H\)</span></td>
-<td>ice thickness</td>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(H\)</span></p></td>
+<td><p>ice thickness</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(h\)</span></td>
-<td>ice surface elevation</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(h\)</span></p></td>
+<td><p>ice surface elevation</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(n\)</span></td>
-<td>flow law exponent</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(n\)</span></p></td>
+<td><p>flow law exponent</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(g\)</span></td>
-<td>acceleration due to gravity</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(g\)</span></p></td>
+<td><p>acceleration due to gravity</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(\rho\)</span></td>
-<td>ice density</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\rho\)</span></p></td>
+<td><p>ice density</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(N\)</span></td>
-<td>ice overburden pressure, <span class="math notranslate nohighlight">\(N = \rho g H\)</span></td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N\)</span></p></td>
+<td><p>ice overburden pressure, <span class="math notranslate nohighlight">\(N = \rho g H\)</span></p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(P\)</span></td>
-<td>basal water pressure</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(P\)</span></p></td>
+<td><p>basal water pressure</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(A_s\)</span></td>
-<td>sliding parameter</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(A_s\)</span></p></td>
+<td><p>sliding parameter</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(\beta_c\)</span></td>
-<td>“constriction parameter” capturing the effect of valley walls on the flow;
-set to <span class="math notranslate nohighlight">\(1\)</span> in this implementation</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\beta_c\)</span></p></td>
+<td><p>“constriction parameter” capturing the effect of valley walls on the flow;
+set to <span class="math notranslate nohighlight">\(1\)</span> in this implementation</p></td>
 </tr>
 </tbody>
 </table>
@@ -273,9 +273,9 @@ pressure: <span class="math notranslate nohighlight">\(P = k N\)</span>. This si
 <p>To enable, use <code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">weertman_sliding</span></code> (this results in constant-in-depth
 ice velocity) or <code class="option docutils literal notranslate"><span class="pre">-stress_balance</span> <span class="pre">weertman_sliding+sia</span></code> to use this parameterization
 as a sliding law with the deformational flow modeled using the SIA model.</p>
-<p>Use configuration parameters <code class="config docutils literal notranslate"><span class="pre">stress_balance.weertman_sliding.k</span></code> and
-<code class="config docutils literal notranslate"><span class="pre">stress_balance.weertman_sliding.A</span></code> tot set <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(A_s\)</span>, respectively. Default
-values come from <a class="reference internal" href="../../../zzz_references_html.html#tomkin2007" id="id13">[75]</a>.</p>
+<p>Use configuration parameters <a class="reference internal" href="../../parameters/index.html#config-stress_balance.weertman_sliding.k"><code class="docutils literal notranslate"><span class="pre">stress_balance</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.weertman_sliding</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.k</span></code></a> and
+<a class="reference internal" href="../../parameters/index.html#config-stress_balance.weertman_sliding.A"><code class="docutils literal notranslate"><span class="pre">stress_balance</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.weertman_sliding</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.A</span></code></a> tot set <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(A_s\)</span>, respectively. Default
+values come from <a class="bibtex reference internal" href="../../../zzz_references_html.html#tomkin2007" id="id13">[75]</a>.</p>
 </div>
 </div>
 
@@ -349,25 +349,23 @@ values come from <a class="reference internal" href="../../../zzz_references_htm
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spatial grid &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Model time" href="time.html" />
     <link rel="prev" title="Computational box" href="box.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -33,12 +33,13 @@
     <div class="body" role="main">
       
   <div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#spatial-grid" id="id5">Spatial grid</a><ul>
-<li><a class="reference internal" href="#grid-registration" id="id6">Grid registration</a></li>
-<li><a class="reference internal" href="#grid-projections" id="id7">Grid projections</a></li>
-<li><a class="reference internal" href="#parallel-domain-distribution" id="id8">Parallel domain distribution</a></li>
+<li><p><a class="reference internal" href="#spatial-grid" id="id5">Spatial grid</a></p>
+<ul>
+<li><p><a class="reference internal" href="#grid-registration" id="id6">Grid registration</a></p></li>
+<li><p><a class="reference internal" href="#grid-projections" id="id7">Grid projections</a></p></li>
+<li><p><a class="reference internal" href="#parallel-domain-distribution" id="id8">Parallel domain distribution</a></p></li>
 </ul>
 </li>
 </ul>
@@ -83,7 +84,7 @@ precedence over options,</p>
 <p>will give a warning that “<code class="docutils literal notranslate"><span class="pre">PISM</span> <span class="pre">WARNING:</span> <span class="pre">ignoring</span> <span class="pre">command-line</span> <span class="pre">option</span> <span class="pre">'-Mz'</span></code>”.</p>
 <div class="section" id="grid-registration">
 <span id="sec-grid-registration"></span><h2><a class="toc-backref" href="#id6">Grid registration</a><a class="headerlink" href="#grid-registration" title="Permalink to this headline">¶</a></h2>
-<p>PISM’s horizontal computational grid is uniform and (by default) cell-centered.<a class="footnote-reference" href="#id3" id="id1">[1]</a></p>
+<p>PISM’s horizontal computational grid is uniform and (by default) cell-centered.<a class="footnote-reference brackets" href="#id3" id="id1">1</a></p>
 <p>This is not the only possible interpretation, but it is consistent with the finite-volume
 handling of mass (ice thickness) evolution is PISM.</p>
 <p>Consider a grid with minimum and maximum <span class="math notranslate nohighlight">\(x\)</span> coordinates <span class="math notranslate nohighlight">\(x_\text{min}\)</span> and <span class="math notranslate nohighlight">\(x_\text{max}\)</span>
@@ -92,7 +93,7 @@ extends <em>past</em> <span class="math notranslate nohighlight">\(x_\text{min}\
 <a class="reference internal" href="#fig-cell-center"><span class="std std-numref">Fig. 18</span></a>.</p>
 <div class="figure align-center" id="fig-cell-center">
 <a class="reference internal image-reference" href="../../../_images/grid-centered-both.png"><img alt="../../../_images/grid-centered-both.png" src="../../../_images/grid-centered-both.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Computational grids using the default (<code class="docutils literal notranslate"><span class="pre">center</span></code>) grid registration.</span></p>
+<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Computational grids using the default (<code class="docutils literal notranslate"><span class="pre">center</span></code>) grid registration.</span><a class="headerlink" href="#fig-cell-center" title="Permalink to this image">¶</a></p>
 <div class="legend">
 <p><em>Left</em>: a coarse grid. <em>Right</em>: a finer grid covering the same domain.</p>
 <p>The solid black line represents the domain boundary, dashed red lines are cell
@@ -122,8 +123,8 @@ the grid spacing of <span class="math notranslate nohighlight">\(5\)</span> km.<
 <span class="eqno">(2)<a class="headerlink" href="#equation-eq-grid-center" title="Permalink to this equation">¶</a></span>\[ \begin{align}\begin{aligned}\Delta x &amp;= \frac{2 L_x}{M_x},\\x_\text{min} &amp;= x_c - L_x + \frac12 \Delta x,\\x_\text{max} &amp;= x_c + L_x - \frac12 \Delta x,\end{aligned}\end{align} \]</div>
 <p>where <span class="math notranslate nohighlight">\(x_c\)</span> is the <span class="math notranslate nohighlight">\(x\)</span>-coordinate of the domain center.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">One advantage of this approach is that it is easy to build a set of grids covering a
+<p class="admonition-title">Note</p>
+<p>One advantage of this approach is that it is easy to build a set of grids covering a
 given region such that grid cells nest within each other as in
 <a class="reference internal" href="#fig-cell-center"><span class="std std-numref">Fig. 18</span></a>. In particular, this makes it easier to create a set of
 surface mass balance fields for the domain that use different resolutions but <em>have the
@@ -146,20 +147,21 @@ and <span class="math notranslate nohighlight">\(x\)</span> coordinates range fr
 <p>See <a class="reference internal" href="#fig-cell-corner"><span class="std std-numref">Fig. 19</span></a> for an illustration.</p>
 <div class="figure align-center" id="fig-cell-corner">
 <a class="reference internal image-reference" href="../../../_images/grid-corner-both.png"><img alt="../../../_images/grid-corner-both.png" src="../../../_images/grid-corner-both.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">Computational grids using the <code class="docutils literal notranslate"><span class="pre">corner</span></code> grid registration.</span></p>
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">Computational grids using the <code class="docutils literal notranslate"><span class="pre">corner</span></code> grid registration.</span><a class="headerlink" href="#fig-cell-corner" title="Permalink to this image">¶</a></p>
 <div class="legend">
-<em>Left</em>: a coarse grid. <em>Right</em>: a finer grid covering the same domain.</div>
+<p><em>Left</em>: a coarse grid. <em>Right</em>: a finer grid covering the same domain.</p>
+</div>
 </div>
 <p>To switch between <a class="reference internal" href="#equation-eq-grid-center">(2)</a> and <a class="reference internal" href="#equation-eq-grid-corner">(3)</a>,
-set the configuration parameter <code class="config docutils literal notranslate"><span class="pre">grid.registration</span></code>.</p>
+set the configuration parameter <a class="reference internal" href="../../parameters/index.html#config-grid.registration"><code class="docutils literal notranslate"><span class="pre">grid</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.registration</span></code></a>.</p>
 </div>
 <div class="section" id="grid-projections">
 <span id="sec-projections"></span><h2><a class="toc-backref" href="#id7">Grid projections</a><a class="headerlink" href="#grid-projections" title="Permalink to this headline">¶</a></h2>
 <p>PISM can use the <a class="reference external" href="https://proj.org/">PROJ</a> library (see <a class="reference internal" href="../../../installation/prerequisites.html#sec-install-prerequisites"><span class="std std-ref">Required tools and libraries</span></a>) and projection
 information to compute</p>
 <ul class="simple">
-<li>latitudes and longitudes of grid points (variables <code class="variable docutils literal notranslate"><span class="pre">lat</span></code> and <code class="variable docutils literal notranslate"><span class="pre">lon</span></code>), and</li>
-<li>latitudes and longitudes of cell corners (variables <code class="variable docutils literal notranslate"><span class="pre">lat_bnds</span></code> and <code class="variable docutils literal notranslate"><span class="pre">lon_bnds</span></code>).</li>
+<li><p>latitudes and longitudes of grid points (variables <code class="variable docutils literal notranslate"><span class="pre">lat</span></code> and <code class="variable docutils literal notranslate"><span class="pre">lon</span></code>), and</p></li>
+<li><p>latitudes and longitudes of cell corners (variables <code class="variable docutils literal notranslate"><span class="pre">lat_bnds</span></code> and <code class="variable docutils literal notranslate"><span class="pre">lon_bnds</span></code>).</p></li>
 </ul>
 <p>To use this feature, compile PISM with PROJ and add the global attribute <code class="docutils literal notranslate"><span class="pre">proj</span></code>
 containing the parameter string describing the projection to the input file.</p>
@@ -208,7 +210,7 @@ mapping:proj_params = &quot;+proj=stere +lat_0=90 +lat_ts=71 +lon_0=-39 +k=1 +x_
 <div class="section" id="parallel-domain-distribution">
 <span id="sec-domain-distribution"></span><h2><a class="toc-backref" href="#id8">Parallel domain distribution</a><a class="headerlink" href="#parallel-domain-distribution" title="Permalink to this headline">¶</a></h2>
 <p>When running PISM in parallel with <code class="docutils literal notranslate"><span class="pre">mpiexec</span> <span class="pre">-n</span> <span class="pre">N</span></code>, the horizontal grid is distributed
-across <span class="math notranslate nohighlight">\(N\)</span> processes <a class="footnote-reference" href="#id4" id="id2">[2]</a>. PISM divides the grid into <span class="math notranslate nohighlight">\(N_x\)</span> parts in the <span class="math notranslate nohighlight">\(x\)</span> direction and
+across <span class="math notranslate nohighlight">\(N\)</span> processes <a class="footnote-reference brackets" href="#id4" id="id2">2</a>. PISM divides the grid into <span class="math notranslate nohighlight">\(N_x\)</span> parts in the <span class="math notranslate nohighlight">\(x\)</span> direction and
 <span class="math notranslate nohighlight">\(N_y\)</span> parts in the <span class="math notranslate nohighlight">\(y\)</span> direction. By default this is done automatically, with the goal
 that <span class="math notranslate nohighlight">\(N_x\times N_y = N\)</span> and <span class="math notranslate nohighlight">\(N_x\)</span> is as close to <span class="math notranslate nohighlight">\(N_y\)</span> as possible. Note that <span class="math notranslate nohighlight">\(N\)</span> should,
 therefore, be a composite (not prime) number.</p>
@@ -229,21 +231,17 @@ For example,</p>
 variable in the output file, e.g. using <code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">big</span></code>. The same <code class="variable docutils literal notranslate"><span class="pre">rank</span></code> variable is
 available as a spatial diagnostic field (section <a class="reference internal" href="../../practical-usage/saving-diagnostics.html#sec-saving-diagnostics"><span class="std std-ref">Saving time series of spatially-varying diagnostic quantities</span></a>).</p>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id3" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>This is consistent with the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a> document for data-sets without cell
+<dl class="footnote brackets">
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>This is consistent with the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a> document for data-sets without cell
 bounds: “If bounds are not provided, an application might reasonably assume the
 gridpoints to be at the centers of the cells, but we do not require that in this
-standard.”</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id4" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>In most cases one process corresponds to one “core” of your computer.</td></tr>
-</tbody>
-</table>
+standard.”</p>
+</dd>
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>In most cases one process corresponds to one “core” of your computer.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -317,25 +315,23 @@ standard.”</td></tr>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

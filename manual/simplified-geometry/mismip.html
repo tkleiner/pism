@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MISMIP &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="MISMIP3d" href="mismip3d.html" />
     <link rel="prev" title="EISMINT II" href="eismint-2.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -40,18 +40,19 @@ system is modeled, the reversibility of grounding line movement under changes in
 softness is tested, different sliding laws are tested, and the behavior of grounding lines
 on reverse-slope beds is tested. The intercomparison process is described at the website</p>
 <blockquote>
-<div><a class="reference external" href="http://homepages.ulb.ac.be/~fpattyn/mismip/">http://homepages.ulb.ac.be/~fpattyn/mismip/</a></div></blockquote>
+<div><p><a class="reference external" href="http://homepages.ulb.ac.be/~fpattyn/mismip/">http://homepages.ulb.ac.be/~fpattyn/mismip/</a></p>
+</div></blockquote>
 <p>Find a full text description there, along with the published report on the results
-<a class="reference internal" href="../../zzz_references_html.html#mismip2012" id="id1">[118]</a>; that paper includes results from PISM version 0.1. These documents are
+<a class="bibtex reference internal" href="../../zzz_references_html.html#mismip2012" id="id1">[118]</a>; that paper includes results from PISM version 0.1. These documents are
 essential reading for understanding MISMIP results generally, and for appreciating the
 brief discussion in this subsection.</p>
 <p>PISM’s version of MISMIP includes an attached ice shelf even though modeling the shelf is
-theoretically unnecessary in the flow line case. The analysis in <a class="reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id2">[120]</a> shows
+theoretically unnecessary in the flow line case. The analysis in <a class="bibtex reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id2">[120]</a> shows
 that the only effect of an ice shelf, in the flow line case, is to transfer the force
 imbalance at the calving front directly to the ice column at the grounding line. Such an
 analysis does not apply to ice shelves with two horizontal dimensions; real ice shelves
 have “buttressing” and “side drag” and other forces not present in the flow line
-<a class="reference internal" href="../../zzz_references_html.html#goldbergetal2009" id="id3">[121]</a>. See the next subsection on MISMIP3d and the Ross ice shelf example in
+<a class="bibtex reference internal" href="../../zzz_references_html.html#goldbergetal2009" id="id3">[121]</a>. See the next subsection on MISMIP3d and the Ross ice shelf example in
 section <a class="reference internal" href="../validation/ross.html#sec-ross"><span class="std std-ref">An SSA flow model for the Ross Ice Shelf in Antarctica</span></a>, among other examples.</p>
 <p>We must adapt the usual 3D PISM model to two horizontal dimensions, i.e. to do flow-line
 problems (see section <a class="reference internal" href="../practical-usage/flowline.html#sec-flowline-modeling"><span class="std std-ref">Using PISM for flow-line modeling</span></a>). The flow direction for MISMIP is
@@ -60,7 +61,7 @@ of points in the <span class="math notranslate nohighlight">\(y\)</span>-directi
 this in the cross-flow direction confuses the finite difference scheme.</p>
 <p>PISM can do MISMIP experiments with either of two applicable ice dynamics models. Model 1
 is a pure SSA model; “category 2” in the MISMIP classification. Model 2 combines SIA and
-SSA velocities as described in <a class="reference internal" href="../../zzz_references_html.html#winkelmannetal2011" id="id4">[33]</a>; “category 3” because it resolves
+SSA velocities as described in <a class="bibtex reference internal" href="../../zzz_references_html.html#winkelmannetal2011" id="id4">[33]</a>; “category 3” because it resolves
 “vertical” shear (i.e. using SIA flow).</p>
 <p>There are many runs for a complete MISMIP intercomparison submission. Specifically, for a
 given model there are <span class="math notranslate nohighlight">\(62\)</span> runs for each grid choice, and three (suggested) grid choices,
@@ -73,9 +74,10 @@ participant, and here we just use a 6 km grid.</p>
 <p>The implementation of MISMIP in PISM conforms to the intercomparison description, but that
 document specifies</p>
 <blockquote>
-<div>… we require that the rate of change of grounding line position be <span class="math notranslate nohighlight">\(0.1\)</span> m/a or
+<div><p>… we require that the rate of change of grounding line position be <span class="math notranslate nohighlight">\(0.1\)</span> m/a or
 less, while the rate of change of ice thickness at each grid point at which ice
-thickness is defined must be less than <span class="math notranslate nohighlight">\(10^{-4}\)</span> m/a…</div></blockquote>
+thickness is defined must be less than <span class="math notranslate nohighlight">\(10^{-4}\)</span> m/a…</p>
+</div></blockquote>
 <p>as a standard for “steady state”. The scripts here do not implement this stopping
 criterion. However, we report enough information, in PISM output files with scalar and
 spatially-variable time-series, to compute a grounding line rate or the time at which the
@@ -94,31 +96,31 @@ bash experiment-1a-mode-1.sh 2 &gt;&amp; out.1a-mode-1 &amp;
 <p>first generate a bash script, then use it to do a run which takes about 20 minutes, and
 then generate an image in <code class="docutils literal notranslate"><span class="pre">.png</span></code> format. Note that step 7 is in the middle of the
 experiment. It is shown in <a class="reference internal" href="#fig-mismipmodel1exper1aa7"><span class="std std-numref">Fig. 20</span></a> (left).</p>
-<div class="figure" id="fig-mismipmodel1exper1aa7">
+<div class="figure align-default" id="fig-mismipmodel1exper1aa7">
 <img alt="../../_images/mismip-resolution.png" src="../../_images/mismip-resolution.png" />
 <p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">A marine ice sheet profile in the MISMIP intercomparison; PISM model 1, experiment 1a,
-at step 7. Left: grid mode 1 (12 km grid). Right: grid mode 3 (6 km grid).</span></p>
+at step 7. Left: grid mode 1 (12 km grid). Right: grid mode 3 (6 km grid).</span><a class="headerlink" href="#fig-mismipmodel1exper1aa7" title="Permalink to this image">¶</a></p>
 </div>
-<div class="figure" id="fig-smexper1am1a1">
+<div class="figure align-default" id="fig-smexper1am1a1">
 <img alt="../../_images/SM-1a-A1.png" src="../../_images/SM-1a-A1.png" />
 <p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Analytical profile for steady state of experiment 1a, step 1, from theory in
-<a class="reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id5">[120]</a>. This is a boundary layer asymptotic matching result, but not the
-exact solution to the equations.</span></p>
+<a class="bibtex reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id5">[120]</a>. This is a boundary layer asymptotic matching result, but not the
+exact solution to the equations.</span><a class="headerlink" href="#fig-smexper1am1a1" title="Permalink to this image">¶</a></p>
 </div>
 <p>The script <code class="docutils literal notranslate"><span class="pre">MISMIP.py</span></code> in <code class="docutils literal notranslate"><span class="pre">examples/mismip/mismip2d</span></code> has the ability to compute the
-profile from the Schoof’s <a class="reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id6">[120]</a> asymptotic-matching boundary layer theory. This
+profile from the Schoof’s <a class="bibtex reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id6">[120]</a> asymptotic-matching boundary layer theory. This
 script is a Python translation, using <code class="docutils literal notranslate"><span class="pre">scipy</span></code> and <code class="docutils literal notranslate"><span class="pre">pylab</span></code>, of the <a class="reference external" href="http://homepages.ulb.ac.be/~fpattyn/mismip/MISMIP_distribution.tar">provided MATLAB
 codes</a>. For example,</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>python MISMIP.py -o mismip_analytic.png
 </pre></div>
 </div>
 <p>produces a <code class="docutils literal notranslate"><span class="pre">.png</span></code> image file with <a class="reference internal" href="#fig-smexper1am1a1"><span class="std std-numref">Fig. 21</span></a>. By default
-<code class="docutils literal notranslate"><span class="pre">run.py</span></code> uses the asymptotic-matching thickness result from the <a class="reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id7">[120]</a> theory
+<code class="docutils literal notranslate"><span class="pre">run.py</span></code> uses the asymptotic-matching thickness result from the <a class="bibtex reference internal" href="../../zzz_references_html.html#schoofmarine1" id="id7">[120]</a> theory
 to initialize the initial ice thickness, as allowed by the MISMIP specification.</p>
-<div class="figure" id="fig-mismipmode2results">
+<div class="figure align-default" id="fig-mismipmode2results">
 <img alt="../../_images/profileA7-M2.png" src="../../_images/profileA7-M2.png" />
 <p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">Results from MISMIP grid mode 2, with 1.2 km spacing, for steady state of experiment
-1a: profile at step 7 (compare <a class="reference internal" href="#fig-mismipmodel1exper1aa7"><span class="std std-numref">Fig. 20</span></a>).</span></p>
+1a: profile at step 7 (compare <a class="reference internal" href="#fig-mismipmodel1exper1aa7"><span class="std std-numref">Fig. 20</span></a>).</span><a class="headerlink" href="#fig-mismipmode2results" title="Permalink to this image">¶</a></p>
 </div>
 <p>Generally the PISM result does not put the grounding line in the same location as Schoof’s
 boundary layer theory, and at least at coarser resolutions the problem is with PISM’s
@@ -198,25 +200,23 @@ to 16 km for grid mode 2 (a factor of about 5), by using a grid refinement from 
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

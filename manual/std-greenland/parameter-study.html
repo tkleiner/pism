@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>An ice dynamics parameter study &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Ice dynamics, the PISM view" href="../highlevelview/index.html" />
     <link rel="prev" title="Grid sequencing" href="grid-sequencing.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -36,7 +36,7 @@
 <span id="sec-paramstudy"></span><h1>An ice dynamics parameter study<a class="headerlink" href="#an-ice-dynamics-parameter-study" title="Permalink to this headline">¶</a></h1>
 <p>The readers of this manual should not assume the PISM authors know all the correct
 parameters for describing ice flow. While PISM must have <em>default</em> values of all
-parameters, to help users get started,<a class="footnote-reference" href="#id10" id="id1">[1]</a> it has more than two hundred user-configurable
+parameters, to help users get started,<a class="footnote-reference brackets" href="#id10" id="id1">1</a> it has more than two hundred user-configurable
 parameters. The goal in this manual is to help the reader adjust them to their desired
 values. While “correct” values may never be known, or may not exist, examining the
 behavior of the model as it depends on parameters is both a nontrivial and an essential
@@ -46,18 +46,18 @@ experimental uncertainty is unlikely to affect model results in any important ma
 <code class="docutils literal notranslate"><span class="pre">constants.sea_water.density</span></code>). For others, however, for instance for the exponent in
 the basal sliding law, changing the value is highly-significant to model results, as we’ll
 see in this subsection. This is also a parameter which is very uncertain given current
-glaciological understanding <a class="reference internal" href="../../zzz_references_html.html#cuffeypaterson" id="id2">[74]</a>.</p>
+glaciological understanding <a class="bibtex reference internal" href="../../zzz_references_html.html#cuffeypaterson" id="id2">[74]</a>.</p>
 <p>To illustrate a parameter study in this Manual we restrict consideration to just two
 important parameters for ice dynamics,</p>
 <ul class="simple">
-<li><span class="math notranslate nohighlight">\(q=\)</span> <code class="config docutils literal notranslate"><span class="pre">basal_resistance.pseudo_plastic.q</span></code>: exponent used in
+<li><p><span class="math notranslate nohighlight">\(q=\)</span> <a class="reference internal" href="../parameters/index.html#config-basal_resistance.pseudo_plastic.q"><code class="docutils literal notranslate"><span class="pre">basal_resistance</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.pseudo_plastic</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.q</span></code></a>: exponent used in
 the sliding law which relates basal sliding velocity to basal shear stress in the SSA
-stress balance; see subsection <a class="reference internal" href="../modeling-choices/subglacier/basal-strength.html#sec-basestrength"><span class="std std-ref">Controlling basal strength</span></a> for more on this parameter, and</li>
-<li><span class="math notranslate nohighlight">\(e=\)</span> <code class="config docutils literal notranslate"><span class="pre">stress_balance.sia.enhancement_factor</span></code>: values larger
+stress balance; see subsection <a class="reference internal" href="../modeling-choices/subglacier/basal-strength.html#sec-basestrength"><span class="std std-ref">Controlling basal strength</span></a> for more on this parameter, and</p></li>
+<li><p><span class="math notranslate nohighlight">\(e=\)</span> <a class="reference internal" href="../parameters/index.html#config-stress_balance.sia.enhancement_factor"><code class="docutils literal notranslate"><span class="pre">stress_balance</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.sia</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.enhancement_factor</span></code></a>: values larger
 than one give flow “enhancement” by making the ice deform more easily in shear than is
-determined by the standard flow law <a class="reference internal" href="../../zzz_references_html.html#lliboutryduval1985" id="id3">[71]</a>, <a class="reference internal" href="../../zzz_references_html.html#patersonbudd" id="id4">[69]</a>;
+determined by the standard flow law <a class="bibtex reference internal" href="../../zzz_references_html.html#lliboutryduval1985" id="id3">[71]</a>, <a class="bibtex reference internal" href="../../zzz_references_html.html#patersonbudd" id="id4">[69]</a>;
 applied only in the SIA stress balance; see section <a class="reference internal" href="../modeling-choices/dynamics/rheology.html#sec-rheology"><span class="std std-ref">Ice rheology</span></a> for more on this
-parameter.</li>
+parameter.</p></li>
 </ul>
 <p>By varying these parameters over full intervals of values, say <span class="math notranslate nohighlight">\(0.1\le q \le 1.0\)</span>
 and <span class="math notranslate nohighlight">\(1 \le e \le 6\)</span>, we could explore a two-dimensional parameter space. But of
@@ -107,10 +107,10 @@ p10km_1.0_1.sh  p10km_1.0_3.sh  p10km_1.0_6.sh
 <p>The reader should inspect a few of these scripts. They are all very similar, of course,
 but, for instance, the <code class="docutils literal notranslate"><span class="pre">p10km_0.1_1.sh</span></code> script uses options <code class="docutils literal notranslate"><span class="pre">-pseudo_plastic_q</span> <span class="pre">0.1</span></code>
 and <code class="docutils literal notranslate"><span class="pre">-sia_e</span> <span class="pre">1</span></code>.</p>
-<div class="figure" id="fig-ivolparamstudy">
+<div class="figure align-default" id="fig-ivolparamstudy">
 <img alt="../../_images/ivol-param.png" src="../../_images/ivol-param.png" />
 <p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Time series of ice volume <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code> from nine runs in our parameter study
-example, with parameter choices <span class="math notranslate nohighlight">\((q,e)\)</span> given.</span></p>
+example, with parameter choices <span class="math notranslate nohighlight">\((q,e)\)</span> given.</span><a class="headerlink" href="#fig-ivolparamstudy" title="Permalink to this image">¶</a></p>
 </div>
 <p>We have not yet run PISM, but only asked one script to create nine others. We now have the
 option of running them sequentially or in parallel. Each script itself does a parallel
@@ -144,13 +144,13 @@ that even small changes in overall ice sheet state (geometry, energy, …) will 
 <em>some</em> location to exceed its yield stress and suddenly change flow regime. This will
 shorten the time steps. By contrast, the <span class="math notranslate nohighlight">\(e\)</span> value is much less significant in
 determining run times.</p>
-<div class="figure" id="fig-paramstudy">
+<div class="figure align-default" id="fig-paramstudy">
 <img alt="../../_images/p10km-comparison.png" src="../../_images/p10km-comparison.png" />
 <p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Surface speed <code class="docutils literal notranslate"><span class="pre">velsurf_mag</span></code> from a 10 km grid parameter study. Right-most subfigure
 is observed data from <code class="docutils literal notranslate"><span class="pre">Greenland_5km_v1.1.nc</span></code>. Top row: <span class="math notranslate nohighlight">\(q=0.1\)</span> and
 <span class="math notranslate nohighlight">\(e=1,3,6\)</span> (left-to-right). Middle row: <span class="math notranslate nohighlight">\(q=0.5\)</span>. Bottom row: <span class="math notranslate nohighlight">\(q=1.0\)</span>.
 All subfigures have common color scale (velocity m/year), as shown in the right-most
-figure, with 100 m/year contour shown in all cases (solid black).</span></p>
+figure, with 100 m/year contour shown in all cases (solid black).</span><a class="headerlink" href="#fig-paramstudy" title="Permalink to this image">¶</a></p>
 </div>
 <p>On a supercomputer, the <code class="docutils literal notranslate"><span class="pre">runparallel.sh</span></code> script generally should be modified to submit
 jobs to the scheduler. See example scripts <code class="docutils literal notranslate"><span class="pre">advanced/paramspawn.sh</span></code> and
@@ -174,24 +174,23 @@ nearly-plastic at top to linear at bottom.</p>
 <p>From such figures we can make an informal assessment and comparison of the results, but
 objective assessment is important. Example objective functionals include:</p>
 <ol class="arabic simple">
-<li>compute the integral of the square (or other power) of the difference between the model
-and observed surface velocity <a class="reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id5">[62]</a>, or</li>
-<li>compute the model-observed differences between the histogram of the number of cells
-with a given surface speed <a class="reference internal" href="../../zzz_references_html.html#bkajs" id="id6">[126]</a>.</li>
+<li><p>compute the integral of the square (or other power) of the difference between the model
+and observed surface velocity <a class="bibtex reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id5">[62]</a>, or</p></li>
+<li><p>compute the model-observed differences between the histogram of the number of cells
+with a given surface speed <a class="bibtex reference internal" href="../../zzz_references_html.html#bkajs" id="id6">[126]</a>.</p></li>
 </ol>
 <p>Note that these functionals are measuring the effects of changing a small number of
 parameters, namely two parameters in the current study. So-called “inversion” might use
 the same objective functionals but with a much larger parameter space. Inversion is
-therefore capable of achieving much smaller objective measures <a class="reference internal" href="../../zzz_references_html.html#habermannetal2013" id="id7">[63]</a>,
-<a class="reference internal" href="../../zzz_references_html.html#larouretal2012" id="id8">[127]</a>, <a class="reference internal" href="../../zzz_references_html.html#priceetal2011" id="id9">[128]</a>, though at the cost of less understanding,
+therefore capable of achieving much smaller objective measures <a class="bibtex reference internal" href="../../zzz_references_html.html#habermannetal2013" id="id7">[63]</a>,
+<a class="bibtex reference internal" href="../../zzz_references_html.html#larouretal2012" id="id8">[127]</a>, <a class="bibtex reference internal" href="../../zzz_references_html.html#priceetal2011" id="id9">[128]</a>, though at the cost of less understanding,
 perhaps, of the meaning of the optimal parameter values.</p>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id10" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>See <a class="reference internal" href="../parameters/index.html#sec-parameter-list"><span class="std std-ref">Configuration parameters</span></a> for the full list.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>See <a class="reference internal" href="../parameters/index.html#sec-parameter-list"><span class="std std-ref">Configuration parameters</span></a> for the full list.</p>
+</dd>
+</dl>
 </div>
 
 
@@ -265,25 +264,23 @@ perhaps, of the meaning of the optimal parameter values.</p>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

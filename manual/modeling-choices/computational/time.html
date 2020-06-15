@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model time &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Ice dynamics and thermodynamics" href="../dynamics/index.html" />
     <link rel="prev" title="Spatial grid" href="grid.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -40,27 +40,27 @@ it defaults to zero. The default value for the end year is the start year plus t
 (<code class="docutils literal notranslate"><span class="pre">-y</span></code>) run length. If both <code class="docutils literal notranslate"><span class="pre">-ys</span></code> and <code class="docutils literal notranslate"><span class="pre">-ye</span></code> are used then the run length is set to
 the difference. Using all three of <code class="docutils literal notranslate"><span class="pre">-ys</span></code>, <code class="docutils literal notranslate"><span class="pre">-y</span></code> and <code class="docutils literal notranslate"><span class="pre">-ys</span></code> is not allowed; this
 generates an error message.</p>
-<table border="1" class="colwidths-given docutils" id="tab-timeoptions">
+<table class="colwidths-given docutils align-default" id="tab-timeoptions">
 <caption><span class="caption-number">Table 7 </span><span class="caption-text">Command-line options controlling PISM time</span><a class="headerlink" href="#tab-timeoptions" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="20%" />
-<col width="80%" />
+<col style="width: 20%" />
+<col style="width: 80%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Option</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-y</span></code> (years)</td>
-<td>Number of model years to run.</td>
+<tbody>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-y</span></code> (years)</p></td>
+<td><p>Number of model years to run.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ys</span></code> (years)</td>
-<td>Model year at which to start the run. Also resets the model
-time, ignoring any time in the input file.</td>
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-ys</span></code> (years)</p></td>
+<td><p>Model year at which to start the run. Also resets the model
+time, ignoring any time in the input file.</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ye</span></code> (years)</td>
-<td>Model year at which to end the run.</td>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ye</span></code> (years)</p></td>
+<td><p>Model year at which to end the run.</p></td>
 </tr>
 </tbody>
 </table>
@@ -68,7 +68,7 @@ time, ignoring any time in the input file.</td>
 <span id="sec-calendars"></span><h2>Calendars<a class="headerlink" href="#calendars" title="Permalink to this headline">¶</a></h2>
 <p>Most of PISM, and its ice dynamics core in particular, only needs to know the length of
 the current time-step. Internally PISM stores time in “seconds since a specified moment”
-and thus PISM generally does not use or need a calendar. <a class="footnote-reference" href="#id3" id="id1">[1]</a> We refer to PISM internal
+and thus PISM generally does not use or need a calendar. <a class="footnote-reference brackets" href="#id3" id="id1">1</a> We refer to PISM internal
 time as <em>model time</em>.</p>
 <p>One can select a calendar for more precise control of the model time, however. A
 “calendar” is a concept that is part of the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a>. Choosing a calendar is
@@ -85,7 +85,7 @@ by the CF metadata conventions.</p>
 require precise application of forcing data or reporting on particular dates
 (paleo-climate runs, for example). In this mode PISM ignores the reference date in time
 unit specifications (such as “<code class="docutils literal notranslate"><span class="pre">days</span> <span class="pre">since</span> <span class="pre">1969-7-20</span></code>”), though the value set using
-<code class="config docutils literal notranslate"><span class="pre">time.reference_date</span></code> configuration parameter is saved in (is passed forward into)
+<a class="reference internal" href="../../parameters/index.html#config-time.reference_date"><code class="docutils literal notranslate"><span class="pre">time</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.reference_date</span></code></a> configuration parameter is saved in (is passed forward into)
 output files.</p>
 <p>The calendar setting also affects the year length. In particular, with the default choice
 of the calendar (<code class="docutils literal notranslate"><span class="pre">365_day</span></code>), <code class="docutils literal notranslate"><span class="pre">-y</span> <span class="pre">10</span></code> sets the run duration to</p>
@@ -93,61 +93,59 @@ of the calendar (<code class="docutils literal notranslate"><span class="pre">36
 \[10 \times 365 \times 24 \times 60 \times 60 = 315360000\]</div>
 <p>seconds, not <span class="math notranslate nohighlight">\(10 \times 365.25 \times 24 \times 60 \times 60\)</span> or similar.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This does <strong>not</strong> affect unit conversion: the factor used to convert <span class="math notranslate nohighlight">\(m/s\)</span> to
+<p class="admonition-title">Note</p>
+<p>This does <strong>not</strong> affect unit conversion: the factor used to convert <span class="math notranslate nohighlight">\(m/s\)</span> to
 <span class="math notranslate nohighlight">\(m/\text{year}\)</span> does not depend on the calendar choice.</p>
 </div>
-<table border="1" class="colwidths-given docutils" id="tab-calendars">
+<table class="colwidths-given docutils align-default" id="tab-calendars">
 <caption><span class="caption-number">Table 8 </span><span class="caption-text">Calendars supported by PISM. Please see <a class="reference external" href="http://meteora.ucsd.edu/~pierce/calcalcs/calendars.html">CalCalcs</a> documentation for
              details</span><a class="headerlink" href="#tab-calendars" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col style="width: 25%" />
+<col style="width: 75%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Keyword</th>
-<th class="head">Meaning</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Keyword</p></th>
+<th class="head"><p>Meaning</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gregorian</span></code> or <code class="docutils literal notranslate"><span class="pre">standard</span></code></td>
-<td>Mixed Gregorian/Julian calendar used today.</td>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gregorian</span></code> or <code class="docutils literal notranslate"><span class="pre">standard</span></code></p></td>
+<td><p>Mixed Gregorian/Julian calendar used today.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">proleptic_gregorian</span></code></td>
-<td>Gregorian calendar extended to dates before 1582-10-15.</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">proleptic_gregorian</span></code></p></td>
+<td><p>Gregorian calendar extended to dates before 1582-10-15.</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">noleap</span></code> or <code class="docutils literal notranslate"><span class="pre">365_day</span></code></td>
-<td>Calendar with fixed-length 365-day years</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">noleap</span></code> or <code class="docutils literal notranslate"><span class="pre">365_day</span></code></p></td>
+<td><p>Calendar with fixed-length 365-day years</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">360_day</span></code></td>
-<td>Calendar with fixed-length 360-day years divided into 30-day months</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">360_day</span></code></p></td>
+<td><p>Calendar with fixed-length 360-day years divided into 30-day months</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">julian</span></code></td>
-<td>Julian calendar</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">julian</span></code></p></td>
+<td><p>Julian calendar</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">none</span></code></td>
-<td>no calendar</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>no calendar</p></td>
 </tr>
 </tbody>
 </table>
 <p>Selecting a non-trivial (Gregorian, Proleptic Gregorian, or Julian) calendar using the
-<code class="config docutils literal notranslate"><span class="pre">time.calendar</span></code> configuration parameter or the <code class="option docutils literal notranslate"><span class="pre">-calendar</span></code> command-line
+<a class="reference internal" href="../../parameters/index.html#config-time.calendar"><code class="docutils literal notranslate"><span class="pre">time</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.calendar</span></code></a> configuration parameter or the <code class="option docutils literal notranslate"><span class="pre">-calendar</span></code> command-line
 option enables calendar-based time management; see <a class="reference internal" href="#tab-calendars"><span class="std std-numref">Table 8</span></a>. The
 implications of selecting such a calendar are:</p>
 <ul>
-<li><p class="first">PISM uses the <code class="docutils literal notranslate"><span class="pre">units</span></code> attribute of coordinate variables <em>literally</em> (including the
+<li><p>PISM uses the <code class="docutils literal notranslate"><span class="pre">units</span></code> attribute of coordinate variables <em>literally</em> (including the
 reference date) in unit conversions. Please make sure that the <code class="variable docutils literal notranslate"><span class="pre">time</span></code> variable in
 all forcing files has the units attribute such as “<code class="docutils literal notranslate"><span class="pre">days</span> <span class="pre">since</span> <span class="pre">2012-1-1</span></code>”. PISM will
 stop with an error message if a time variable does not have a reference date in its unit
-specification.</p>
-</li>
-<li><p class="first">It is important to use units that are a fixed multiple of “seconds”, such as “<code class="docutils literal notranslate"><span class="pre">minutes</span>
+specification.</p></li>
+<li><p>It is important to use units that are a fixed multiple of “seconds”, such as “<code class="docutils literal notranslate"><span class="pre">minutes</span>
 <span class="pre">since</span> <span class="pre">1989-1-1</span></code>” or “<code class="docutils literal notranslate"><span class="pre">days</span> <span class="pre">since</span> <span class="pre">1999-12-31</span></code>” and avoid “months” and “years”. (PISM
 uses UDUNITS-2 to convert units, and in UDUNITS one month is always interpreted as
 <span class="math notranslate nohighlight">\(\frac{1}{12}\cdot 365.242198781\)</span> days.) Please see the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a> document
-for details.</p>
-</li>
-<li><p class="first">PISM uses dates in standard output:</p>
+for details.</p></li>
+<li><p>PISM uses dates in standard output:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>...
    time interval (length)   [2012-01-01, 2021-12-31]  (10.000 years)
 ...
@@ -160,11 +158,9 @@ S 2012-07-01:  0.00014    0.6306   0.00000000           0.00000
 using <code class="option docutils literal notranslate"><span class="pre">-y</span></code>, <code class="option docutils literal notranslate"><span class="pre">-ys</span></code> and <code class="option docutils literal notranslate"><span class="pre">-ye</span></code> command-line options, respectively. Arguments
 of these options are interpreted in a slightly different manner, though:</p>
 </li>
-<li><p class="first">the run length option <code class="docutils literal notranslate"><span class="pre">-y</span></code> takes an <em>integer</em> argument, interpreted as the number of
-<em>calendar</em> years</p>
-</li>
-<li><p class="first">options <code class="docutils literal notranslate"><span class="pre">-ys</span></code> and <code class="docutils literal notranslate"><span class="pre">-ye</span></code> take <em>dates</em> as arguments.</p>
-</li>
+<li><p>the run length option <code class="docutils literal notranslate"><span class="pre">-y</span></code> takes an <em>integer</em> argument, interpreted as the number of
+<em>calendar</em> years</p></li>
+<li><p>options <code class="docutils literal notranslate"><span class="pre">-ys</span></code> and <code class="docutils literal notranslate"><span class="pre">-ye</span></code> take <em>dates</em> as arguments.</p></li>
 </ul>
 <p>For example, either of the following commands sets up a run covering the <span class="math notranslate nohighlight">\(21^{st}\)</span>
 century:</p>
@@ -228,7 +224,7 @@ step, but the run duration was chosen so as to avoid significant model state evo
 during the run.</p>
 <p>This diagnostic mode is often associated to the modeling of ice shelves and ice streams.
 section <a class="reference internal" href="../../validation/ross.html#sec-ross"><span class="std std-ref">An SSA flow model for the Ross Ice Shelf in Antarctica</span></a> describes using a short “diagnostic” run to model the Ross ice
-shelf <a class="reference internal" href="../../../zzz_references_html.html#macayealetal" id="id2">[64]</a>. Verification tests I and J, section <a class="reference internal" href="../../verification/index.html#sec-verif"><span class="std std-ref">Verification</span></a>, are
+shelf <a class="bibtex reference internal" href="../../../zzz_references_html.html#macayealetal" id="id2">[64]</a>. Verification tests I and J, section <a class="reference internal" href="../../verification/index.html#sec-verif"><span class="std std-ref">Verification</span></a>, are
 diagnostic calculations using the SSA.</p>
 <p>The NetCDF model state saved by PISM at the end of an <em>evolution</em> run (i.e. with “<code class="docutils literal notranslate"><span class="pre">-y</span>
 <span class="pre">Y</span></code>” for <span class="math notranslate nohighlight">\(Y&gt;0\)</span>) does not, under the default <code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">medium</span></code> output size, contain
@@ -238,12 +234,11 @@ supported diagnostic quantities at the end of a time-stepping run using the opti
 <code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">big</span></code>. Or one can go back and do a “<code class="docutils literal notranslate"><span class="pre">-y</span> <span class="pre">small_number</span></code>” diagnostic run using
 <code class="docutils literal notranslate"><span class="pre">-o_size</span> <span class="pre">big</span></code>.</p>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id3" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Note seconds are part of SI units.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Note seconds are part of SI units.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -317,25 +312,23 @@ supported diagnostic quantities at the end of a time-stepping run using the opti
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

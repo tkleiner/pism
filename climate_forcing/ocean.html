@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ocean model components &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Technical notes" href="../technical/index.html" />
     <link rel="prev" title="Atmosphere model components" href="atmosphere.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -41,177 +41,170 @@ conservation code. The sub-shelf mass flux is used as a source in the mass-conti
 (transport) equation. Positive flux corresponds to ice loss; in other words, this
 sub-shelf mass flux is a “melt rate”.</p>
 <div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#ocean-model-components" id="id14">Ocean model components</a><ul>
-<li><a class="reference internal" href="#constant-in-time-and-space" id="id15">Constant in time and space</a></li>
-<li><a class="reference internal" href="#reading-forcing-data-from-a-file" id="id16">Reading forcing data from a file</a></li>
-<li><a class="reference internal" href="#pik" id="id17">PIK</a></li>
-<li><a class="reference internal" href="#basal-melt-rate-and-temperature-from-thermodynamics-in-boundary-layer" id="id18">Basal melt rate and temperature from thermodynamics in boundary layer</a></li>
-<li><a class="reference internal" href="#pico" id="id19">PICO</a></li>
-<li><a class="reference internal" href="#scalar-sea-level-offsets" id="id20">Scalar sea level offsets</a></li>
-<li><a class="reference internal" href="#two-dimensional-sea-level-offsets" id="id21">Two-dimensional sea level offsets</a></li>
-<li><a class="reference internal" href="#scalar-sub-shelf-temperature-offsets" id="id22">Scalar sub-shelf temperature offsets</a></li>
-<li><a class="reference internal" href="#scalar-sub-shelf-mass-flux-offsets" id="id23">Scalar sub-shelf mass flux offsets</a></li>
-<li><a class="reference internal" href="#scalar-sub-shelf-mass-flux-fraction-offsets" id="id24">Scalar sub-shelf mass flux fraction offsets</a></li>
-<li><a class="reference internal" href="#two-dimensional-sub-shelf-mass-flux-offsets" id="id25">Two-dimensional sub-shelf mass flux offsets</a></li>
-<li><a class="reference internal" href="#scalar-melange-back-pressure-fraction" id="id26">Scalar melange back pressure fraction</a></li>
-<li><a class="reference internal" href="#the-caching-modifier" id="id27">The caching modifier</a></li>
+<li><p><a class="reference internal" href="#ocean-model-components" id="id14">Ocean model components</a></p>
+<ul>
+<li><p><a class="reference internal" href="#constant-in-time-and-space" id="id15">Constant in time and space</a></p></li>
+<li><p><a class="reference internal" href="#reading-forcing-data-from-a-file" id="id16">Reading forcing data from a file</a></p></li>
+<li><p><a class="reference internal" href="#pik" id="id17">PIK</a></p></li>
+<li><p><a class="reference internal" href="#basal-melt-rate-and-temperature-from-thermodynamics-in-boundary-layer" id="id18">Basal melt rate and temperature from thermodynamics in boundary layer</a></p></li>
+<li><p><a class="reference internal" href="#pico" id="id19">PICO</a></p></li>
+<li><p><a class="reference internal" href="#scalar-sea-level-offsets" id="id20">Scalar sea level offsets</a></p></li>
+<li><p><a class="reference internal" href="#two-dimensional-sea-level-offsets" id="id21">Two-dimensional sea level offsets</a></p></li>
+<li><p><a class="reference internal" href="#scalar-sub-shelf-temperature-offsets" id="id22">Scalar sub-shelf temperature offsets</a></p></li>
+<li><p><a class="reference internal" href="#scalar-sub-shelf-mass-flux-offsets" id="id23">Scalar sub-shelf mass flux offsets</a></p></li>
+<li><p><a class="reference internal" href="#scalar-sub-shelf-mass-flux-fraction-offsets" id="id24">Scalar sub-shelf mass flux fraction offsets</a></p></li>
+<li><p><a class="reference internal" href="#two-dimensional-sub-shelf-mass-flux-offsets" id="id25">Two-dimensional sub-shelf mass flux offsets</a></p></li>
+<li><p><a class="reference internal" href="#scalar-melange-back-pressure-fraction" id="id26">Scalar melange back pressure fraction</a></p></li>
+<li><p><a class="reference internal" href="#the-caching-modifier" id="id27">The caching modifier</a></p></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="constant-in-time-and-space">
 <span id="sec-ocean-constant"></span><h2><a class="toc-backref" href="#id15">Constant in time and space</a><a class="headerlink" href="#constant-in-time-and-space" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">constant</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body">none</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Constant</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">constant</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Constant</span></code></p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is the default choice.</p>
+<p class="admonition-title">Note</p>
+<p>This is the default choice.</p>
 </div>
 <p>This ocean model component implements boundary conditions at the ice/ocean interface that
 are constant <em>both</em> in space and time.</p>
 <p>The sub-shelf ice temperature is set to pressure melting and the sub-shelf melt rate is
 assumed to be proportional to the heat flux from the ocean into the ice (configuration
-parameter <code class="config docutils literal notranslate"><span class="pre">ocean.sub_shelf_heat_flux_into_ice</span></code>).</p>
+parameter <a class="reference internal" href="../manual/parameters/index.html#config-ocean.sub_shelf_heat_flux_into_ice"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.sub_shelf_heat_flux_into_ice</span></code></a>).</p>
 <p>Alternatively, the sub-shelf melt rate in meters per year can be set using the
 <code class="option docutils literal notranslate"><span class="pre">-shelf_base_melt_rate</span></code> command-line option.</p>
 </div>
 <div class="section" id="reading-forcing-data-from-a-file">
 <span id="sec-ocean-given"></span><h2><a class="toc-backref" href="#id16">Reading forcing data from a file</a><a class="headerlink" href="#reading-forcing-data-from-a-file" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">given</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">shelfbtemp</span></code> Kelvin,
-<code class="variable docutils literal notranslate"><span class="pre">shelfbmassflux</span></code>  <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Given</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">given</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">shelfbtemp</span></code> Kelvin,
+<code class="variable docutils literal notranslate"><span class="pre">shelfbmassflux</span></code>  <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Given</span></code></p>
+</dd>
+</dl>
 <p>This ocean model component reads sub-shelf ice temperature <code class="variable docutils literal notranslate"><span class="pre">shelfbtemp</span></code> and the
 sub-shelf mass flux <code class="variable docutils literal notranslate"><span class="pre">shelfbmassflux</span></code> from a file. It takes the following command-line
 options.</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_given_file</span></code>: sets the name of the file to read forcing data from. The file
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_given_file</span></code>: sets the name of the file to read forcing data from. The file
 may contain several records. If only one record is provided it is interpreted as
-time-independent.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_given_reference_year</span></code> specifies the reference date; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_given_period</span></code> specifies the length of the period of the forcing data, in
-model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+time-independent.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_given_reference_year</span></code> specifies the reference date; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_given_period</span></code> specifies the length of the period of the forcing data, in
+model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 <p>Variables <code class="variable docutils literal notranslate"><span class="pre">shelfbtemp</span></code> and <code class="variable docutils literal notranslate"><span class="pre">shelfbmassflux</span></code> may be time-dependent. (The <code class="docutils literal notranslate"><span class="pre">-ocean</span>
 <span class="pre">given</span></code> component is very similar to <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span></code> and <code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given</span></code>.)</p>
 </div>
 <div class="section" id="pik">
 <span id="sec-ocean-pik"></span><h2><a class="toc-backref" href="#id17">PIK</a><a class="headerlink" href="#pik" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">pik</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body">none</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::PIK</span></code></td>
-</tr>
-</tbody>
-</table>
-<p>This ocean model component implements the ocean forcing setup used in <a class="reference internal" href="../zzz_references_html.html#martinetal2011" id="id1">[3]</a>.
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">pik</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::PIK</span></code></p>
+</dd>
+</dl>
+<p>This ocean model component implements the ocean forcing setup used in <a class="bibtex reference internal" href="../zzz_references_html.html#martinetal2011" id="id1">[3]</a>.
 The sub-shelf ice temperature is set to pressure-melting; the sub-shelf mass flux
-computation follows <a class="reference internal" href="../zzz_references_html.html#beckmanngoosse2003" id="id2">[10]</a>.</p>
+computation follows <a class="bibtex reference internal" href="../zzz_references_html.html#beckmanngoosse2003" id="id2">[10]</a>.</p>
 <p>It takes one command-line option:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-meltfactor_pik</span></code>: a melt factor <span class="math notranslate nohighlight">\(F_{\mathrm{melt}}\)</span> in sub-shelf-melting
-parameterization, see equation (5) in <a class="reference internal" href="../zzz_references_html.html#martinetal2011" id="id3">[3]</a>.</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-meltfactor_pik</span></code>: a melt factor <span class="math notranslate nohighlight">\(F_{\mathrm{melt}}\)</span> in sub-shelf-melting
+parameterization, see equation (5) in <a class="bibtex reference internal" href="../zzz_references_html.html#martinetal2011" id="id3">[3]</a>.</p></li>
 </ul>
 </div>
 <div class="section" id="basal-melt-rate-and-temperature-from-thermodynamics-in-boundary-layer">
 <span id="sec-ocean-th"></span><h2><a class="toc-backref" href="#id18">Basal melt rate and temperature from thermodynamics in boundary layer</a><a class="headerlink" href="#basal-melt-rate-and-temperature-from-thermodynamics-in-boundary-layer" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">th</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code> (absolute potential ocean temperature), [Kelvin],
-<code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code> (salinity of the adjacent ocean), [g/kg]</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::GivenTH</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">th</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code> (absolute potential ocean temperature), [Kelvin],
+<code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code> (salinity of the adjacent ocean), [g/kg]</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::GivenTH</span></code></p>
+</dd>
+</dl>
 <p>This ocean model component derives basal melt rate and basal temperature from
 thermodynamics in a boundary layer at the base of the ice shelf. It uses a set of three
 equations describing</p>
 <ol class="arabic simple">
-<li>the energy flux balance,</li>
-<li>the salt flux balance,</li>
-<li>the pressure and salinity dependent freezing point in the boundary layer.</li>
+<li><p>the energy flux balance,</p></li>
+<li><p>the salt flux balance,</p></li>
+<li><p>the pressure and salinity dependent freezing point in the boundary layer.</p></li>
 </ol>
-<p>This model is described in <a class="reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id4">[11]</a> and <a class="reference internal" href="../zzz_references_html.html#hellmeretal1998" id="id5">[12]</a>.</p>
+<p>This model is described in <a class="bibtex reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id4">[11]</a> and <a class="bibtex reference internal" href="../zzz_references_html.html#hellmeretal1998" id="id5">[12]</a>.</p>
 <p>Inputs are potential temperature (variable <code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code>) and salinity (variable
 <code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>) read from a file. A constant salinity (see
-<code class="config docutils literal notranslate"><span class="pre">constants.sea_water.salinity</span></code>) is used if the input file does not contain
+<a class="reference internal" href="../manual/parameters/index.html#config-constants.sea_water.salinity"><code class="docutils literal notranslate"><span class="pre">constants</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.sea_water</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.salinity</span></code></a>) is used if the input file does not contain
 <code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>.</p>
 <p>No ocean circulation is modeled, so melt water computed by this model is not fed back into
 the surrounding ocean.</p>
 <p>This implementation uses different approximations of the temperature gradient at the base
 of an ice shelf column depending on whether there is sub-shelf melt, sub-shelf freeze-on,
-or neither (see <a class="reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id6">[11]</a> for details).</p>
+or neither (see <a class="bibtex reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id6">[11]</a> for details).</p>
 <p>It takes two command-line option:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_th_file</span></code>: specifies the NetCDF file providing potential temperature and
-salinity fields.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-clip_shelf_base_salinity</span></code>: if this is set (which is the default), the sub-shelf
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_th_file</span></code>: specifies the NetCDF file providing potential temperature and
+salinity fields.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-clip_shelf_base_salinity</span></code>: if this is set (which is the default), the sub-shelf
 salinity is clipped so that it stays in the <span class="math notranslate nohighlight">\([4, 40]\)</span> psu range. This is done to
 ensure that we stay in the range of applicability of the melting point temperature
-parameterization; see <a class="reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id7">[11]</a>. To disable salinity clipping, use the
+parameterization; see <a class="bibtex reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id7">[11]</a>. To disable salinity clipping, use the
 <code class="option docutils literal notranslate"><span class="pre">-no_clip_shelf_base_salinity</span></code> option or set the configuration parameter
-<code class="config docutils literal notranslate"><span class="pre">ocean.three_equation_model_clip_salinity</span></code>  to “no”.</li>
+<a class="reference internal" href="../manual/parameters/index.html#config-ocean.three_equation_model_clip_salinity"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.three_equation_model_clip_salinity</span></code></a>  to “no”.</p></li>
 </ul>
 <p>See <a class="reference internal" href="../technical/ocean-th.html#sec-ocean-th-details"><span class="std std-ref">Three-equation ocean model (implementation details)</span></a> for implementation details.</p>
 </div>
 <div class="section" id="pico">
 <span id="sec-pico"></span><h2><a class="toc-backref" href="#id19">PICO</a><a class="headerlink" href="#pico" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">pico</span></code></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><p class="first"><code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code> (potential ocean temperature), [Kelvin],</p>
+<dl class="field-list">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">pico</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code> (potential ocean temperature), [Kelvin],</p>
 <p><code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code> (salinity of the adjacent ocean), [g/kg],</p>
 <p><code class="variable docutils literal notranslate"><span class="pre">basins</span></code> (mask of large-scale ocean basins that ocean input is averaged over), [integer]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Pico</span></code></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Pico</span></code></p>
+</dd>
+</dl>
 <p>The PICO model provides sub-shelf melt rates and temperatures consistent with the vertical
 overturning circulation in ice shelf cavities that drives the exchange with open ocean
-water masses. It is based on the ocean box model of <a class="reference internal" href="../zzz_references_html.html#olbershellmer2010" id="id8">[13]</a> and includes
+water masses. It is based on the ocean box model of <a class="bibtex reference internal" href="../zzz_references_html.html#olbershellmer2010" id="id8">[13]</a> and includes
 a geometric approach which makes it applicable to ice shelves that evolve in two
 horizontal dimensions. For each ice shelf, PICO solves the box model equations describing
 the transport between coarse ocean boxes. It applies a boundary layer melt formulation
-<a class="reference internal" href="../zzz_references_html.html#hellmerolbers1989" id="id9">[14]</a>, <a class="reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id10">[11]</a>. The overturning circulation is
-driven by the ice-pump <a class="reference internal" href="../zzz_references_html.html#lewisperkin1986" id="id11">[15]</a>: melting at the ice-shelf base reduces the
+<a class="bibtex reference internal" href="../zzz_references_html.html#hellmerolbers1989" id="id9">[14]</a>, <a class="bibtex reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id10">[11]</a>. The overturning circulation is
+driven by the ice-pump <a class="bibtex reference internal" href="../zzz_references_html.html#lewisperkin1986" id="id11">[15]</a>: melting at the ice-shelf base reduces the
 density of ambient water masses. Buoyant water rising along the shelf base draws in ocean
 water at depth, which flows across the continental shelf towards the deep grounding lines.
 The model captures this circulation by defining consecutive boxes following the flow
@@ -221,17 +214,17 @@ calving fronts. Open ocean properties in front of the shelf as well as the geome
 shelf determine basal melt rate and basal temperature at each grid point.</p>
 <p>The main equations reflect the</p>
 <ol class="arabic simple">
-<li>heat and salt balance for each ocean box in contact with the ice shelf base,</li>
-<li>overturning flux driven by the density difference between open-ocean and grounding-line box,</li>
-<li>boundary layer melt formulation.</li>
+<li><p>heat and salt balance for each ocean box in contact with the ice shelf base,</p></li>
+<li><p>overturning flux driven by the density difference between open-ocean and grounding-line box,</p></li>
+<li><p>boundary layer melt formulation.</p></li>
 </ol>
-<p>The PICO model is described in detail in <a class="reference internal" href="../zzz_references_html.html#reesealbrecht2018" id="id12">[16]</a>.</p>
+<p>The PICO model is described in detail in <a class="bibtex reference internal" href="../zzz_references_html.html#reesealbrecht2018" id="id12">[16]</a>.</p>
 <p>Inputs are potential temperature (variable <code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code>), salinity (variable
 <code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>) and ocean basin mask (variable <code class="variable docutils literal notranslate"><span class="pre">basins</span></code>). Variables
 <code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code> and <code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code> may be time-dependent.</p>
 <p>Forcing ocean temperature and salinity are taken from the water masses that occupy the sea
 floor in front of the ice shelves, which extends down to a specified continental shelf
-depth (see <code class="config docutils literal notranslate"><span class="pre">ocean.pico.continental_shelf_depth</span></code>). These water masses are
+depth (see <a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.continental_shelf_depth"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.pico</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.continental_shelf_depth</span></code></a>). These water masses are
 transported by the overturning circulation into the ice shelf cavity and towards the
 grounding line. The basin mask defines regions of similar, large-scale ocean conditions;
 each region is marked with a distinct positive integer. In PICO, ocean input temperature
@@ -240,184 +233,166 @@ the input values of the overturning circulation are calculated as an area-weight
 over all basins that intersect the ice shelf. If ocean input parameters cannot be
 identified, standard values are used (<strong>Warning:</strong> this could strongly influence melt
 rates computed by PICO). In regions where the PICO geometry cannot be identified,
-<a class="reference internal" href="../zzz_references_html.html#beckmanngoosse2003" id="id13">[10]</a> is applied.</p>
-<p>PICO has one command-line option and 7 configuration parameters:</p>
-<ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_pico_file</span></code>: specifies the NetCDF file containing potential temperature
-(<code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code>), salinity (<code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>) and ocean basins (<code class="variable docutils literal notranslate"><span class="pre">basins</span></code>).</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.pico.heat_exchange_coefficent</span></code> sets the coefficient for turbulent heat
-exchange from the ambient ocean across the boundary layer beneath the ice shelf base.</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.pico.overturning_coefficent</span></code>: sets the coefficient in the overturning
-parameterization.</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.pico.number_of_boxes</span></code>: For each ice shelf the number of ocean boxes is
-determined by interpolating between 1 and number_of_boxes depending on its size and
-geometry such that larger ice shelves are resolved with more boxes; a value of 5 is
-suitable for the Antarctic setup.</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.pico.number_of_basins</span></code></li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.pico.exclude_ice_rises</span></code>: If set to true, grounding lines of ice rises are
-excluded in the geometrical routines that determine the ocean boxes; using this option
-is recommended.</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.pico.continental_shelf_depth</span></code>: specifies the depth up to which oceanic
-input temperatures and salinities are averaged over the continental shelf areas in front
-of the ice shelf cavities.</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.pico.maximum_ice_rise_area</span></code>: specifies an area threshold that separates
-ice rises from continental regions.</li>
-</ul>
+<a class="bibtex reference internal" href="../zzz_references_html.html#beckmanngoosse2003" id="id13">[10]</a> is applied.</p>
+<p>PICO uses the following configuration parameters (prefix: <code class="docutils literal notranslate"><span class="pre">ocean.pico.</span></code>):</p>
+<ol class="simple">
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.continental_shelf_depth"><code class="docutils literal notranslate"><span class="pre">continental_shelf_depth</span></code></a> (-800<em> meters</em>) Specifies the depth up to which oceanic input temperatures and salinities are averaged over the continental shelf areas in front of the ice shelf cavities.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.exclude_ice_rises"><code class="docutils literal notranslate"><span class="pre">exclude_ice_rises</span></code></a> (yes) If set to true, grounding lines of ice rises are excluded in the geometrical routines that determine the ocean boxes; using this option is recommended.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.file"><code class="docutils literal notranslate"><span class="pre">file</span></code></a> Specifies the NetCDF file containing potential temperature (<code class="variable docutils literal notranslate"><span class="pre">theta_ocean</span></code>), salinity (<code class="variable docutils literal notranslate"><span class="pre">salinity_ocean</span></code>) and ocean basins (<code class="variable docutils literal notranslate"><span class="pre">basins</span></code>).</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.heat_exchange_coefficent"><code class="docutils literal notranslate"><span class="pre">heat_exchange_coefficent</span></code></a> (2e-05<em> meters second-1</em>) Sets the coefficient for turbulent heat exchange from the ambient ocean across the boundary layer beneath the ice shelf base.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.maximum_ice_rise_area"><code class="docutils literal notranslate"><span class="pre">maximum_ice_rise_area</span></code></a> (100000<em> km2</em>) Specifies an area threshold that separates ice rises from continental regions.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.number_of_boxes"><code class="docutils literal notranslate"><span class="pre">number_of_boxes</span></code></a> (5) For each ice shelf the number of ocean boxes is determined by interpolating between 1 and number_of_boxes depending on its size and geometry such that larger ice shelves are resolved with more boxes; a value of 5 is suitable for the Antarctic setup.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.overturning_coefficent"><code class="docutils literal notranslate"><span class="pre">overturning_coefficent</span></code></a> (1e+06<em> meters6 seconds-1 kg-1</em>) Sets the overturning strength coefficient.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.period"><code class="docutils literal notranslate"><span class="pre">period</span></code></a> (0<em> years</em>) Length of the period of the climate forcing data. Set to zero to disable.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.reference_year"><code class="docutils literal notranslate"><span class="pre">reference_year</span></code></a> (0<em> years</em>) Reference year to use when <a class="reference internal" href="../manual/parameters/index.html#config-ocean.pico.period"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.pico</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.period</span></code></a> is active.</p></li>
+</ol>
 </div>
 <div class="section" id="scalar-sea-level-offsets">
 <span id="sec-ocean-delta-sl"></span><h2><a class="toc-backref" href="#id20">Scalar sea level offsets</a><a class="headerlink" href="#scalar-sea-level-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-sea_level</span> <span class="pre">...,delta_sl</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code> (meters)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::sea_level::Delta_SL</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-sea_level</span> <span class="pre">...,delta_sl</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code> (meters)</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::sea_level::Delta_SL</span></code></p>
+</dd>
+</dl>
 <p>The <code class="docutils literal notranslate"><span class="pre">delta_sl</span></code> modifier implements sea level forcing using scalar offsets.</p>
 <p>It takes the following command-line options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_sl_file</span></code>: specifies the name of the file containing forcing data.
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_sl_file</span></code>: specifies the name of the file containing forcing data.
 This file has to contain the <code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code> variable using units “meters” or
-equivalent.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_sl_period</span></code> specifies the length of the period of the forcing data, in
-model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_sl_reference_year</span></code> specifies the reference date; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+equivalent.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_sl_period</span></code> specifies the length of the period of the forcing data, in
+model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_sl_reference_year</span></code> specifies the reference date; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="two-dimensional-sea-level-offsets">
 <span id="sec-ocean-delta-sl-2d"></span><h2><a class="toc-backref" href="#id21">Two-dimensional sea level offsets</a><a class="headerlink" href="#two-dimensional-sea-level-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-sea_level</span> <span class="pre">...,delta_sl_2d</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code> (meters)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::sea_level::Delta_SL_2D</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-sea_level</span> <span class="pre">...,delta_sl_2d</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code> (meters)</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::sea_level::Delta_SL_2D</span></code></p>
+</dd>
+</dl>
 <p>The <code class="docutils literal notranslate"><span class="pre">delta_sl</span></code> modifier implements sea level forcing using time-dependent and
 spatially-variable offsets.</p>
 <p>It uses the following configuration parameters:</p>
 <ul class="simple">
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.delta_sl_2d.file</span></code>: specifies the name of the file containing forcing
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.delta_sl_2d.file"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.delta_sl_2d</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.file</span></code></a>: specifies the name of the file containing forcing
 data. This file has to contain the <code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code> variable using units “meters” or
-equivalent.</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.delta_sl_2d.period</span></code> specifies the length of the period of the forcing
-data, in model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="config docutils literal notranslate"><span class="pre">ocean.delta_sl_2d.reference_year</span></code> specifies the reference date; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+equivalent.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.delta_sl_2d.period"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.delta_sl_2d</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.period</span></code></a> specifies the length of the period of the forcing
+data, in model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-ocean.delta_sl_2d.reference_year"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.delta_sl_2d</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.reference_year</span></code></a> specifies the reference date; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="scalar-sub-shelf-temperature-offsets">
 <span id="sec-ocean-delta-t"></span><h2><a class="toc-backref" href="#id22">Scalar sub-shelf temperature offsets</a><a class="headerlink" href="#scalar-sub-shelf-temperature-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,delta_T</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> (Kelvin)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Delta_T</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,delta_T</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> (Kelvin)</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Delta_T</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements forcing using sub-shelf ice temperature offsets.</p>
 <p>It takes the following command-line options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_T_file</span></code>: specifies the name of the file containing forcing data. This
-file has to contain the <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> variable using units of “Kelvin” or equivalent.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_T_period</span></code> specifies the length of the period of the forcing data, in
-model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_T_reference_year</span></code> specifies the reference date; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_T_file</span></code>: specifies the name of the file containing forcing data. This
+file has to contain the <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> variable using units of “Kelvin” or equivalent.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_T_period</span></code> specifies the length of the period of the forcing data, in
+model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_T_reference_year</span></code> specifies the reference date; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="scalar-sub-shelf-mass-flux-offsets">
 <span id="sec-ocean-delta-smb"></span><h2><a class="toc-backref" href="#id23">Scalar sub-shelf mass flux offsets</a><a class="headerlink" href="#scalar-sub-shelf-mass-flux-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,delta_SMB</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_SMB</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Delta_SMB</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,delta_SMB</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">delta_SMB</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Delta_SMB</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements forcing using sub-shelf mass flux (melt rate) offsets.</p>
 <p>It takes the following command-line options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_SMB_file</span></code>: specifies the name of the file containing forcing data.
-This file has to contain the <code class="variable docutils literal notranslate"><span class="pre">delta_SMB</span></code> variable using units <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span> or equivalent.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_SMB_period</span></code> specifies the length of the period of the forcing data,
-in model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_SMB_reference_year</span></code> specifies the reference date; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_SMB_file</span></code>: specifies the name of the file containing forcing data.
+This file has to contain the <code class="variable docutils literal notranslate"><span class="pre">delta_SMB</span></code> variable using units <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span> or equivalent.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_SMB_period</span></code> specifies the length of the period of the forcing data,
+in model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_delta_SMB_reference_year</span></code> specifies the reference date; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="scalar-sub-shelf-mass-flux-fraction-offsets">
 <span id="sec-ocean-frac-smb"></span><h2><a class="toc-backref" href="#id24">Scalar sub-shelf mass flux fraction offsets</a><a class="headerlink" href="#scalar-sub-shelf-mass-flux-fraction-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,frac_SMB</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">frac_SMB</span></code> [1]</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Frac_SMB</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,frac_SMB</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">frac_SMB</span></code> [1]</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Frac_SMB</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements forcing using sub-shelf mass flux (melt rate) fraction offsets.</p>
 <p>It takes the following command-line options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_SMB_file</span></code>: specifies the name of the file containing forcing data.
-This file has to contain the <code class="variable docutils literal notranslate"><span class="pre">frac_SMB</span></code> variable.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_SMB_period</span></code> specifies the length of the period of the forcing data, in
-model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_SMB_reference_year</span></code> specifies the reference date; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_SMB_file</span></code>: specifies the name of the file containing forcing data.
+This file has to contain the <code class="variable docutils literal notranslate"><span class="pre">frac_SMB</span></code> variable.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_SMB_period</span></code> specifies the length of the period of the forcing data, in
+model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_SMB_reference_year</span></code> specifies the reference date; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="two-dimensional-sub-shelf-mass-flux-offsets">
 <span id="sec-ocean-anomaly"></span><h2><a class="toc-backref" href="#id25">Two-dimensional sub-shelf mass flux offsets</a><a class="headerlink" href="#two-dimensional-sub-shelf-mass-flux-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,anomaly</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">shelf_base_mass_flux_anomaly</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Anomaly</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,anomaly</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">shelf_base_mass_flux_anomaly</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Anomaly</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements a spatially-variable version of <code class="docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,delta_SMB</span></code> which
 applies time-dependent shelf base mass flux anomalies, as used for initMIP or LARMIP
 model intercomparisons.</p>
 <p>It takes the following command-line options:</p>
 <ul>
-<li><p class="first"><code class="option docutils literal notranslate"><span class="pre">-ocean_anomaly_file</span></code> specifies a file containing the variable
-<code class="variable docutils literal notranslate"><span class="pre">shelf_base_mass_flux_anomaly</span></code>.</p>
-</li>
-<li><p class="first"><code class="option docutils literal notranslate"><span class="pre">-ocean_anomaly_period</span></code> (years) specifies the period of the forcing data, in
-model years; see <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a></p>
-</li>
-<li><p class="first"><code class="option docutils literal notranslate"><span class="pre">-ocean_anomaly_reference_year</span></code> specifies the reference year; see
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_anomaly_file</span></code> specifies a file containing the variable
+<code class="variable docutils literal notranslate"><span class="pre">shelf_base_mass_flux_anomaly</span></code>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_anomaly_period</span></code> (years) specifies the period of the forcing data, in
+model years; see <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a></p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_anomaly_reference_year</span></code> specifies the reference year; see
 <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a></p>
 <p>See also to <code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,anomaly</span></code> or
 <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,anomaly</span></code> (section <a class="reference internal" href="surface.html#sec-surface-anomaly"><span class="std std-ref">Using climate data anomalies</span></a>)
@@ -428,18 +403,17 @@ respectively.</p>
 </div>
 <div class="section" id="scalar-melange-back-pressure-fraction">
 <span id="sec-ocean-frac-mbp"></span><h2><a class="toc-backref" href="#id26">Scalar melange back pressure fraction</a><a class="headerlink" href="#scalar-melange-back-pressure-fraction" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,frac_MBP</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">frac_MBP</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Frac_MBP</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,frac_MBP</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">frac_MBP</span></code></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Frac_MBP</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements forcing using melange back pressure fraction (scaling). The
 scalar time-dependent variable <code class="variable docutils literal notranslate"><span class="pre">frac_MBP</span></code> should take on values from 0 to 1; it is
 understood as the fraction of the maximum melange back pressure possible at a given
@@ -447,37 +421,36 @@ location. (We assume that melange back pressure cannot exceed the pressure of th
 column at a calving front.)</p>
 <p>Please see <a class="reference internal" href="../manual/modeling-choices/marine/melange.html#sec-model-melange-pressure"><span class="std std-ref">Modeling melange back-pressure</span></a> for details.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>This modifier <em>scales</em> the melange back pressure fraction provided by an ocean model.
-The default value of <code class="config docutils literal notranslate"><span class="pre">ocean.melange_back_pressure_fraction</span></code> is zero and
+The default value of <a class="reference internal" href="../manual/parameters/index.html#config-ocean.melange_back_pressure_fraction"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.melange_back_pressure_fraction</span></code></a> is zero and
 <em>scaling it does nothing</em>.</p>
-<p class="last">We recommend setting <code class="config docutils literal notranslate"><span class="pre">ocean.melange_back_pressure_fraction</span></code> to 1.</p>
+<p>We recommend setting <a class="reference internal" href="../manual/parameters/index.html#config-ocean.melange_back_pressure_fraction"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.melange_back_pressure_fraction</span></code></a> to 1.</p>
 </div>
 <p>This modifier takes the following command-line options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_MBP_file</span></code>: specifies the name of the file containing forcing data.
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_MBP_file</span></code>: specifies the name of the file containing forcing data.
 This file has to contain the <code class="variable docutils literal notranslate"><span class="pre">frac_MBP</span></code> variable using units of “1” (a
-dimensionless parameter)</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_MBP_period</span></code> specifies the length of the period of the forcing data, in
-model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_MBP_reference_year</span></code> specifies the reference date; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+dimensionless parameter)</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_MBP_period</span></code> specifies the length of the period of the forcing data, in
+model years; see section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_frac_MBP_reference_year</span></code> specifies the reference date; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="the-caching-modifier">
 <span id="sec-ocean-cache"></span><h2><a class="toc-backref" href="#id27">The caching modifier</a><a class="headerlink" href="#the-caching-modifier" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,cache</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::ocean::Cache</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="surface.html#sec-surface-cache"><span class="std std-ref">The caching modifier</span></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-ocean</span> <span class="pre">...,cache</span></code></p>
+</dd>
+<dt class="field-even">C++ class</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">pism::ocean::Cache</span></code></p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p><a class="reference internal" href="surface.html#sec-surface-cache"><span class="std std-ref">The caching modifier</span></a></p>
+</dd>
+</dl>
 <p>This modifier skips ocean model updates, so that a ocean model is called no more than
 every <code class="option docutils literal notranslate"><span class="pre">-ocean_cache_update_interval</span></code> years. A time-step of <span class="math notranslate nohighlight">\(1\)</span> year is used every
 time a ocean model is updated.</p>
@@ -485,8 +458,8 @@ time a ocean model is updated.</p>
 differs little from the next. (Coarse-grid paleo-climate runs, for example.)</p>
 <p>It takes the following options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-ocean_cache_update_interval</span></code> (<em>years</em>) Specifies the minimum interval between
-updates. PISM may take longer time-steps if the adaptive scheme allows it, though.</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-ocean_cache_update_interval</span></code> (<em>years</em>) Specifies the minimum interval between
+updates. PISM may take longer time-steps if the adaptive scheme allows it, though.</p></li>
 </ul>
 </div>
 </div>
@@ -562,25 +535,23 @@ updates. PISM may take longer time-steps if the adaptive scheme allows it, thoug
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

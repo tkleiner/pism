@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bootstrapping &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Modeling choices" href="../modeling-choices/index.html" />
     <link rel="prev" title="Initialization from a saved model state" href="restarting.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -48,19 +48,19 @@ practice.</p>
 <p>Ice sheet models often need to do something like this to get “reasonable” initial fields
 within the ice:</p>
 <ol class="arabic simple">
-<li>start only with (potentially) observable quantities like surface elevation, ice
-thickness, ice surface temperature, surface mass balance, and geothermal flux,</li>
-<li>“bootstrap” as defined here, using heuristics to fill in temperatures at depth and to
+<li><p>start only with (potentially) observable quantities like surface elevation, ice
+thickness, ice surface temperature, surface mass balance, and geothermal flux,</p></li>
+<li><p>“bootstrap” as defined here, using heuristics to fill in temperatures at depth and to
 give a preliminary estimate of the basal sliding condition and the three-dimensional
-velocity field, and</li>
-<li><ol class="first arabic">
-<li><em>either</em> do a long run, often holding the current geometry and surface conditions
+velocity field, and</p></li>
+<li><ol class="arabic simple">
+<li><p><em>either</em> do a long run, often holding the current geometry and surface conditions
 steady, to evolve toward a steady state which has compatible temperature, stress,
-and velocity fields,</li>
-<li><em>or</em> do a long run using an additional (typically spatially-imprecise) historical
+and velocity fields,</p></li>
+<li><p><em>or</em> do a long run using an additional (typically spatially-imprecise) historical
 record from an ice core or a sea bed core (or both), to apply forcing to the surface
 temperature or sea level (for instance), but with the same functional result of
-filling in temperature, stress, and velocity fields.</li>
+filling in temperature, stress, and velocity fields.</p></li>
 </ol>
 </li>
 </ol>
@@ -92,19 +92,15 @@ thickness, surface temperature, and geothermal flux.</p>
 <span id="sec-bootstrapping-format"></span><h2><code class="docutils literal notranslate"><span class="pre">-bootstrap</span></code> file format<a class="headerlink" href="#bootstrap-file-format" title="Permalink to this headline">¶</a></h2>
 <p>Allowed formats for a bootstrapping file are relatively simple to describe.</p>
 <ol class="arabic">
-<li><p class="first">NetCDF variables should have the <code class="docutils literal notranslate"><span class="pre">units</span></code> containing a <a class="reference external" href="https://www.unidata.ucar.edu/software/udunits/">UDUNITS</a>-compatible string. If
-this attribute is missing, PISM will assume that a field uses MKS units.<a class="footnote-reference" href="#id2" id="id1">[1]</a></p>
-</li>
-<li><p class="first">NetCDF coordinate variables should have <code class="docutils literal notranslate"><span class="pre">standard_name</span></code> or <code class="docutils literal notranslate"><span class="pre">axis</span></code> attributes. These
+<li><p>NetCDF variables should have the <code class="docutils literal notranslate"><span class="pre">units</span></code> containing a <a class="reference external" href="https://www.unidata.ucar.edu/software/udunits/">UDUNITS</a>-compatible string. If
+this attribute is missing, PISM will assume that a field uses MKS units.<a class="footnote-reference brackets" href="#id2" id="id1">1</a></p></li>
+<li><p>NetCDF coordinate variables should have <code class="docutils literal notranslate"><span class="pre">standard_name</span></code> or <code class="docutils literal notranslate"><span class="pre">axis</span></code> attributes. These
 are used to determine which <em>spatial</em> dimension a NetCDF dimension corresponds to; for
 example see <code class="docutils literal notranslate"><span class="pre">ncdump</span> <span class="pre">-h</span></code> output from a file produced by PISM. The <code class="variable docutils literal notranslate"><span class="pre">x</span></code> and
-<code class="variable docutils literal notranslate"><span class="pre">y</span></code> dimensions need not be called “<code class="variable docutils literal notranslate"><span class="pre">x</span></code>” and “<code class="variable docutils literal notranslate"><span class="pre">y</span></code>”.</p>
-</li>
-<li><p class="first">Coordinate variables have to be strictly-increasing.</p>
-</li>
-<li><p class="first">Three-dimensional variables will be ignored in bootstrapping.</p>
-</li>
-<li><p class="first">The <code class="docutils literal notranslate"><span class="pre">standard_name</span></code> attribute is used, when available, to identify a variable, so
+<code class="variable docutils literal notranslate"><span class="pre">y</span></code> dimensions need not be called “<code class="variable docutils literal notranslate"><span class="pre">x</span></code>” and “<code class="variable docutils literal notranslate"><span class="pre">y</span></code>”.</p></li>
+<li><p>Coordinate variables have to be strictly-increasing.</p></li>
+<li><p>Three-dimensional variables will be ignored in bootstrapping.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">standard_name</span></code> attribute is used, when available, to identify a variable, so
 variable names need not match corresponding variables in a PISM output file. See the
 <a class="reference internal" href="../../technical/cf-standard-names.html#sec-cf-standard-names"><span class="std std-ref">CF standard names used by PISM</span></a> for a list of CF standard names used in
 PISM.</p>
@@ -112,23 +108,20 @@ PISM.</p>
 <code class="docutils literal notranslate"><span class="pre">bedrock_altitude</span></code> and the ice thickness by <code class="docutils literal notranslate"><span class="pre">standard_name</span></code> =
 <code class="docutils literal notranslate"><span class="pre">land_ice_thickness</span></code>.</p>
 </li>
-<li><p class="first">Any two-dimensional variable except bed topography and ice thickness may be missing.
+<li><p>Any two-dimensional variable except bed topography and ice thickness may be missing.
 For missing variables some heuristic will be applied. See <a class="reference internal" href="../highlevelview/model-hierarchy.html#tab-modelhierarchy"><span class="std std-numref">Table 4</span></a>
 for a sketch of the data necessary for bootstrapping; see <code class="docutils literal notranslate"><span class="pre">src/base/iMbootstrap.cc</span></code>
-for all further details.</p>
-</li>
-<li><p class="first">Surface elevation is ignored if present. Users with surface elevation and bed elevation
+for all further details.</p></li>
+<li><p>Surface elevation is ignored if present. Users with surface elevation and bed elevation
 data should compute the ice thickness variable, put it in the bootstrapping file, and
-set its <code class="docutils literal notranslate"><span class="pre">standard_name</span></code> to <code class="docutils literal notranslate"><span class="pre">land_ice_thickness</span></code>.</p>
-</li>
+set its <code class="docutils literal notranslate"><span class="pre">standard_name</span></code> to <code class="docutils literal notranslate"><span class="pre">land_ice_thickness</span></code>.</p></li>
 </ol>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>PISM automatically converts data present in an input file to MKS. This means that
-having ice thickness in feet or temperature in Fahrenheit <em>is</em> allowed.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>PISM automatically converts data present in an input file to MKS. This means that
+having ice thickness in feet or temperature in Fahrenheit <em>is</em> allowed.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -197,25 +190,23 @@ having ice thickness in feet or temperature in Fahrenheit <em>is</em> allowed.</
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

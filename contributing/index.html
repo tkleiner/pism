@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contributing to PISM &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Submitting bug reports" href="bug-reporting.html" />
     <link rel="prev" title="Three-equation ocean model (implementation details)" href="../technical/ocean-th.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -35,36 +35,34 @@
   <div class="section" id="contributing-to-pism">
 <span id="sec-contributing"></span><h1>Contributing to PISM<a class="headerlink" href="#contributing-to-pism" title="Permalink to this headline">¶</a></h1>
 <p>Bug reports, contributions of code, documentation, and tests are always appreciated.</p>
-<p>You will need a <a class="reference external" href="https://github.com/">GitHub</a> account and some familiarity with <a class="reference external" href="https://git-scm.com/">Git</a><a class="footnote-reference" href="#id2" id="id1">[1]</a>.</p>
+<p>You will need a <a class="reference external" href="https://github.com/">GitHub</a> account and some familiarity with <a class="reference external" href="https://git-scm.com/">Git</a><a class="footnote-reference brackets" href="#id2" id="id1">1</a>.</p>
 <p>Please see <a class="reference internal" href="bug-reporting.html#sec-bug-reports"><span class="std std-ref">Submitting bug reports</span></a> for bug reporting guidelines.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">By submitting code, the contributor gives irretrievable consent to the redistribution
+<p class="admonition-title">Note</p>
+<p>By submitting code, the contributor gives irretrievable consent to the redistribution
 and modification of the contributed source code as described in the PISM’s open source
 license.</p>
 </div>
 <p>Contributions are preferred via pull requests to <a class="reference external" href="https://github.com/pism/pism">https://github.com/pism/pism</a>.</p>
 <ol class="arabic">
-<li><p class="first"><a class="reference external" href="https://help.github.com/en/articles/fork-a-repo">Fork PISM’s repository.</a></p>
-</li>
-<li><p class="first">Create a branch that will contain your changes.</p>
-</li>
-<li><p class="first">Implement proposed changes.</p>
+<li><p><a class="reference external" href="https://help.github.com/en/articles/fork-a-repo">Fork PISM’s repository.</a></p></li>
+<li><p>Create a branch that will contain your changes.</p></li>
+<li><p>Implement proposed changes.</p>
 <ol class="loweralpha simple">
-<li>Make changes to the code or documentation (or both).</li>
-<li>Test your changes.</li>
-<li>Add verification or regression tests (optional but <strong>strongly encouraged</strong>).</li>
-<li>Update documentation, if necessary.</li>
-<li>Update the change log <code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code>. If your contribution contains a bug fix,
-please describe the bug and its effects.</li>
+<li><p>Make changes to the code or documentation (or both).</p></li>
+<li><p>Test your changes.</p></li>
+<li><p>Add verification or regression tests (optional but <strong>strongly encouraged</strong>).</p></li>
+<li><p>Update documentation, if necessary.</p></li>
+<li><p>Update the change log <code class="docutils literal notranslate"><span class="pre">CHANGES.rst</span></code>. If your contribution contains a bug fix,
+please describe the bug and its effects.</p></li>
 </ol>
 </li>
-<li><p class="first"><a class="reference external" href="https://help.github.com/en/articles/creating-a-pull-request">Create a pull request</a> and make sure to <a class="reference external" href="https://help.github.com/en/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork">allow
+<li><p><a class="reference external" href="https://help.github.com/en/articles/creating-a-pull-request">Create a pull request</a> and make sure to <a class="reference external" href="https://help.github.com/en/articles/allowing-changes-to-a-pull-request-branch-created-from-a-fork">allow
 edits from maintainers.</a></p>
 <p>Every time you push your code to <a class="reference external" href="https://github.com/">GitHub</a> <a class="reference external" href="https://circleci.com/">CircleCI</a> will</p>
 <ul class="simple">
-<li>build it with pedantic compiler settings, treating all compiler warnings as errors</li>
-<li>run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> in the build directory.</li>
+<li><p>build it with pedantic compiler settings, treating all compiler warnings as errors</p></li>
+<li><p>run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> in the build directory.</p></li>
 </ul>
 <p>Please make sure all tests pass (you will get an e-mail if there was a failure).</p>
 </li>
@@ -79,8 +77,8 @@ repository containing your code. We realize that your group’s policy may make 
 impossible to put the code in a public repository. However, it is very easy to set up a
 private repository instead.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Working in isolation will lead to a waste of many person-hours of effort once your work
+<p class="admonition-title">Warning</p>
+<p>Working in isolation will lead to a waste of many person-hours of effort once your work
 is ready to be merged into PISM.</p>
 </div>
 <p>See sections listed below for various technical details.</p>
@@ -96,13 +94,12 @@ is ready to be merged into PISM.</p>
 </ul>
 </div>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Please see <a class="reference internal" href="git-introduction.html#sec-git-introduction"><span class="std std-ref">Git introduction for PISM developers</span></a> for a brief introduction and <a class="reference external" href="https://git-scm.com/doc">Git
-documentation</a> for more.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Please see <a class="reference internal" href="git-introduction.html#sec-git-introduction"><span class="std std-ref">Git introduction for PISM developers</span></a> for a brief introduction and <a class="reference external" href="https://git-scm.com/doc">Git
+documentation</a> for more.</p>
+</dd>
+</dl>
 </div>
 
 
@@ -160,25 +157,23 @@ documentation</a> for more.</td></tr>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

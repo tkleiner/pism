@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Testing if forcing data is used correctly &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Surface mass and energy process model components" href="surface.html" />
     <link rel="prev" title="Examples and corresponding options" href="examples.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -63,7 +63,7 @@ pismr -i state.nc -surface given -extra_times 0.0:0.1:2.5 \
 </pre></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">pisms</span></code> merely generates demonstration climate data, using EISMINT II choices
-<a class="reference internal" href="../zzz_references_html.html#eismint00" id="id1">[21]</a>. The next run extracts the surface mass balance <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>
+<a class="bibtex reference internal" href="../zzz_references_html.html#eismint00" id="id1">[21]</a>. The next run extracts the surface mass balance <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>
 and surface temperature <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code> from <code class="docutils literal notranslate"><span class="pre">state.nc</span></code>. It then does nothing
 interesting, exactly because a constant climate is used. Viewing <code class="docutils literal notranslate"><span class="pre">movie.nc</span></code> we see these
 same values as from <code class="docutils literal notranslate"><span class="pre">state.nc</span></code>, in variables <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>,
@@ -84,7 +84,7 @@ get the surface mass balance <code class="variable docutils literal notranslate"
 <code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code> and a noticeable decrease in the surface mass balance during summer months
 (see variable <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>). Note that <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code> is constant
 in time: this is the temperature <em>at the ice surface but below firn</em> and it does not
-include seasonal variations <a class="reference internal" href="../zzz_references_html.html#hock05" id="id2">[22]</a>.</p>
+include seasonal variations <a class="bibtex reference internal" href="../zzz_references_html.html#hock05" id="id2">[22]</a>.</p>
 </div>
 <div class="section" id="using-low-resolution-test-runs">
 <h2>Using low-resolution test runs<a class="headerlink" href="#using-low-resolution-test-runs" title="Permalink to this headline">¶</a></h2>
@@ -132,20 +132,20 @@ the time-series of the accumulation rate (top graph) and the air temperature (bo
 graph) with the map view of the surface elevation on the left.</p>
 <p>Here are two things to notice:</p>
 <ol class="arabic simple">
-<li>The summer peak day is in the right place. The default for this value is July 15 (day
+<li><p>The summer peak day is in the right place. The default for this value is July 15 (day
 <span class="math notranslate nohighlight">\(196\)</span>, at approximately <span class="math notranslate nohighlight">\(196/365 \simeq 0.54\)</span> year). (If it is important, the peak day
 can be changed using the configuration parameter
-<code class="config docutils literal notranslate"><span class="pre">atmosphere.fausto_air_temp.summer_peak_day</span></code>).</li>
-<li>Lows of the surface mass balance rate <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> correspond to
+<a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.fausto_air_temp.summer_peak_day"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.fausto_air_temp</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.summer_peak_day</span></code></a>).</p></li>
+<li><p>Lows of the surface mass balance rate <code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code> correspond to
 positive degree-days in the given period, because of highs of the air temperature.
 Recall the air temperature graph does not show random daily variations. Even though it
 has the maximum of about <span class="math notranslate nohighlight">\(266\)</span> Kelvin, the parameterized instantaneous air
 temperature can be above freezing. A positive value for positive degree-days is
-expected <a class="reference internal" href="../zzz_references_html.html#calovgreve05" id="id3">[17]</a>.</li>
+expected <a class="bibtex reference internal" href="../zzz_references_html.html#calovgreve05" id="id3">[17]</a>.</p></li>
 </ol>
-<div class="figure" id="fig-pddseries">
+<div class="figure align-default" id="fig-pddseries">
 <img alt="../_images/pdd-movie.png" src="../_images/pdd-movie.png" />
-<p class="caption"><span class="caption-number">Fig. 35 </span><span class="caption-text">Time series of the surface mass balance rate and near-surface air temperature.</span></p>
+<p class="caption"><span class="caption-number">Fig. 35 </span><span class="caption-text">Time series of the surface mass balance rate and near-surface air temperature.</span><a class="headerlink" href="#fig-pddseries" title="Permalink to this image">¶</a></p>
 </div>
 <p>We can also test the surface temperature forcing code with the following command.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pismr -i g20km_pre100.nc -surface simple \
@@ -162,9 +162,9 @@ expected <a class="reference internal" href="../zzz_references_html.html#calovgr
 <p>This figure shows the GRIP temperature offsets and the time-series of the temperature at
 the ice surface at a point in southern Greenland (bottom graph), confirming that the
 temperature offsets are used correctly.</p>
-<div class="figure" id="fig-artm-timeseries">
+<div class="figure align-default" id="fig-artm-timeseries">
 <img alt="../_images/dT-movie.png" src="../_images/dT-movie.png" />
-<p class="caption"><span class="caption-number">Fig. 36 </span><span class="caption-text">Time series of the surface temperature compared to GRIP temperature offsets</span></p>
+<p class="caption"><span class="caption-number">Fig. 36 </span><span class="caption-text">Time series of the surface temperature compared to GRIP temperature offsets</span><a class="headerlink" href="#fig-artm-timeseries" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 </div>
@@ -230,25 +230,23 @@ temperature offsets are used correctly.</p>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

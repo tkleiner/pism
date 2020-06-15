@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Git introduction for PISM developers &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Git branches" href="git-branches.html" />
     <link rel="prev" title="PISM coding guidelines" href="coding_guidelines.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -57,7 +57,7 @@ git config --global user.email johndoe@example.com
 GUI can save you from having to type these commands yourself but one should still know
 them.</p>
 <ol class="arabic">
-<li><p class="first">When starting work on a new feature make sure to start from the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch:</p>
+<li><p>When starting work on a new feature make sure to start from the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout dev
 </pre></div>
 </div>
@@ -68,7 +68,7 @@ instead:</p>
 </div>
 <p>See <a class="reference internal" href="git-branches.html#sec-git-branches"><span class="std std-ref">Git branches</span></a> for more.</p>
 </li>
-<li><p class="first">Next, create and switch to a new branch:</p>
+<li><p>Next, create and switch to a new branch:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout -b &lt;user-name&gt;/&lt;short-description&gt;
 </pre></div>
 </div>
@@ -79,26 +79,25 @@ or three words) description of the topic you intend to work on.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Work on the code, documentation, etc.</p>
-</li>
-<li><p class="first">Inspect changes:</p>
+<li><p>Work on the code, documentation, etc.</p></li>
+<li><p>Inspect changes:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git status
 </pre></div>
 </div>
 </li>
-<li><p class="first">Commit changes:</p>
+<li><p>Commit changes:</p>
 <ul>
-<li><p class="first">To commit all changes to files that are already in the repository:</p>
+<li><p>To commit all changes to files that are already in the repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git commit -a
 </pre></div>
 </div>
 </li>
-<li><p class="first">To commit particular files</p>
+<li><p>To commit particular files</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git commit file1 file2 ...
 </pre></div>
 </div>
 </li>
-<li><p class="first">To add new files that are to be committed:</p>
+<li><p>To add new files that are to be committed:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git add file1 file2 ...
 git commit
 </pre></div>
@@ -106,26 +105,26 @@ git commit
 </li>
 </ul>
 </li>
-<li><p class="first">Push changes to GitHub:</p>
+<li><p>Push changes to GitHub:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git push -u origin ckhroulev/energy-balance
 </pre></div>
 </div>
 <p>Push changes to your own branch or other branches dedicated to a topic you may be
 sharing with your collaborators.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Do <em>not</em> push to <code class="docutils literal notranslate"><span class="pre">dev</span></code> or <code class="docutils literal notranslate"><span class="pre">master</span></code> directly unless you know what you are doing.</p>
+<p class="admonition-title">Note</p>
+<p>Do <em>not</em> push to <code class="docutils literal notranslate"><span class="pre">dev</span></code> or <code class="docutils literal notranslate"><span class="pre">master</span></code> directly unless you know what you are doing.</p>
 </div>
 </li>
-<li><p class="first">If you started your branch from <code class="docutils literal notranslate"><span class="pre">dev</span></code> and need to use a feature that was added to <code class="docutils literal notranslate"><span class="pre">dev</span></code>
+<li><p>If you started your branch from <code class="docutils literal notranslate"><span class="pre">dev</span></code> and need to use a feature that was added to <code class="docutils literal notranslate"><span class="pre">dev</span></code>
 since then you can run</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git merge dev
 </pre></div>
 </div>
 <p>to “merge” the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch into your branch.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Please do not merge <code class="docutils literal notranslate"><span class="pre">dev</span></code> into your branch unless you need to: doing it too often
+<p class="admonition-title">Note</p>
+<p>Please do not merge <code class="docutils literal notranslate"><span class="pre">dev</span></code> into your branch unless you need to: doing it too often
 makes the development history (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code>) more confusing and less useful.</p>
 </div>
 </li>
@@ -204,25 +203,23 @@ body. Summarize the issue if its title is not descriptive enough.</p>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

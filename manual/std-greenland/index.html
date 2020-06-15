@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Getting started: a Greenland ice sheet example &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Input data" href="input-data.html" />
     <link rel="prev" title="PISM User’s Manual" href="../index.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -43,8 +43,8 @@ going. Give it a try!</p>
 prognostic model experiments on the Greenland ice sheet. Ice sheet and glacier model
 studies often involve modeling present and past states using actions like the ones
 demonstrated here. Our particular choices made here are motivated by the evaluation of
-initialization methods in <a class="reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id1">[62]</a>.</p>
-<p>We use data assembled by the <a class="reference external" href="http://websrv.cs.umt.edu/isis/index.php/SeaRISE_Assessment">Sea-level Response to Ice Sheet Evolution (SeaRISE)</a> assessment process <a class="reference internal" href="../../zzz_references_html.html#bindschadler2013searise" id="id2">[58]</a>. SeaRISE is a
+initialization methods in <a class="bibtex reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id1">[62]</a>.</p>
+<p>We use data assembled by the <a class="reference external" href="http://websrv.cs.umt.edu/isis/index.php/SeaRISE_Assessment">Sea-level Response to Ice Sheet Evolution (SeaRISE)</a> assessment process <a class="bibtex reference internal" href="../../zzz_references_html.html#bindschadler2013searise" id="id2">[58]</a>. SeaRISE is a
 community-organized assessment process providing an upper bound on ice sheet contributions
 to sea level in the next 100–200 years, especially for the IPCC AR5 report in 2013.</p>
 <p>This example is a hands-on first look at PISM. It is not an in-depth tutorial, and some
@@ -54,8 +54,8 @@ discusses PISM options, nontrivial modeling choices, and how to preprocess input
 done on a typical workstation or laptop. PISM is, however, designed to make high
 resolution (e.g. <span class="math notranslate nohighlight">\(5\,\textrm{km}\)</span> to <span class="math notranslate nohighlight">\(\sim 500\,\textrm{m}\)</span> grids for
 whole-Greenland ice sheet modeling) possible by exploiting large-scale parallel
-processing. See <a class="reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id3">[62]</a>, <a class="reference internal" href="../../zzz_references_html.html#golledgeetal2012" id="id4">[124]</a>,
-<a class="reference internal" href="../../zzz_references_html.html#golledgeetal2013" id="id5">[82]</a>, among other published high-resolution PISM examples.</p>
+processing. See <a class="bibtex reference internal" href="../../zzz_references_html.html#aschwandenadalgeirsdottirkhroulev" id="id3">[62]</a>, <a class="bibtex reference internal" href="../../zzz_references_html.html#golledgeetal2012" id="id4">[124]</a>,
+<a class="bibtex reference internal" href="../../zzz_references_html.html#golledgeetal2013" id="id5">[82]</a>, among other published high-resolution PISM examples.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="input-data.html">Input data</a></li>
@@ -141,25 +141,23 @@ processing. See <a class="reference internal" href="../../zzz_references_html.ht
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

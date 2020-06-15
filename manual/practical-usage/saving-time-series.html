@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saving time series of scalar diagnostic quantities &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Saving time series of spatially-varying diagnostic quantities" href="saving-diagnostics.html" />
     <link rel="prev" title="Input and output" href="input-output.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -41,7 +41,7 @@ combination of the options <code class="docutils literal notranslate"><span clas
 </pre></div>
 </div>
 <p>will run for 10000 years, saving total ice volume and grounded ice area to
-<code class="docutils literal notranslate"><span class="pre">time-series.nc</span></code> <em>yearly</em>. See tables <a class="reference internal" href="#tab-time-series-opts"><span class="std std-numref">Table 30</span></a> for the list of
+<code class="docutils literal notranslate"><span class="pre">time-series.nc</span></code> <em>yearly</em>. See tables <a class="reference internal" href="#tab-time-series-opts"><span class="std std-numref">Table 28</span></a> for the list of
 options and <a class="reference internal" href="../diagnostics/index.html#sec-ts-vars"><span class="std std-ref">Scalar time-series</span></a> for the full list of supported time-series.</p>
 <p>Note that, similarly to the snapshot-saving code (section <a class="reference internal" href="saving-snapshots.html#sec-snapshots"><span class="std std-ref">Saving re-startable snapshots of the model state</span></a>), this
 mechanism does not affect adaptive time-stepping. Here, however, PISM will save exactly
@@ -58,66 +58,66 @@ the existing file will be moved to <code class="docutils literal notranslate"><s
 stored, or when an <code class="docutils literal notranslate"><span class="pre">-extra_file</span></code> is saved, whichever comes first. Sending an <code class="docutils literal notranslate"><span class="pre">USR1</span></code>
 (or <code class="docutils literal notranslate"><span class="pre">USR2</span></code>) signal to a PISM process flushes these buffers, making it possible to
 monitor the run. (See section <a class="reference internal" href="signals.html#sec-signal"><span class="std std-ref">Signals, to control a running PISM model</span></a> for more about PISM’s signal handling.)</p>
-<table border="1" class="colwidths-given docutils" id="tab-time-series-opts">
-<caption><span class="caption-number">Table 30 </span><span class="caption-text">Command-line options controlling saving scalar time-series</span><a class="headerlink" href="#tab-time-series-opts" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given docutils align-default" id="tab-time-series-opts">
+<caption><span class="caption-number">Table 28 </span><span class="caption-text">Command-line options controlling saving scalar time-series</span><a class="headerlink" href="#tab-time-series-opts" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col style="width: 25%" />
+<col style="width: 75%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Option</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ts_file</span></code></td>
-<td>Specifies the file to save to.</td>
+<tbody>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ts_file</span></code></p></td>
+<td><p>Specifies the file to save to.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ts_times</span></code></td>
-<td>Specifies times to save at as a MATLAB-style range <span class="math notranslate nohighlight">\(a:\Delta t:b\)</span>, a
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-ts_times</span></code></p></td>
+<td><p>Specifies times to save at as a MATLAB-style range <span class="math notranslate nohighlight">\(a:\Delta t:b\)</span>, a
 comma-separated list, or a keyword (<code class="docutils literal notranslate"><span class="pre">hourly</span></code>, <code class="docutils literal notranslate"><span class="pre">daily</span></code>, <code class="docutils literal notranslate"><span class="pre">monthly</span></code>,
-<code class="docutils literal notranslate"><span class="pre">yearly</span></code>). See section <a class="reference internal" href="saving-diagnostics.html#sec-saving-diagnostics"><span class="std std-ref">Saving time series of spatially-varying diagnostic quantities</span></a>.</td>
+<code class="docutils literal notranslate"><span class="pre">yearly</span></code>). See section <a class="reference internal" href="saving-diagnostics.html#sec-saving-diagnostics"><span class="std std-ref">Saving time series of spatially-varying diagnostic quantities</span></a>.</p></td>
 </tr>
-<tr class="row-even"><td><code class="option docutils literal notranslate"><span class="pre">-ts_vars</span></code></td>
-<td>Comma-separated list of variables. Omitting this option is equivalent to listing
-the <em>all</em> variables.</td>
+<tr class="row-even"><td><p><code class="option docutils literal notranslate"><span class="pre">-ts_vars</span></code></p></td>
+<td><p>Comma-separated list of variables. Omitting this option is equivalent to listing
+the <em>all</em> variables.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="option docutils literal notranslate"><span class="pre">-ts_append</span></code></td>
-<td>Append time series to file if it already exists. No effect if file does not yet
-exist.</td>
+<tr class="row-odd"><td><p><code class="option docutils literal notranslate"><span class="pre">-ts_append</span></code></p></td>
+<td><p>Append time series to file if it already exists. No effect if file does not yet
+exist.</p></td>
 </tr>
 </tbody>
 </table>
 <p>Besides the above information on usage, here are comments on the physical significance of
 several scalar diagnostics:</p>
 <ul class="simple">
-<li>For each variable named <code class="docutils literal notranslate"><span class="pre">..._flux</span></code>, positive values mean ice sheet mass gain.</li>
-<li>PISM reports ice volume, ice mass, and several other quantities for “glacierized” areas.
+<li><p>For each variable named <code class="docutils literal notranslate"><span class="pre">..._flux</span></code>, positive values mean ice sheet mass gain.</p></li>
+<li><p>PISM reports ice volume, ice mass, and several other quantities for “glacierized” areas.
 These quantities do not include contributions from areas where the ice thickness is
 equal to or below the value of the configuration parameter
 <code class="docutils literal notranslate"><span class="pre">output.ice_free_thickness_standard</span></code> (in meters). Corresponding quantities without the
-suffix <em>do</em> include areas with a thin, “seasonal” ice cover.</li>
-<li>Ice volume and area are computed and then split among floating and grounded portions:
+suffix <em>do</em> include areas with a thin, “seasonal” ice cover.</p></li>
+<li><p>Ice volume and area are computed and then split among floating and grounded portions:
 <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code> <span class="math notranslate nohighlight">\(\mapsto\)</span> (<code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_shelf</span></code>,
 <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_grounded</span></code>) while <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized</span></code> <span class="math notranslate nohighlight">\(\mapsto\)</span>
 (<code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_shelf</span></code>, <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_grounded</span></code>). The volumes have units
-<span class="math notranslate nohighlight">\(m^3\)</span> and the areas have units <span class="math notranslate nohighlight">\(m^2\)</span>.</li>
-<li>The thermodynamic state of the ice sheet can be assessed, in part, by the amount of cold
+<span class="math notranslate nohighlight">\(m^3\)</span> and the areas have units <span class="math notranslate nohighlight">\(m^2\)</span>.</p></li>
+<li><p>The thermodynamic state of the ice sheet can be assessed, in part, by the amount of cold
 or temperate (“<code class="docutils literal notranslate"><span class="pre">temp</span></code>”) ice. Thus there is another splitting: <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code>
 <span class="math notranslate nohighlight">\(\mapsto\)</span> (<code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_cold</span></code>, <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized_temperate</span></code>) and
 <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized</span></code> <span class="math notranslate nohighlight">\(\mapsto\)</span>
-(<code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_cold_base</span></code>, <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_temperate_base</span></code>).</li>
-<li>The sea level rise potential <code class="variable docutils literal notranslate"><span class="pre">sea_level_rise_potential</span></code> is the increase in sea
+(<code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_cold_base</span></code>, <code class="docutils literal notranslate"><span class="pre">ice_area_glacierized_temperate_base</span></code>).</p></li>
+<li><p>The sea level rise potential <code class="variable docutils literal notranslate"><span class="pre">sea_level_rise_potential</span></code> is the increase in sea
 level (in meters) that would result from melting all the grounded ice not displacing sea
 water and distributing the corresponding <em>fresh water</em> volume uniformly over the entire
-global ocean (<span class="math notranslate nohighlight">\(362.5 \cdot 10^6\, km^2\)</span>, see <a class="reference internal" href="../../zzz_references_html.html#cogley2011" id="id1">[99]</a>). This follows the
-definition used in the SeaRISE project <a class="reference internal" href="../../zzz_references_html.html#bindschadler2013searise" id="id2">[58]</a>.</li>
-<li>Fields <code class="docutils literal notranslate"><span class="pre">max_diffusivity</span></code> and <code class="docutils literal notranslate"><span class="pre">max_hor_vel</span></code> relate to PISM time-stepping. These
+global ocean (<span class="math notranslate nohighlight">\(362.5 \cdot 10^6\, km^2\)</span>, see <a class="bibtex reference internal" href="../../zzz_references_html.html#cogley2011" id="id1">[99]</a>). This follows the
+definition used in the SeaRISE project <a class="bibtex reference internal" href="../../zzz_references_html.html#bindschadler2013searise" id="id2">[58]</a>.</p></li>
+<li><p>Fields <code class="docutils literal notranslate"><span class="pre">max_diffusivity</span></code> and <code class="docutils literal notranslate"><span class="pre">max_hor_vel</span></code> relate to PISM time-stepping. These
 quantities appear in per-time-step form in the standard output from PISM (i.e. at
 default verbosity). <code class="docutils literal notranslate"><span class="pre">max_diffusivity</span></code> determines the length of the mass continuity
 sub-steps for the SIA stress balance (sub-)model. <code class="docutils literal notranslate"><span class="pre">max_hor_vel</span></code> determines the
 CFL-type restriction for mass continuity and conservation of energy contributions of the
-SSA stress balance (i.e. sliding) velocity.</li>
+SSA stress balance (i.e. sliding) velocity.</p></li>
 </ul>
 </div>
 
@@ -200,25 +200,23 @@ SSA stress balance (i.e. sliding) velocity.</li>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examples and corresponding options &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Testing if forcing data is used correctly" href="testing.html" />
     <link rel="prev" title="Managing model time" href="time.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -42,26 +42,25 @@ referenced below for more information.</p>
 time- and space-dependent climate data produced by a climate model.</p>
 <p>There are two cases:</p>
 <ul class="simple">
-<li>coupling to a climate model that includes surface (firn, snow) processes</li>
-<li>coupling to a climate model providing near-surface air temperature and precipitation</li>
+<li><p>coupling to a climate model that includes surface (firn, snow) processes</p></li>
+<li><p>coupling to a climate model providing near-surface air temperature and precipitation</p></li>
 </ul>
 <div class="section" id="reading-ice-surface-temperature-and-mass-balance">
 <span id="sec-example-surface-given"></span><h3>Reading ice surface temperature and mass balance<a class="headerlink" href="#reading-ice-surface-temperature-and-mass-balance" title="Permalink to this headline">¶</a></h3>
 <p>This is the simplest case. It is often the preferred case, for example when the climate
 model in use has high quality surface mass and energy sub-models which are then preferred
 to the highly simplified (e.g. temperature index) surface models in PISM.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>, <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span> <span class="pre">-surface_given_file</span> <span class="pre">forcing.nc</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="surface.html#sec-surface-given"><span class="std std-ref">Reading top-surface boundary conditions from a file</span></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>, <code class="variable docutils literal notranslate"><span class="pre">ice_surface_temp</span></code></p>
+</dd>
+<dt class="field-even">Options</dt>
+<dd class="field-even"><p><code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given</span> <span class="pre">-surface_given_file</span> <span class="pre">forcing.nc</span></code></p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p><a class="reference internal" href="surface.html#sec-surface-given"><span class="std std-ref">Reading top-surface boundary conditions from a file</span></a></p>
+</dd>
+</dl>
 </div>
 <div class="section" id="reading-air-temperature-and-precipitation">
 <span id="sec-example-atmosphere-given"></span><h3>Reading air temperature and precipitation<a class="headerlink" href="#reading-air-temperature-and-precipitation" title="Permalink to this headline">¶</a></h3>
@@ -69,19 +68,18 @@ to the highly simplified (e.g. temperature index) surface models in PISM.</p>
 precipitation, these data need to be converted into top-of-the-ice temperature and
 climatic mass balance.</p>
 <p>One way to do that is by using a temperature index (PDD) model component included in PISM.
-This component has adjustable parameters; default values come from <a class="reference internal" href="../zzz_references_html.html#ritzeismint" id="id1">[7]</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>, <code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given</span> <span class="pre">-atmosphere_given_file</span> <span class="pre">forcing.nc</span> <span class="pre">-surface</span> <span class="pre">pdd</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="atmosphere.html#sec-atmosphere-given"><span class="std std-ref">Reading boundary conditions from a file</span></a>, <a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">Temperature-index scheme</span></a></td>
-</tr>
-</tbody>
-</table>
+This component has adjustable parameters; default values come from <a class="bibtex reference internal" href="../zzz_references_html.html#ritzeismint" id="id1">[7]</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>, <code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code></p>
+</dd>
+<dt class="field-even">Options</dt>
+<dd class="field-even"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given</span> <span class="pre">-atmosphere_given_file</span> <span class="pre">forcing.nc</span> <span class="pre">-surface</span> <span class="pre">pdd</span></code></p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atmosphere.html#sec-atmosphere-given"><span class="std std-ref">Reading boundary conditions from a file</span></a>, <a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">Temperature-index scheme</span></a></p>
+</dd>
+</dl>
 <p>If melt is negligible <code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">pdd</span></code> should be replaced with <code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">simple</span></code>
 (see section <a class="reference internal" href="surface.html#sec-surface-simple"><span class="std std-ref">The “invisible” model</span></a>).</p>
 </div>
@@ -90,26 +88,25 @@ This component has adjustable parameters; default values come from <a class="ref
 <span id="sec-example-atmosphere-anomalies"></span><h2>Using climate anomalies<a class="headerlink" href="#using-climate-anomalies" title="Permalink to this headline">¶</a></h2>
 <p>Prognostic modeling experiments frequently use time- and space-dependent air temperature
 and precipitation anomalies.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>,
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">precipitation_anomaly</span></code>,
-<code class="variable docutils literal notranslate"><span class="pre">air_temp_anomaly</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given,anomaly</span></code>,
+<code class="variable docutils literal notranslate"><span class="pre">air_temp_anomaly</span></code></p>
+</dd>
+<dt class="field-even">Options</dt>
+<dd class="field-even"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given,anomaly</span></code>,
 <code class="option docutils literal notranslate"><span class="pre">-atmosphere_given_file</span> <span class="pre">forcing.nc</span></code>,
 <code class="option docutils literal notranslate"><span class="pre">-atmosphere_anomaly_file</span> <span class="pre">anomalies.nc</span></code>,
-<code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">simple</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="atmosphere.html#sec-atmosphere-given"><span class="std std-ref">Reading boundary conditions from a file</span></a>,
+<code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">simple</span></code></p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atmosphere.html#sec-atmosphere-given"><span class="std std-ref">Reading boundary conditions from a file</span></a>,
 <a class="reference internal" href="atmosphere.html#sec-atmosphere-anomaly"><span class="std std-ref">Using climate data anomalies</span></a>,
-<a class="reference internal" href="surface.html#sec-surface-simple"><span class="std std-ref">The “invisible” model</span></a></td>
-</tr>
-</tbody>
-</table>
+<a class="reference internal" href="surface.html#sec-surface-simple"><span class="std std-ref">The “invisible” model</span></a></p>
+</dd>
+</dl>
 <p>The <code class="docutils literal notranslate"><span class="pre">simple</span></code> surface model component re-interprets precipitation as climatic mass
 balance, which is useful in cases when there is no melt (Antarctic simulations is an
 example).</p>
@@ -119,24 +116,23 @@ example).</p>
 <div class="section" id="sec-example-searise-greenland">
 <span id="id2"></span><h2>SeaRISE-Greenland<a class="headerlink" href="#sec-example-searise-greenland" title="Permalink to this headline">¶</a></h2>
 <p>The SeaRISE-Greenland setup uses a parameterized near-surface air temperature
-<a class="reference internal" href="../zzz_references_html.html#faustoetal2009" id="id3">[1]</a> and a constant-in-time precipitation field read from an input
+<a class="bibtex reference internal" href="../zzz_references_html.html#faustoetal2009" id="id3">[1]</a> and a constant-in-time precipitation field read from an input
 (<code class="option docutils literal notranslate"><span class="pre">-i</span></code>) file. A temperature-index (PDD) scheme is used to compute the climatic mass
 balance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>,
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">lat</span></code>,
-<code class="variable docutils literal notranslate"><span class="pre">lon</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">searise_greenland</span> <span class="pre">-surface</span> <span class="pre">pdd</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="atmosphere.html#sec-atmosphere-searise-greenland"><span class="std std-ref">SeaRISE-Greenland</span></a>,
-<a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">Temperature-index scheme</span></a></td>
-</tr>
-</tbody>
-</table>
+<code class="variable docutils literal notranslate"><span class="pre">lon</span></code></p>
+</dd>
+<dt class="field-even">Options</dt>
+<dd class="field-even"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">searise_greenland</span> <span class="pre">-surface</span> <span class="pre">pdd</span></code></p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atmosphere.html#sec-atmosphere-searise-greenland"><span class="std std-ref">SeaRISE-Greenland</span></a>,
+<a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">Temperature-index scheme</span></a></p>
+</dd>
+</dl>
 <p>The air temperature parameterization is a function of latitude (<code class="variable docutils literal notranslate"><span class="pre">lat</span></code>), longitude
 (<code class="variable docutils literal notranslate"><span class="pre">lon</span></code>) and surface elevation (dynamically updated by PISM).</p>
 </div>
@@ -145,54 +141,52 @@ balance.</p>
 <p>The air temperature parameterization in the previous section is appropriate for present
 day modeling. PISM includes some mechanisms allowing for corrections taking into account
 differences between present and past climates. In particular, one can use ice-core derived
-scalar air temperature offsets <a class="reference internal" href="../zzz_references_html.html#johnsenetalgrip" id="id4">[8]</a>, precipitation adjustments
-<a class="reference internal" href="../zzz_references_html.html#huybrechts02" id="id5">[2]</a>, and sea level offsets from SPECMAP <a class="reference internal" href="../zzz_references_html.html#imbrieetal1984" id="id6">[9]</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>,
+scalar air temperature offsets <a class="bibtex reference internal" href="../zzz_references_html.html#johnsenetalgrip" id="id4">[8]</a>, precipitation adjustments
+<a class="bibtex reference internal" href="../zzz_references_html.html#huybrechts02" id="id5">[2]</a>, and sea level offsets from SPECMAP <a class="bibtex reference internal" href="../zzz_references_html.html#imbrieetal1984" id="id6">[9]</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">lat</span></code>,
-<code class="variable docutils literal notranslate"><span class="pre">lon</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">searise_greenland,delta_T</span> <span class="pre">-atmosphere_delta_T_file</span>
+<code class="variable docutils literal notranslate"><span class="pre">lon</span></code></p>
+</dd>
+<dt class="field-even">Options</dt>
+<dd class="field-even"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">searise_greenland,delta_T</span> <span class="pre">-atmosphere_delta_T_file</span>
 <span class="pre">delta_T.nc</span> <span class="pre">-surface</span> <span class="pre">pdd</span> <span class="pre">-sea_level</span> <span class="pre">constant,delta_sl</span> <span class="pre">-ocean_delta_sl_file</span>
-<span class="pre">delta_SL.nc</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="atmosphere.html#sec-atmosphere-searise-greenland"><span class="std std-ref">SeaRISE-Greenland</span></a>,
+<span class="pre">delta_SL.nc</span></code></p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atmosphere.html#sec-atmosphere-searise-greenland"><span class="std std-ref">SeaRISE-Greenland</span></a>,
 <a class="reference internal" href="atmosphere.html#sec-atmosphere-delta-t"><span class="std std-ref">Scalar temperature offsets</span></a>,
 <a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">Temperature-index scheme</span></a>,
 <a class="reference internal" href="ocean.html#sec-ocean-constant"><span class="std std-ref">Constant in time and space</span></a>,
-<a class="reference internal" href="ocean.html#sec-ocean-delta-sl"><span class="std std-ref">Scalar sea level offsets</span></a></td>
-</tr>
-</tbody>
-</table>
+<a class="reference internal" href="ocean.html#sec-ocean-delta-sl"><span class="std std-ref">Scalar sea level offsets</span></a></p>
+</dd>
+</dl>
 <p>Note that the temperature offsets are applied to <em>air</em> temperatures at the <em>atmosphere
 level</em>. This ensures that <span class="math notranslate nohighlight">\(\Delta T\)</span> influences the PDD computation.</p>
 </div>
 <div class="section" id="antarctic-paleo-climate-runs">
 <span id="sec-example-antarctica-paleo"></span><h2>Antarctic paleo-climate runs<a class="headerlink" href="#antarctic-paleo-climate-runs" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>,
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">climatic_mass_balance</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code>,
-<code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given,delta_T</span> <span class="pre">-surface_delta_T_file</span> <span class="pre">delta_T.nc</span> <span class="pre">-sea_level</span>
-<span class="pre">constant,delta_sl</span> <span class="pre">-ocean_delta_sl_file</span> <span class="pre">delta_SL.nc</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="surface.html#sec-surface-given"><span class="std std-ref">Reading top-surface boundary conditions from a file</span></a>,
+<code class="variable docutils literal notranslate"><span class="pre">delta_SL</span></code></p>
+</dd>
+<dt class="field-even">Options</dt>
+<dd class="field-even"><p><code class="option docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">given,delta_T</span> <span class="pre">-surface_delta_T_file</span> <span class="pre">delta_T.nc</span> <span class="pre">-sea_level</span>
+<span class="pre">constant,delta_sl</span> <span class="pre">-ocean_delta_sl_file</span> <span class="pre">delta_SL.nc</span></code></p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p><a class="reference internal" href="surface.html#sec-surface-given"><span class="std std-ref">Reading top-surface boundary conditions from a file</span></a>,
 <a class="reference internal" href="surface.html#sec-surface-delta-t"><span class="std std-ref">Scalar temperature offsets</span></a>,
 <a class="reference internal" href="ocean.html#sec-ocean-constant"><span class="std std-ref">Constant in time and space</span></a>,
-<a class="reference internal" href="ocean.html#sec-ocean-delta-sl"><span class="std std-ref">Scalar sea level offsets</span></a></td>
-</tr>
-</tbody>
-</table>
+<a class="reference internal" href="ocean.html#sec-ocean-delta-sl"><span class="std std-ref">Scalar sea level offsets</span></a></p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -259,25 +253,23 @@ level</em>. This ensures that <span class="math notranslate nohighlight">\(\Delt
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

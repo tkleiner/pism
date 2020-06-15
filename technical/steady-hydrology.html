@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computing steady-state subglacial water flux &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Release checklist" href="release_checklist.html" />
     <link rel="prev" title="BOMBPROOF, PISM’s numerical scheme for conservation of energy" href="bombproof.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -63,12 +63,12 @@
 <span class="eqno">(55)<a class="headerlink" href="#equation-eq-hydrology-routing" title="Permalink to this equation">¶</a></span>\[ \begin{align}\begin{aligned}\diff{W}{t} + \diff{\Wtill}{t} + \div \bq = \frac{m}{\rho_w}\\\diff{\Wtill}{t} = \frac{m}{\rho_w} - C_d\\\bq = -k W^{\alpha} |\nabla \psi|^{\beta - 2} \nabla \psi\\\psi = P_o + \rho_w g (b + W)\end{aligned}\end{align} \]</div>
 <p>on a an ice covered area <span class="math notranslate nohighlight">\(\Omega\)</span>. We assume zero flux boundary conditions on the inflow
 part of the boundary and no boundary condition on the outflow boundary. See
-<a class="reference internal" href="../zzz_references_html.html#buelervanpelt2015" id="id1">[90]</a> (equations 1, 2, 6, 16, 26) for details and the notation. Here
+<a class="bibtex reference internal" href="../zzz_references_html.html#buelervanpelt2015" id="id1">[90]</a> (equations 1, 2, 6, 16, 26) for details and the notation. Here
 we also assume that <span class="math notranslate nohighlight">\(m \ge 0\)</span>.</p>
 <p>Our goal is to estimate <span class="math notranslate nohighlight">\(Q = \bq \cdot \n\)</span>, the flux through the outflow part of the
 boundary of <span class="math notranslate nohighlight">\(\Omega\)</span> corresponding to the steady state of <a class="reference internal" href="#equation-eq-hydrology-routing">(55)</a> using
 a method that is computationally cheaper than using the explicit in time approximation
-of <a class="reference internal" href="#equation-eq-hydrology-routing">(55)</a> described by <a class="reference internal" href="../zzz_references_html.html#buelervanpelt2015" id="id2">[90]</a>.</p>
+of <a class="reference internal" href="#equation-eq-hydrology-routing">(55)</a> described by <a class="bibtex reference internal" href="../zzz_references_html.html#buelervanpelt2015" id="id2">[90]</a>.</p>
 <p>Pick a contiguous section <span class="math notranslate nohighlight">\(\omega\)</span> of <span class="math notranslate nohighlight">\(\partial \Omega\)</span> (the terminus of an outlet
 glacier, for example). Let <span class="math notranslate nohighlight">\(B\)</span> be the union of all the trajectories of the vector field
 <span class="math notranslate nohighlight">\(\bq\)</span> in <span class="math notranslate nohighlight">\(\Omega\)</span> that pass through <span class="math notranslate nohighlight">\(\omega\)</span>. The area <span class="math notranslate nohighlight">\(B\)</span> is the “drainage basin”
@@ -76,11 +76,11 @@ corresponding to <span class="math notranslate nohighlight">\(\omega\)</span>.</
 <p>Let <span class="math notranslate nohighlight">\(\gamma = \partial B \setminus \omega\)</span>. Note that if a point <span class="math notranslate nohighlight">\(P\)</span> is in <span class="math notranslate nohighlight">\(\gamma\)</span> then
 one of the following conditions is satisfied.</p>
 <ol class="arabic simple">
-<li><span class="math notranslate nohighlight">\(|\bq| = 0\)</span> (it is the origin of a trajectory that starts within <span class="math notranslate nohighlight">\(\Omega\)</span>) or</li>
-<li><span class="math notranslate nohighlight">\(P \in \partial \Omega\)</span> (specifically, <span class="math notranslate nohighlight">\(P\)</span> is a part of the inflow part of the boundary
-of <span class="math notranslate nohighlight">\(\Omega\)</span>)</li>
-<li><span class="math notranslate nohighlight">\(\bq \cdot \n = 0\)</span> (<span class="math notranslate nohighlight">\(P\)</span> is not at the end of a trajectory, and so the normal to the
-boundary is orthogonal to <span class="math notranslate nohighlight">\(\bq\)</span>).</li>
+<li><p><span class="math notranslate nohighlight">\(|\bq| = 0\)</span> (it is the origin of a trajectory that starts within <span class="math notranslate nohighlight">\(\Omega\)</span>) or</p></li>
+<li><p><span class="math notranslate nohighlight">\(P \in \partial \Omega\)</span> (specifically, <span class="math notranslate nohighlight">\(P\)</span> is a part of the inflow part of the boundary
+of <span class="math notranslate nohighlight">\(\Omega\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bq \cdot \n = 0\)</span> (<span class="math notranslate nohighlight">\(P\)</span> is not at the end of a trajectory, and so the normal to the
+boundary is orthogonal to <span class="math notranslate nohighlight">\(\bq\)</span>).</p></li>
 </ol>
 <p>Therefore <span class="math notranslate nohighlight">\(\bq \cdot \n = 0\)</span> on <span class="math notranslate nohighlight">\(\gamma\)</span> and</p>
 <div class="math notranslate nohighlight">
@@ -115,7 +115,7 @@ vector field <span class="math notranslate nohighlight">\(\V\)</span> leave <spa
 <div class="math notranslate nohighlight" id="equation-eq-steady-hydro-2">
 <span class="eqno">(58)<a class="headerlink" href="#equation-eq-steady-hydro-2" title="Permalink to this equation">¶</a></span>\[\int_B u_0 = \frac{1}{1 - \epsilon} \int_0^T \int_{\omega} (\V u) \cdot \n\]</div>
 <p>Combining <a class="reference internal" href="#equation-eq-steady-hydro-1">(56)</a> and <a class="reference internal" href="#equation-eq-steady-hydro-2">(58)</a> and choosing <span class="math notranslate nohighlight">\(u_0 = \tau m\,
-/\, \rho_w\)</span> for some <span class="math notranslate nohighlight">\(\tau &gt; 0\)</span><a class="footnote-reference" href="#id4" id="id3">[1]</a> gives us a way to estimate the flux through the
+/\, \rho_w\)</span> for some <span class="math notranslate nohighlight">\(\tau &gt; 0\)</span><a class="footnote-reference brackets" href="#id4" id="id3">1</a> gives us a way to estimate the flux through the
 outflow boundary <em>if we know the direction of the steady state flux</em>:</p>
 <div class="math notranslate nohighlight" id="equation-eq-steady-hydro-3">
 <span class="eqno">(59)<a class="headerlink" href="#equation-eq-steady-hydro-3" title="Permalink to this equation">¶</a></span>\[\int_{\omega} \bq \cdot \n\; ds = \frac{1}{\tau(1 - \epsilon)} \int_0^T \int_{\omega} (\V u) \cdot \n\; ds.\]</div>
@@ -133,12 +133,12 @@ an adjustment needed to ensure that <span class="math notranslate nohighlight">\
 measure zero (no “plateaus”).</p>
 <p>The approximation of <span class="math notranslate nohighlight">\(\tilde \psi\)</span> on a computational grid is computed as follows.</p>
 <ol class="arabic simple">
-<li>Set <span class="math notranslate nohighlight">\(k = 0\)</span>, <span class="math notranslate nohighlight">\(\tilde \psi_{0} = \psi\)</span>.</li>
-<li>Iterate over all grid points. If a grid point <span class="math notranslate nohighlight">\((i, j)\)</span> is at a local minimum, set
+<li><p>Set <span class="math notranslate nohighlight">\(k = 0\)</span>, <span class="math notranslate nohighlight">\(\tilde \psi_{0} = \psi\)</span>.</p></li>
+<li><p>Iterate over all grid points. If a grid point <span class="math notranslate nohighlight">\((i, j)\)</span> is at a local minimum, set
 <span class="math notranslate nohighlight">\(\tilde \psi_{k + 1}(i, j)\)</span> to the average of neighboring values of <span class="math notranslate nohighlight">\(\tilde \psi_{k}\)</span>
 plus a small increment <span class="math notranslate nohighlight">\(\Delta \psi\)</span>, otherwise set <span class="math notranslate nohighlight">\(\tilde \psi_{k + 1}(i, j)\)</span> to
-<span class="math notranslate nohighlight">\(\tilde \psi_{k}(i, j)\)</span>.</li>
-<li>If step 2 found no local minima, stop. Otherwise increment <span class="math notranslate nohighlight">\(k\)</span> and proceed to step 2.</li>
+<span class="math notranslate nohighlight">\(\tilde \psi_{k}(i, j)\)</span>.</p></li>
+<li><p>If step 2 found no local minima, stop. Otherwise increment <span class="math notranslate nohighlight">\(k\)</span> and proceed to step 2.</p></li>
 </ol>
 <p>Next, note that it is not necessary to identify the drainage basin <span class="math notranslate nohighlight">\(B\)</span> for a terminus
 <span class="math notranslate nohighlight">\(\omega\)</span>: it is defined by <span class="math notranslate nohighlight">\(\psi\)</span> and therefore an approximation of
@@ -149,28 +149,22 @@ plus a small increment <span class="math notranslate nohighlight">\(\Delta \psi\
 <p>Using an explicit time stepping approximation of <a class="reference internal" href="#equation-eq-emptying-problem">(57)</a> we can estimate
 <span class="math notranslate nohighlight">\(\int_{\omega} \bq \cdot \n \; ds\)</span> as follows.</p>
 <ol class="arabic">
-<li><p class="first">Given ice thickness <span class="math notranslate nohighlight">\(H\)</span> and bed elevation <span class="math notranslate nohighlight">\(b\)</span> compute <span class="math notranslate nohighlight">\(\tilde \psi\)</span> by filling “dips”
-as described above.</p>
-</li>
-<li><p class="first">Choose the stopping criterion <span class="math notranslate nohighlight">\(\epsilon &gt; 0\)</span> and the scaling for the source term <span class="math notranslate nohighlight">\(\tau &gt; 0\)</span>.</p>
-</li>
-<li><p class="first">Set</p>
+<li><p>Given ice thickness <span class="math notranslate nohighlight">\(H\)</span> and bed elevation <span class="math notranslate nohighlight">\(b\)</span> compute <span class="math notranslate nohighlight">\(\tilde \psi\)</span> by filling “dips”
+as described above.</p></li>
+<li><p>Choose the stopping criterion <span class="math notranslate nohighlight">\(\epsilon &gt; 0\)</span> and the scaling for the source term <span class="math notranslate nohighlight">\(\tau &gt; 0\)</span>.</p></li>
+<li><p>Set</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}u &amp;\leftarrow \frac{\tau m}{\rho_w},\\t &amp;\leftarrow 0,\\Q &amp;\leftarrow (0, 0).\end{aligned}\end{align} \]</div>
 </li>
-<li><p class="first">Compute the CFL time step <span class="math notranslate nohighlight">\(\Delta t\)</span> using <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(\V\)</span>.</p>
-</li>
-<li><p class="first">Perform an explicit step from <span class="math notranslate nohighlight">\(t\)</span> to <span class="math notranslate nohighlight">\(t + \Delta t\)</span>, updating <span class="math notranslate nohighlight">\(u\)</span>.</p>
-</li>
-<li><p class="first">Accumulate this step’s contribution to <span class="math notranslate nohighlight">\(Q\)</span>:</p>
+<li><p>Compute the CFL time step <span class="math notranslate nohighlight">\(\Delta t\)</span> using <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(\V\)</span>.</p></li>
+<li><p>Perform an explicit step from <span class="math notranslate nohighlight">\(t\)</span> to <span class="math notranslate nohighlight">\(t + \Delta t\)</span>, updating <span class="math notranslate nohighlight">\(u\)</span>.</p></li>
+<li><p>Accumulate this step’s contribution to <span class="math notranslate nohighlight">\(Q\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[Q \leftarrow Q + \Delta t \cdot \V u.\]</div>
 </li>
-<li><p class="first">Set <span class="math notranslate nohighlight">\(t \leftarrow t + \Delta t\)</span></p>
-</li>
-<li><p class="first">If <span class="math notranslate nohighlight">\(\int_{\Omega} u\; dx\, dy &gt; \epsilon\)</span>, go to 4.</p>
-</li>
-<li><p class="first">Set</p>
+<li><p>Set <span class="math notranslate nohighlight">\(t \leftarrow t + \Delta t\)</span></p></li>
+<li><p>If <span class="math notranslate nohighlight">\(\int_{\Omega} u\; dx\, dy &gt; \epsilon\)</span>, go to 4.</p></li>
+<li><p>Set</p>
 <div class="math notranslate nohighlight">
 \[Q \leftarrow \frac{1}{t (1 - \epsilon^{*})}\; Q,\]</div>
 <p>where</p>
@@ -179,12 +173,11 @@ as described above.</p>
 </li>
 </ol>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id4" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>The constant <span class="math notranslate nohighlight">\(\tau\)</span> is needed to get appropriate units, but its value is irrelevant.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id3">1</a></span></dt>
+<dd><p>The constant <span class="math notranslate nohighlight">\(\tau\)</span> is needed to get appropriate units, but its value is irrelevant.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -249,25 +242,23 @@ as described above.</p>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

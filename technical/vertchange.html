@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>On the vertical coordinate in PISM, and a critical change of variable &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using Schoof’s parameterized bed roughness technique in PISM" href="bed_roughness.html" />
     <link rel="prev" title="CF standard names used by PISM" href="cf-standard-names.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -37,14 +37,14 @@
 <p>In PISM all fields in the ice, including enthalpy, age, velocity, and so on, evolve within
 an ice fluid domain of <em>changing geometry</em>. See <a class="reference internal" href="#fig-freebdry"><span class="std std-numref">Fig. 38</span></a>. In
 particular, the upper and lower surfaces of the ice fluid move with respect to the geoid.</p>
-<div class="figure" id="fig-freebdry">
+<div class="figure align-default" id="fig-freebdry">
 <img alt="../_images/tempbdryfig.png" src="../_images/tempbdryfig.png" />
 <p class="caption"><span class="caption-number">Fig. 38 </span><span class="caption-text">The ice fluid domain evolves, with both the upper and lower surfaces in motion with
-respect to the geoid.</span></p>
+respect to the geoid.</span><a class="headerlink" href="#fig-freebdry" title="Permalink to this image">¶</a></p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">FIXME: This figure should show the floating case too.</p>
+<p class="admonition-title">Note</p>
+<p>FIXME: This figure should show the floating case too.</p>
 </div>
 <p>The <span class="math notranslate nohighlight">\((x,y,z)\)</span> coordinates in <a class="reference internal" href="#fig-freebdry"><span class="std std-numref">Fig. 38</span></a> are supposed to be from an orthogonal
 coordinate system with <span class="math notranslate nohighlight">\(z\)</span> in the direction anti-parallel to gravity, so this is a
@@ -67,21 +67,21 @@ ice and ocean, respectively.</p>
 <p>throughout the PISM code. This replaces <span class="math notranslate nohighlight">\(z=b\)</span> by <span class="math notranslate nohighlight">\(s=0\)</span> as the equation of the
 base surface of the ice. The ice fluid domain in the new coordinates only has a free upper
 surface as shown in <a class="reference internal" href="#fig-sfreebdry"><span class="std std-numref">Fig. 39</span></a>.</p>
-<div class="figure" id="fig-sfreebdry">
+<div class="figure align-default" id="fig-sfreebdry">
 <img alt="../_images/stempbdryfig.png" src="../_images/stempbdryfig.png" />
 <p class="caption"><span class="caption-number">Fig. 39 </span><span class="caption-text">In (x,y,s) space the ice fluid domain only has an upper surface which moves,
-<span class="math notranslate nohighlight">\(s=H(x,y,t)\)</span>. Compare to <a class="reference internal" href="#fig-freebdry"><span class="std std-numref">Fig. 38</span></a>.</span></p>
+<span class="math notranslate nohighlight">\(s=H(x,y,t)\)</span>. Compare to <a class="reference internal" href="#fig-freebdry"><span class="std std-numref">Fig. 38</span></a>.</span><a class="headerlink" href="#fig-sfreebdry" title="Permalink to this image">¶</a></p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">FIXME: This figure should show the floating case too, and bedrock.”</p>
+<p class="admonition-title">Note</p>
+<p>FIXME: This figure should show the floating case too, and bedrock.”</p>
 </div>
 <p>In PISM the computational domain (region)</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{R}=\left\{(x,y,s)\big| -L_x\le x \le L_x, -L_y\le y \le L_y, -Lb_z \le s \le
 L_z\right\}\]</div>
 <p>is divided into a three-dimensional grid. See <code class="docutils literal notranslate"><span class="pre">IceGrid</span></code>.</p>
-<p>The change of variable <span class="math notranslate nohighlight">\(z\to s\)</span> used here <em>is not</em> the <a class="reference internal" href="../zzz_references_html.html#jenssen" id="id1">[148]</a> change of variable
+<p>The change of variable <span class="math notranslate nohighlight">\(z\to s\)</span> used here <em>is not</em> the <a class="bibtex reference internal" href="../zzz_references_html.html#jenssen" id="id1">[148]</a> change of variable
 <span class="math notranslate nohighlight">\(\tilde s=(z-b)/H\)</span> . That change causes the conservation of energy equation to
 become singular at the boundaries of the ice sheet. Specifically, the Jenssen change
 replaces the vertical conduction term by a manifestly-singular term at ice sheet margins
@@ -250,25 +250,23 @@ relative vertical velocity <span class="math notranslate nohighlight">\(\tilde w
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

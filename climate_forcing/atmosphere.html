@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atmosphere model components &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Ocean model components" href="ocean.html" />
     <link rel="prev" title="Surface mass and energy process model components" href="surface.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -33,55 +33,54 @@
     <div class="body" role="main">
       
   <div class="section" id="atmosphere-model-components">
-<h1><a class="toc-backref" href="#id19">Atmosphere model components</a><a class="headerlink" href="#atmosphere-model-components" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id16">Atmosphere model components</a><a class="headerlink" href="#atmosphere-model-components" title="Permalink to this headline">¶</a></h1>
 <div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#atmosphere-model-components" id="id19">Atmosphere model components</a><ul>
-<li><a class="reference internal" href="#reading-boundary-conditions-from-a-file" id="id20">Reading boundary conditions from a file</a></li>
-<li><a class="reference internal" href="#cosine-yearly-cycle" id="id21">Cosine yearly cycle</a></li>
-<li><a class="reference internal" href="#sec-atmosphere-searise-greenland" id="id22">SeaRISE-Greenland</a></li>
-<li><a class="reference internal" href="#pik" id="id23">PIK</a></li>
-<li><a class="reference internal" href="#one-weather-station" id="id24">One weather station</a></li>
-<li><a class="reference internal" href="#scalar-temperature-offsets" id="id25">Scalar temperature offsets</a></li>
-<li><a class="reference internal" href="#scalar-precipitation-offsets" id="id26">Scalar precipitation offsets</a></li>
-<li><a class="reference internal" href="#scalar-precipitation-scaling" id="id27">Scalar precipitation scaling</a></li>
-<li><a class="reference internal" href="#precipitation-correction-using-scalar-temperature-offsets" id="id28">Precipitation correction using scalar temperature offsets</a></li>
-<li><a class="reference internal" href="#adjustments-using-modeled-change-in-surface-elevation" id="id29">Adjustments using modeled change in surface elevation</a></li>
-<li><a class="reference internal" href="#using-climate-data-anomalies" id="id30">Using climate data anomalies</a></li>
-<li><a class="reference internal" href="#orographic-precipitation" id="id31">Orographic precipitation</a></li>
+<li><p><a class="reference internal" href="#atmosphere-model-components" id="id16">Atmosphere model components</a></p>
+<ul>
+<li><p><a class="reference internal" href="#reading-boundary-conditions-from-a-file" id="id17">Reading boundary conditions from a file</a></p></li>
+<li><p><a class="reference internal" href="#cosine-yearly-cycle" id="id18">Cosine yearly cycle</a></p></li>
+<li><p><a class="reference internal" href="#sec-atmosphere-searise-greenland" id="id19">SeaRISE-Greenland</a></p></li>
+<li><p><a class="reference internal" href="#pik" id="id20">PIK</a></p></li>
+<li><p><a class="reference internal" href="#one-weather-station" id="id21">One weather station</a></p></li>
+<li><p><a class="reference internal" href="#scalar-temperature-offsets" id="id22">Scalar temperature offsets</a></p></li>
+<li><p><a class="reference internal" href="#scalar-precipitation-offsets" id="id23">Scalar precipitation offsets</a></p></li>
+<li><p><a class="reference internal" href="#scalar-precipitation-scaling" id="id24">Scalar precipitation scaling</a></p></li>
+<li><p><a class="reference internal" href="#precipitation-correction-using-scalar-temperature-offsets" id="id25">Precipitation correction using scalar temperature offsets</a></p></li>
+<li><p><a class="reference internal" href="#adjustments-using-modeled-change-in-surface-elevation" id="id26">Adjustments using modeled change in surface elevation</a></p></li>
+<li><p><a class="reference internal" href="#using-climate-data-anomalies" id="id27">Using climate data anomalies</a></p></li>
+<li><p><a class="reference internal" href="#orographic-precipitation" id="id28">Orographic precipitation</a></p></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="reading-boundary-conditions-from-a-file">
-<span id="sec-atmosphere-given"></span><h2><a class="toc-backref" href="#id20">Reading boundary conditions from a file</a><a class="headerlink" href="#reading-boundary-conditions-from-a-file" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code>, <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Given</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="surface.html#sec-surface-given"><span class="std std-ref">Reading top-surface boundary conditions from a file</span></a></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-given"></span><h2><a class="toc-backref" href="#id17">Reading boundary conditions from a file</a><a class="headerlink" href="#reading-boundary-conditions-from-a-file" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code>, <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Given</span></code></p>
+</dd>
+<dt class="field-even">See also</dt>
+<dd class="field-even"><p><a class="reference internal" href="surface.html#sec-surface-given"><span class="std std-ref">Reading top-surface boundary conditions from a file</span></a></p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is the default choice.</p>
+<p class="admonition-title">Note</p>
+<p>This is the default choice.</p>
 </div>
-<p>Command-line options:</p>
-<ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_given_file</span></code> prescribes an input file</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_given_period</span></code> (<em>years</em>) makes PISM interpret data in
-<code class="docutils literal notranslate"><span class="pre">-atmosphere_given_file</span></code> as periodic. See section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_given_reference_year</span></code> sets the reference model year; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-</ul>
+<p>This model is controlled by the following parameters with the prefix <code class="docutils literal notranslate"><span class="pre">atmosphere.given.</span></code>.</p>
+<ol class="simple">
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.given.file"><code class="docutils literal notranslate"><span class="pre">file</span></code></a> Name of the file containing climate forcing fields.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.given.period"><code class="docutils literal notranslate"><span class="pre">period</span></code></a> (0<em> years</em>) Length of the period of the climate forcing data. Set to zero to disable.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.given.reference_year"><code class="docutils literal notranslate"><span class="pre">reference_year</span></code></a> (0<em> years</em>) Reference year to use when <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.given.period"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.given</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.period</span></code></a> is active.</p></li>
+</ol>
 <p>A file <code class="docutils literal notranslate"><span class="pre">foo.nc</span></code> used with <code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">given</span> <span class="pre">-atmosphere_given_file</span> <span class="pre">foo.nc</span></code> should
 contain several records; the <code class="variable docutils literal notranslate"><span class="pre">time</span></code> variable should describe what model time these
 records correspond to.</p>
@@ -91,60 +90,66 @@ data, e.g. using monthly records of <code class="variable docutils literal notra
 (section <a class="reference internal" href="surface.html#sec-surface-pdd"><span class="std std-ref">Temperature-index scheme</span></a>).</p>
 </div>
 <div class="section" id="cosine-yearly-cycle">
-<span id="sec-atmosphere-yearly-cycle"></span><h2><a class="toc-backref" href="#id21">Cosine yearly cycle</a><a class="headerlink" href="#cosine-yearly-cycle" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">yearly_cycle</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">air_temp_mean_annual</span></code>,
+<span id="sec-atmosphere-yearly-cycle"></span><h2><a class="toc-backref" href="#id18">Cosine yearly cycle</a><a class="headerlink" href="#cosine-yearly-cycle" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">yearly_cycle</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">air_temp_mean_annual</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">air_temp_mean_july</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span>
-<code class="variable docutils literal notranslate"><span class="pre">amplitude_scaling</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::CosineYearlyCycle</span></code></td>
-</tr>
-</tbody>
-</table>
+<code class="variable docutils literal notranslate"><span class="pre">amplitude_scaling</span></code></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::CosineYearlyCycle</span></code></p>
+</dd>
+</dl>
 <p>This atmosphere model component computes the near-surface air temperature using the
 following formula:</p>
 <div class="math notranslate nohighlight">
 \[T(\mathrm{time}) = T_{\text{mean annual}}
 + A(\mathrm{time})\cdot(T_{\text{mean July}} - T_{\text{mean annual}}) \cdot \cos(2\pi t),\]</div>
 <p>where <span class="math notranslate nohighlight">\(t\)</span> is the year fraction “since last July”; the summer peak of the cycle is on
-<code class="config docutils literal notranslate"><span class="pre">atmosphere.fausto_air_temp.summer_peak_day</span></code>, which is set to day <span class="math notranslate nohighlight">\(196\)</span> by
+<a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.fausto_air_temp.summer_peak_day"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.fausto_air_temp</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.summer_peak_day</span></code></a>, which is set to day <span class="math notranslate nohighlight">\(196\)</span> by
 default (approximately July 15).</p>
-<p>Here <span class="math notranslate nohighlight">\(T_{\text{mean annual}}\)</span> (variable <code class="variable docutils literal notranslate"><span class="pre">air_temp_mean_annual</span></code>) and
-<span class="math notranslate nohighlight">\(T_{\text{mean July}}\)</span> (variable <code class="variable docutils literal notranslate"><span class="pre">air_temp_mean_july</span></code>) are read from a file
-selected using the <code class="option docutils literal notranslate"><span class="pre">-atmosphere_yearly_cycle_file</span></code> command-line option. A
-time-independent precipitation field (variable <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>) is read from the same
-file.</p>
+<p>Here <span class="math notranslate nohighlight">\(T_{\text{mean annual}}\)</span> (variable <code class="variable docutils literal notranslate"><span class="pre">air_temp_mean_annual</span></code>) and <span class="math notranslate nohighlight">\(T_{\text{mean
+July}}\)</span> (variable <code class="variable docutils literal notranslate"><span class="pre">air_temp_mean_july</span></code>) are read from a file selected using the
+command-line option <code class="option docutils literal notranslate"><span class="pre">-atmosphere_yearly_cycle_file</span></code>. A time-independent precipitation
+field (variable <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>) is read from the same file.</p>
 <p>Optionally a time-dependent scalar amplitude scaling <span class="math notranslate nohighlight">\(A(t)\)</span> can be used. Specify a
 file to read it from using the <code class="option docutils literal notranslate"><span class="pre">-atmosphere_yearly_cycle_scaling_file</span></code> command-line
 option. Without this option <span class="math notranslate nohighlight">\(A(\mathrm{time}) \equiv 1\)</span>.</p>
+<p>This model is controlled by the following parameters with the prefix
+<code class="docutils literal notranslate"><span class="pre">atmosphere.yearly_cycle.</span></code>.</p>
+<ol class="simple">
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.yearly_cycle.file"><code class="docutils literal notranslate"><span class="pre">file</span></code></a> Name of the file containing mean annual and mean July temperatures (<code class="docutils literal notranslate"><span class="pre">air_temp_mean_annual</span></code> and <code class="docutils literal notranslate"><span class="pre">air_temp_mean_summer</span></code>) and the <code class="docutils literal notranslate"><span class="pre">precipitation</span></code> field.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.yearly_cycle.scaling.file"><code class="docutils literal notranslate"><span class="pre">scaling</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.file</span></code></a> Name of the file containing amplitude scaling (<code class="docutils literal notranslate"><span class="pre">amplitude_scaling</span></code>) for the near-surface air temperature.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.yearly_cycle.scaling.period"><code class="docutils literal notranslate"><span class="pre">scaling</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.period</span></code></a> (0<em> years</em>) Length of the period of the climate forcing data. Set to zero to disable.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.yearly_cycle.scaling.reference_year"><code class="docutils literal notranslate"><span class="pre">scaling</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.reference_year</span></code></a> (0<em> years</em>) Reference year to use when <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.yearly_cycle.scaling.period"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.yearly_cycle</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.scaling</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.period</span></code></a> is active.</p></li>
+</ol>
 </div>
 <div class="section" id="sec-atmosphere-searise-greenland">
-<span id="id1"></span><h2><a class="toc-backref" href="#id22">SeaRISE-Greenland</a><a class="headerlink" href="#sec-atmosphere-searise-greenland" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">searise_greenland</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">lon</span></code>,
+<span id="id1"></span><h2><a class="toc-backref" href="#id19">SeaRISE-Greenland</a><a class="headerlink" href="#sec-atmosphere-searise-greenland" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">searise_greenland</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">lon</span></code>,
 <code class="variable docutils literal notranslate"><span class="pre">lat</span></code>,
-<code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::SeaRISEGreenland</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">See also:</th><td class="field-body"><a class="reference internal" href="#sec-atmosphere-precip-scaling"><span class="std std-ref">Precipitation correction using scalar temperature offsets</span></a></td>
-</tr>
-</tbody>
-</table>
+<code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::SeaRISEGreenland</span></code></p>
+</dd>
+<dt class="field-even">See also</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sec-atmosphere-precip-scaling"><span class="std std-ref">Precipitation correction using scalar temperature offsets</span></a></p>
+</dd>
+</dl>
 <p>This atmosphere model component implements a longitude, latitude, and elevation dependent
 near-surface air temperature parameterization and a cosine yearly cycle described in
-<a class="reference internal" href="../zzz_references_html.html#faustoetal2009" id="id2">[1]</a> and uses a constant in time ice-equivalent precipitation field (in units
+<a class="bibtex reference internal" href="../zzz_references_html.html#faustoetal2009" id="id2">[1]</a> and uses a constant in time ice-equivalent precipitation field (in units
 of thickness per time, variable <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code>) that is read from an input (<code class="docutils literal notranslate"><span class="pre">-i</span></code>)
 file. To read time-independent precipitation from a different file, use the option
 <code class="option docutils literal notranslate"><span class="pre">-atmosphere_searise_greenland_file</span></code>.</p>
@@ -154,70 +159,68 @@ file. To read time-independent precipitation from a different file, use the opti
 <a class="reference internal" href="#sec-atmosphere-precip-scaling"><span class="std std-ref">Precipitation correction using scalar temperature offsets</span></a>, for an implementation of the SeaRISE-Greenland
 formula for precipitation adjustment using air temperature offsets relative to present; a
 7.3% change of precipitation rate for every one degree Celsius of temperature change
-<a class="reference internal" href="../zzz_references_html.html#huybrechts02" id="id3">[2]</a>.</p>
+<a class="bibtex reference internal" href="../zzz_references_html.html#huybrechts02" id="id3">[2]</a>.</p>
 </div>
 <div class="section" id="pik">
-<span id="sec-atmosphere-pik"></span><h2><a class="toc-backref" href="#id23">PIK</a><a class="headerlink" href="#pik" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">pik</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">lat</span></code>, <code class="variable docutils literal notranslate"><span class="pre">lon</span></code>, <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::PIK</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-pik"></span><h2><a class="toc-backref" href="#id20">PIK</a><a class="headerlink" href="#pik" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">pik</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">lat</span></code>, <code class="variable docutils literal notranslate"><span class="pre">lon</span></code>, <code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::PIK</span></code></p>
+</dd>
+</dl>
 <p>This model component reads a time-independent precipitation field from an input file
-specified by <code class="config docutils literal notranslate"><span class="pre">atmosphere.pik.file</span></code> and computes near-surface air temperature using
-a parameterization selected using <code class="config docutils literal notranslate"><span class="pre">atmosphere.pik.parameterization</span></code> (command-line
-option <code class="option docutils literal notranslate"><span class="pre">-atmosphere_pik</span></code>).</p>
+specified by <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.pik.file"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.pik</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.file</span></code></a> and computes near-surface air temperature using
+a parameterization selected using <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.pik.parameterization"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.pik</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.parameterization</span></code></a>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Parameterizations implemented in this model are appropriate for the <strong>Antarctic</strong> ice
-sheet.</li>
-<li>All parameterizations except for the first one implement a cosine annual cycle of the
-near-surface air temperature.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Parameterizations implemented in this model are appropriate for the <strong>Antarctic</strong> ice
+sheet.</p></li>
+<li><p>All parameterizations except for the first one implement a cosine annual cycle of the
+near-surface air temperature.</p></li>
 </ul>
 </div>
-<table border="1" class="colwidths-given docutils" id="id17">
-<caption><span class="caption-number">Table 46 </span><span class="caption-text">Near-surface air temperature parameterizations</span><a class="headerlink" href="#id17" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given docutils align-default" id="id15">
+<caption><span class="caption-number">Table 44 </span><span class="caption-text">Near-surface air temperature parameterizations</span><a class="headerlink" href="#id15" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="33%" />
-<col width="67%" />
+<col style="width: 33%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Keyword</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Keyword</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">martin</span></code> (default)</td>
-<td>Uses equation (1) from <a class="reference internal" href="../zzz_references_html.html#martinetal2011" id="id4">[3]</a> to parameterize mean annual
-temperature with <em>no seasonal variation in temperature.</em></td>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">martin</span></code> (default)</p></td>
+<td><p>Uses equation (1) from <a class="bibtex reference internal" href="../zzz_references_html.html#martinetal2011" id="id4">[3]</a> to parameterize mean annual
+temperature with <em>no seasonal variation in temperature.</em></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">huybrechts_dewolde</span></code></td>
-<td>Mean annual and mean summer temperatures are computed using parameterizations for
-the Antarctic ice sheet described in <a class="reference internal" href="../zzz_references_html.html#huybrechtsdewolde" id="id5">[4]</a> (equations C1 and C2).</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">huybrechts_dewolde</span></code></p></td>
+<td><p>Mean annual and mean summer temperatures are computed using parameterizations for
+the Antarctic ice sheet described in <a class="bibtex reference internal" href="../zzz_references_html.html#huybrechtsdewolde" id="id5">[4]</a> (equations C1 and C2).</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">martin_huybrechts_dewolde</span></code></td>
-<td>Hybrid of the two above: mean annual temperature as in <a class="reference internal" href="../zzz_references_html.html#martinetal2011" id="id6">[3]</a> with
-the amplitude of the annual cycle from <a class="reference internal" href="../zzz_references_html.html#huybrechtsdewolde" id="id7">[4]</a>.</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">martin_huybrechts_dewolde</span></code></p></td>
+<td><p>Hybrid of the two above: mean annual temperature as in <a class="bibtex reference internal" href="../zzz_references_html.html#martinetal2011" id="id6">[3]</a> with
+the amplitude of the annual cycle from <a class="bibtex reference internal" href="../zzz_references_html.html#huybrechtsdewolde" id="id7">[4]</a>.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">era_interim</span></code></td>
-<td>Mean annual and mean summer temperatures use parameterizations based on multiple
-regression analysis of ERA INTERIM data.</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">era_interim</span></code></p></td>
+<td><p>Mean annual and mean summer temperatures use parameterizations based on multiple
+regression analysis of ERA INTERIM data.</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">era_interim_sin</span></code></td>
-<td>Mean annual and mean summer temperatures use parameterizations based on multiple
-regression analysis of ERA INTERIM data with a <span class="math notranslate nohighlight">\(\sin(\text{latitude})\)</span> dependence.</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">era_interim_sin</span></code></p></td>
+<td><p>Mean annual and mean summer temperatures use parameterizations based on multiple
+regression analysis of ERA INTERIM data with a <span class="math notranslate nohighlight">\(\sin(\text{latitude})\)</span> dependence.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">era_interim_lon</span></code></td>
-<td>Mean annual and mean summer temperatures use parameterizations based on multiple
-regression analysis of ERA INTERIM data with a <span class="math notranslate nohighlight">\(\cos(\text{longitude})\)</span> dependence.</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">era_interim_lon</span></code></p></td>
+<td><p>Mean annual and mean summer temperatures use parameterizations based on multiple
+regression analysis of ERA INTERIM data with a <span class="math notranslate nohighlight">\(\cos(\text{longitude})\)</span> dependence.</p></td>
 </tr>
 </tbody>
 </table>
@@ -225,21 +228,20 @@ regression analysis of ERA INTERIM data with a <span class="math notranslate noh
 parameterization of the ice temperature at its top surface.</p>
 </div>
 <div class="section" id="one-weather-station">
-<span id="sec-atmosphere-one-station"></span><h2><a class="toc-backref" href="#id24">One weather station</a><a class="headerlink" href="#one-weather-station" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">one_station</span></code>
-<code class="option docutils literal notranslate"><span class="pre">-atmosphere_one_station_file</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code> [Kelvin],
-<code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::WeatherStation</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-one-station"></span><h2><a class="toc-backref" href="#id21">One weather station</a><a class="headerlink" href="#one-weather-station" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">one_station</span></code>
+<code class="option docutils literal notranslate"><span class="pre">-atmosphere_one_station_file</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">air_temp</span></code> [Kelvin],
+<code class="variable docutils literal notranslate"><span class="pre">precipitation</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::WeatherStation</span></code></p>
+</dd>
+</dl>
 <p>This model component reads scalar time-series of the near-surface air temperature and
 precipitation from a file specified using the <code class="option docutils literal notranslate"><span class="pre">-atmosphere_one_station_file</span></code> option
 and uses them at <em>all</em> grid points in the domain. In other words, resulting climate fields
@@ -249,227 +251,220 @@ are constant in space but not necessarily in time.</p>
 variablitity.</p>
 </div>
 <div class="section" id="scalar-temperature-offsets">
-<span id="sec-atmosphere-delta-t"></span><h2><a class="toc-backref" href="#id25">Scalar temperature offsets</a><a class="headerlink" href="#scalar-temperature-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,delta_T</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Delta_T</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-delta-t"></span><h2><a class="toc-backref" href="#id22">Scalar temperature offsets</a><a class="headerlink" href="#scalar-temperature-offsets" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,delta_T</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Delta_T</span></code></p>
+</dd>
+</dl>
 <p>This modifier applies scalar time-dependent air temperature offsets to the output of an
 atmosphere model. It takes the following command-line options.</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_T_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code>
-from.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_T_period</span></code> (<em>years</em>) sets the period of the forcing data (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_T_reference_year</span></code> sets the reference year (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_T_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code>
+from.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_T_period</span></code> (<em>years</em>) sets the period of the forcing data (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_T_reference_year</span></code> sets the reference year (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
 </ul>
 <p>Please make sure that <code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> has the units of “<code class="docutils literal notranslate"><span class="pre">Kelvin</span></code>”.</p>
 </div>
 <div class="section" id="scalar-precipitation-offsets">
-<span id="sec-atmosphere-delta-p"></span><h2><a class="toc-backref" href="#id26">Scalar precipitation offsets</a><a class="headerlink" href="#scalar-precipitation-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,delta_P</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_P</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Delta_P</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-delta-p"></span><h2><a class="toc-backref" href="#id23">Scalar precipitation offsets</a><a class="headerlink" href="#scalar-precipitation-offsets" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,delta_P</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">delta_P</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Delta_P</span></code></p>
+</dd>
+</dl>
 <p>This modifier applies scalar time-dependent precipitation offsets to the output of an
 atmosphere model. It takes the following command-line options.</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_P_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">delta_P</span></code>
-from.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_P_period</span></code> (<em>years</em>) sets the period of the forcing data (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_P_reference_year</span></code> sets the reference year (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_P_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">delta_P</span></code>
+from.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_P_period</span></code> (<em>years</em>) sets the period of the forcing data (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_delta_P_reference_year</span></code> sets the reference year (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
 </ul>
 </div>
 <div class="section" id="scalar-precipitation-scaling">
-<span id="sec-atmosphere-frac-p"></span><h2><a class="toc-backref" href="#id27">Scalar precipitation scaling</a><a class="headerlink" href="#scalar-precipitation-scaling" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,frac_P</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code> [no unit]</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Frac_P</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-frac-p"></span><h2><a class="toc-backref" href="#id24">Scalar precipitation scaling</a><a class="headerlink" href="#scalar-precipitation-scaling" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,frac_P</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code> [no unit]</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Frac_P</span></code></p>
+</dd>
+</dl>
 <p>This modifier scales precipitation output of an atmosphere model using a scalar
 time-dependent precipitation fraction, with a value of one corresponding to no change in
 precipitation. It takes the following command-line options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code>
-from.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_period</span></code> (<em>years</em>) sets the period of the forcing data (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_reference_year</span></code> sets the reference year (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code>
+from.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_period</span></code> (<em>years</em>) sets the period of the forcing data (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_reference_year</span></code> sets the reference year (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
 </ul>
 </div>
 <div class="section" id="precipitation-correction-using-scalar-temperature-offsets">
-<span id="sec-atmosphere-precip-scaling"></span><h2><a class="toc-backref" href="#id28">Precipitation correction using scalar temperature offsets</a><a class="headerlink" href="#precipitation-correction-using-scalar-temperature-offsets" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,precip_scaling</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> [degrees Kelvin]</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::PrecipitationScaling</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-precip-scaling"></span><h2><a class="toc-backref" href="#id25">Precipitation correction using scalar temperature offsets</a><a class="headerlink" href="#precipitation-correction-using-scalar-temperature-offsets" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,precip_scaling</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> [degrees Kelvin]</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::PrecipitationScaling</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements the SeaRISE-Greenland formula for a precipitation correction from
 present; a 7.3% change of precipitation rate for every one degree Celsius of air
-temperature change <a class="reference internal" href="../zzz_references_html.html#huybrechts02" id="id8">[2]</a>. See <a class="reference external" href="http://websrv.cs.umt.edu/isis/index.php/Model_Initialization#Greenland">SeaRISE Greenland model initialization</a> for details. The input file should contain air temperature offsets
+temperature change <a class="bibtex reference internal" href="../zzz_references_html.html#huybrechts02" id="id8">[2]</a>. See <a class="reference external" href="http://websrv.cs.umt.edu/isis/index.php/Model_Initialization#Greenland">SeaRISE Greenland model initialization</a> for details. The input file should contain air temperature offsets
 in the format used by <code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,delta_T</span></code> modifier, see section <a class="reference internal" href="#sec-atmosphere-delta-t"><span class="std std-ref">Scalar temperature offsets</span></a>.</p>
 <p>This mechanisms increases precipitation by <span class="math notranslate nohighlight">\(100(\exp(C) - 1)\)</span> percent for each degree of
 temperature increase, where</p>
-<p><span class="math notranslate nohighlight">\(C =\)</span> <code class="config docutils literal notranslate"><span class="pre">atmosphere.precip_exponential_factor_for_temperature</span></code>.</p>
+<p><span class="math notranslate nohighlight">\(C =\)</span> <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.precip_exponential_factor_for_temperature"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.precip_exponential_factor_for_temperature</span></code></a>.</p>
 <p>It takes the following command-line options.</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_precip_scaling_file</span></code> sets the name of the file PISM will read
-<code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> from.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_precip_scaling_period</span></code> (<em>years</em>) sets the period of the forcing data
-(section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_precip_scaling_reference_year</span></code> sets the reference year (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_precip_scaling_file</span></code> sets the name of the file PISM will read
+<code class="variable docutils literal notranslate"><span class="pre">delta_T</span></code> from.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_precip_scaling_period</span></code> (<em>years</em>) sets the period of the forcing data
+(section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_precip_scaling_reference_year</span></code> sets the reference year (section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
 </ul>
 </div>
 <div class="section" id="adjustments-using-modeled-change-in-surface-elevation">
-<span id="sec-atmosphere-elevation-change"></span><h2><a class="toc-backref" href="#id29">Adjustments using modeled change in surface elevation</a><a class="headerlink" href="#adjustments-using-modeled-change-in-surface-elevation" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,elevation_change</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">surface_altitude</span></code> (CF standard name)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::ElevationChange</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-elevation-change"></span><h2><a class="toc-backref" href="#id26">Adjustments using modeled change in surface elevation</a><a class="headerlink" href="#adjustments-using-modeled-change-in-surface-elevation" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,elevation_change</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">surface_altitude</span></code> (CF standard name)</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::ElevationChange</span></code></p>
+</dd>
+</dl>
 <p>The <code class="docutils literal notranslate"><span class="pre">elevation_change</span></code> modifier adjusts air temperature and precipitation using modeled
 changes in surface elevation relative to a reference elevation read from a file.</p>
 <p>The near-surface air temperature is modified using an elevation lapse rate <span class="math notranslate nohighlight">\(\gamma_T =\)</span>
-<code class="config docutils literal notranslate"><span class="pre">atmosphere.elevation_change.temperature_lapse_rate</span></code>. Here</p>
+<a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.elevation_change.temperature_lapse_rate"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.elevation_change</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.temperature_lapse_rate</span></code></a>. Here</p>
 <div class="math notranslate nohighlight">
 \[\gamma_T = -\frac{dT}{dz}.\]</div>
 <p>Two methods of adjusting precipitation are available:</p>
 <ul>
-<li><p class="first">Scaling using an exponential factor</p>
+<li><p>Scaling using an exponential factor</p>
 <div class="math notranslate nohighlight">
 \[\mathrm{P} = \mathrm{P_{input}} \cdot \exp(C \cdot \Delta T),\]</div>
-<p>where <span class="math notranslate nohighlight">\(C =\)</span> <code class="config docutils literal notranslate"><span class="pre">atmosphere.precip_exponential_factor_for_temperature</span></code> and <span class="math notranslate nohighlight">\(\Delta
+<p>where <span class="math notranslate nohighlight">\(C =\)</span> <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.precip_exponential_factor_for_temperature"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.precip_exponential_factor_for_temperature</span></code></a> and <span class="math notranslate nohighlight">\(\Delta
 T\)</span> is the temperature difference produced by applying
-<code class="config docutils literal notranslate"><span class="pre">atmosphere.elevation_change.temperature_lapse_rate</span></code>.</p>
+<a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.elevation_change.temperature_lapse_rate"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.elevation_change</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.temperature_lapse_rate</span></code></a>.</p>
 <p>This mechanisms increases precipitation by <span class="math notranslate nohighlight">\(100(\exp(C) - 1)\)</span> percent for each degree of
 temperature increase.</p>
 <p>To use this method, set <code class="option docutils literal notranslate"><span class="pre">-precip_adjustment</span> <span class="pre">scale</span></code>.</p>
 </li>
-<li><p class="first">Elevation lapse rate for precipitation</p>
+<li><p>Elevation lapse rate for precipitation</p>
 <div class="math notranslate nohighlight">
 \[\mathrm{P} = \mathrm{P_{input}} - \Delta h \cdot \gamma_P,\]</div>
-<p>where <span class="math notranslate nohighlight">\(\gamma_P =\)</span> <code class="config docutils literal notranslate"><span class="pre">atmosphere.elevation_change.precipitation.lapse_rate</span></code> and
+<p>where <span class="math notranslate nohighlight">\(\gamma_P =\)</span> <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.elevation_change.precipitation.lapse_rate"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.elevation_change</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.precipitation</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.lapse_rate</span></code></a> and
 <span class="math notranslate nohighlight">\(\Delta h\)</span> is the difference between modeled and reference surface elevations.</p>
 <p>To use this method, set <code class="option docutils literal notranslate"><span class="pre">-smb_adjustment</span> <span class="pre">shift</span></code>.</p>
 </li>
 </ul>
 <p>It uses the following options.</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-temp_lapse_rate</span></code> gives the temperature lapse rate, in <span class="math notranslate nohighlight">\(K/km\)</span>. Note that we
-use the following definition of the temperature lapse rate:</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-precip_adjustment</span></code> chooses the precipitation lapse rate (<code class="docutils literal notranslate"><span class="pre">shift</span></code>) or scaling
-precipitation with an exponential factor (<code class="docutils literal notranslate"><span class="pre">scale</span></code>).</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-precip_lapse_rate</span></code> gives the precipitation lapse rate, in <span class="math notranslate nohighlight">\((kg / (m^{2} year)) / km\)</span>.
-Here <span class="math notranslate nohighlight">\(\gamma_P = -\frac{dP}{dz}\)</span>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_elevation_change_file</span></code> specifies a file containing the reference surface
+<li><p><code class="option docutils literal notranslate"><span class="pre">-temp_lapse_rate</span></code> gives the temperature lapse rate, in <span class="math notranslate nohighlight">\(K/km\)</span>. Note that we
+use the following definition of the temperature lapse rate:</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-precip_adjustment</span></code> chooses the precipitation lapse rate (<code class="docutils literal notranslate"><span class="pre">shift</span></code>) or scaling
+precipitation with an exponential factor (<code class="docutils literal notranslate"><span class="pre">scale</span></code>).</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-precip_lapse_rate</span></code> gives the precipitation lapse rate, in <span class="math notranslate nohighlight">\((kg / (m^{2} year)) / km\)</span>.
+Here <span class="math notranslate nohighlight">\(\gamma_P = -\frac{dP}{dz}\)</span>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_elevation_change_file</span></code> specifies a file containing the reference surface
 elevation field (standard name: <code class="variable docutils literal notranslate"><span class="pre">surface_altitude</span></code>). This file may contain several
 surface elevation records to use lapse rate corrections relative to a time-dependent
 surface. If one record is provided, the reference surface elevation is assumed to be
-time-independent.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_elevation_change_period</span></code> gives the period, in model years; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_elevation_change_reference_year</span></code> specifies the reference date; see section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+time-independent.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_elevation_change_period</span></code> gives the period, in model years; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_elevation_change_reference_year</span></code> specifies the reference date; see section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 </div>
 <div class="section" id="using-climate-data-anomalies">
-<span id="sec-atmosphere-anomaly"></span><h2><a class="toc-backref" href="#id30">Using climate data anomalies</a><a class="headerlink" href="#using-climate-data-anomalies" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,anomaly</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">air_temp_anomaly</span></code>,
-<code class="variable docutils literal notranslate"><span class="pre">precipitation_anomaly</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Anomaly</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-atmosphere-anomaly"></span><h2><a class="toc-backref" href="#id27">Using climate data anomalies</a><a class="headerlink" href="#using-climate-data-anomalies" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,anomaly</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">air_temp_anomaly</span></code>,
+<code class="variable docutils literal notranslate"><span class="pre">precipitation_anomaly</span></code> <span class="math notranslate nohighlight">\(kg / (m^{2} s)\)</span></p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Anomaly</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements a spatially-variable version of <code class="docutils literal notranslate"><span class="pre">-atmosphere</span>
 <span class="pre">...,delta_T,delta_P</span></code>.</p>
 <p>It takes the following options:</p>
 <ul class="simple">
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_anomaly_file</span></code> specifies a file containing variables
-<code class="variable docutils literal notranslate"><span class="pre">air_temp_anomaly</span></code> and <code class="variable docutils literal notranslate"><span class="pre">precipitation_anomaly</span></code>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_anomaly_period</span></code> (years) specifies the period of the forcing data, in
-model years; section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
-<li><code class="option docutils literal notranslate"><span class="pre">-atmosphere_anomaly_reference_year</span></code> specifies the reference year; section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_anomaly_file</span></code> specifies a file containing variables
+<code class="variable docutils literal notranslate"><span class="pre">air_temp_anomaly</span></code> and <code class="variable docutils literal notranslate"><span class="pre">precipitation_anomaly</span></code>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_anomaly_period</span></code> (years) specifies the period of the forcing data, in
+model years; section <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
+<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_anomaly_reference_year</span></code> specifies the reference year; section
+<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>.</p></li>
 </ul>
 <p>See also to <code class="docutils literal notranslate"><span class="pre">-surface</span> <span class="pre">...,anomaly</span></code> (section <a class="reference internal" href="surface.html#sec-surface-anomaly"><span class="std std-ref">Using climate data anomalies</span></a>), which is
 similar, but applies anomalies at the surface level.</p>
 </div>
 <div class="section" id="orographic-precipitation">
-<span id="sec-orographic-precipitation"></span><h2><a class="toc-backref" href="#id31">Orographic precipitation</a><a class="headerlink" href="#orographic-precipitation" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,orographic_precipitation</span></code></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body">None</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">C++ class:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::OrographicPrecipitation</span></code></td>
-</tr>
-</tbody>
-</table>
+<span id="sec-orographic-precipitation"></span><h2><a class="toc-backref" href="#id28">Orographic precipitation</a><a class="headerlink" href="#orographic-precipitation" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,orographic_precipitation</span></code></p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">C++ class</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::OrographicPrecipitation</span></code></p>
+</dd>
+</dl>
 <p>This modifier implements the linear orographic precipitation model described in
-<a class="reference internal" href="../zzz_references_html.html#smithbarstad2004" id="id9">[5]</a> with a modification incorporating the influence of the Coriolis
-force from <a class="reference internal" href="../zzz_references_html.html#smithbarstadbonneau2005" id="id10">[6]</a>.</p>
+<a class="bibtex reference internal" href="../zzz_references_html.html#smithbarstad2004" id="id9">[5]</a> with a modification incorporating the influence of the Coriolis
+force from <a class="bibtex reference internal" href="../zzz_references_html.html#smithbarstadbonneau2005" id="id10">[6]</a>.</p>
 <p>We compute the Fourier transform of the precipitation field using the formula below (see
-equation 49 in <a class="reference internal" href="../zzz_references_html.html#smithbarstad2004" id="id11">[5]</a> or equation 3 in <a class="reference internal" href="../zzz_references_html.html#smithbarstadbonneau2005" id="id12">[6]</a>).</p>
+equation 49 in <a class="bibtex reference internal" href="../zzz_references_html.html#smithbarstad2004" id="id11">[5]</a> or equation 3 in <a class="bibtex reference internal" href="../zzz_references_html.html#smithbarstadbonneau2005" id="id12">[6]</a>).</p>
 <div class="math notranslate nohighlight" id="equation-eq-orographic-precipitation">
 <span class="eqno">(28)<a class="headerlink" href="#equation-eq-orographic-precipitation" title="Permalink to this equation">¶</a></span>\[\hat P_{\text{LT}}(k, l) = \frac{C_w i \sigma \hat h(k, l)}
 {(1 - i m H_w) (1 + i \sigma \tau_c) (1 + i \sigma \tau_f)},\]</div>
 <p>where <span class="math notranslate nohighlight">\(h\)</span> is the surface elevation, <span class="math notranslate nohighlight">\(C_w = \rho_{S_{\text{ref}}} \Gamma_m / \gamma\)</span>
 relates the condensation rate to vertical motion (see the appendix of
-<a class="reference internal" href="../zzz_references_html.html#smithbarstad2004" id="id13">[5]</a>), <span class="math notranslate nohighlight">\(m\)</span> is the vertical wavenumber (see equation 6 in
-<a class="reference internal" href="../zzz_references_html.html#smithbarstadbonneau2005" id="id14">[6]</a>), and <span class="math notranslate nohighlight">\(\sigma\)</span> is the intrinsic frequency. The rest of the
+<a class="bibtex reference internal" href="../zzz_references_html.html#smithbarstad2004" id="id13">[5]</a>), <span class="math notranslate nohighlight">\(m\)</span> is the vertical wavenumber (see equation 6 in
+<a class="bibtex reference internal" href="../zzz_references_html.html#smithbarstadbonneau2005" id="id14">[6]</a>), and <span class="math notranslate nohighlight">\(\sigma\)</span> is the intrinsic frequency. The rest of the
 constants are defined in the table below.</p>
 <p>The spatial pattern of precipitation is recovered using an inverse Fourier transform
 followed by post-processing:</p>
@@ -482,68 +477,24 @@ temperature cycle from <code class="docutils literal notranslate"><span class="p
 model.</p>
 <p>The only spatially-variable input of this model is the surface elevation (<span class="math notranslate nohighlight">\(h\)</span> above)
 modeled by PISM. It is controlled by a number of configuration parameters. See parameters
-with the prefix <code class="docutils literal notranslate"><span class="pre">atmosphere.orographic_precipitation</span></code>.</p>
-<table border="1" class="colwidths-given docutils" id="id18">
-<caption><span class="caption-number">Table 47 </span><span class="caption-text">Parameters controlling orographic precipitation</span><a class="headerlink" href="#id18" title="Permalink to this table">¶</a></caption>
-<colgroup>
-<col width="33%" />
-<col width="67%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Parameter</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">background_precip_pre</span></code></td>
-<td>Background precipitation <span class="math notranslate nohighlight">\(P_{\text{pre}}\)</span> in <a class="reference internal" href="#equation-eq-orographic-post-processing">(29)</a></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">background_precip_post</span></code></td>
-<td>Background precipitation <span class="math notranslate nohighlight">\(P_{\text{post}}\)</span> in <a class="reference internal" href="#equation-eq-orographic-post-processing">(29)</a></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">scale_factor</span></code></td>
-<td>Scaling factor <span class="math notranslate nohighlight">\(S\)</span> in <a class="reference internal" href="#equation-eq-orographic-post-processing">(29)</a></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">conversion_time</span></code></td>
-<td>Conversion time of cloud water into hydrometeors <span class="math notranslate nohighlight">\(\tau_c\)</span></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fallout_time</span></code></td>
-<td>Fallout time <span class="math notranslate nohighlight">\(\tau_f\)</span></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">water_vapor_scale_height</span></code></td>
-<td>Moist layer depth <span class="math notranslate nohighlight">\(H_w\)</span></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">moist_stability_frequency</span></code></td>
-<td>Moist stability frequency <span class="math notranslate nohighlight">\(N_m\)</span></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">wind_speed</span></code></td>
-<td>Wind speed</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">wind_direction</span></code></td>
-<td>Wind direction. <span class="math notranslate nohighlight">\(0\)</span> corresponds to the wind from the north, <span class="math notranslate nohighlight">\(90\)</span> from the east, and
-so on.</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">lapse_rate</span></code></td>
-<td>Lapse rate <span class="math notranslate nohighlight">\(\gamma\)</span>. Note that here <span class="math notranslate nohighlight">\(\gamma &lt; 0\)</span>.</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">moist_adiabatic_lapse_rate</span></code></td>
-<td>Moist adiabatic lapse rate <span class="math notranslate nohighlight">\(\Gamma_m\)</span>. Note that here <span class="math notranslate nohighlight">\(\Gamma_m &lt; 0\)</span>.</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">reference_density</span></code></td>
-<td>Reference density <span class="math notranslate nohighlight">\(\rho_{S_{\text{ref}}}\)</span> (see equation A3 in <a class="reference internal" href="../zzz_references_html.html#smithbarstad2004" id="id15">[5]</a>)</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">coriolis_latitude</span></code></td>
-<td>Average latitude of the modeling domain used to include the influence of the
-Coriolis force (see equation 6 in <a class="reference internal" href="../zzz_references_html.html#smithbarstadbonneau2005" id="id16">[6]</a>)</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">truncate</span></code></td>
-<td><p class="first">If set, negative precipitation values are truncated as in
-<a class="reference internal" href="#equation-eq-orographic-post-processing">(29)</a>, otherwise the post-processing formula is</p>
-<p class="last"><span class="math notranslate nohighlight">\(P = (P_{\text{pre}} + P_{\text{LT}}) \cdot S + P_{\text{post}}\)</span>.</p>
-</td>
-</tr>
-</tbody>
-</table>
+with the prefix <code class="docutils literal notranslate"><span class="pre">atmosphere.orographic_precipitation.</span></code> listed below.</p>
+<ol class="simple">
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.background_precip_post"><code class="docutils literal notranslate"><span class="pre">background_precip_post</span></code></a> (0<em> mm/hr</em>) Background precipitation <span class="math notranslate nohighlight">\(P_{\mathrm{post}}\)</span> added after the truncation.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.background_precip_pre"><code class="docutils literal notranslate"><span class="pre">background_precip_pre</span></code></a> (0<em> mm/hr</em>) Background precipitation <span class="math notranslate nohighlight">\(P_{\mathrm{pre}}\)</span> added before the truncation.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.conversion_time"><code class="docutils literal notranslate"><span class="pre">conversion_time</span></code></a> (1000<em> s</em>) Cloud conversion time</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.coriolis_latitude"><code class="docutils literal notranslate"><span class="pre">coriolis_latitude</span></code></a> (0<em> degrees_N</em>) Latitude used to compute Coriolis force</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.fallout_time"><code class="docutils literal notranslate"><span class="pre">fallout_time</span></code></a> (1000<em> s</em>) Fallout time</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.grid_size_factor"><code class="docutils literal notranslate"><span class="pre">grid_size_factor</span></code></a> (2) The spectral grid size is <code class="docutils literal notranslate"><span class="pre">(Z*(grid.Mx</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">+</span> <span class="pre">1,</span> <span class="pre">Z*(grid.My</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">+</span> <span class="pre">1)</span></code> where <code class="docutils literal notranslate"><span class="pre">Z</span></code> is given by this parameter.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.lapse_rate"><code class="docutils literal notranslate"><span class="pre">lapse_rate</span></code></a> (-5.8<em> K / km</em>) Lapse rate</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.moist_adiabatic_lapse_rate"><code class="docutils literal notranslate"><span class="pre">moist_adiabatic_lapse_rate</span></code></a> (-6.5<em> K / km</em>) Water vapor scale height</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.moist_stability_frequency"><code class="docutils literal notranslate"><span class="pre">moist_stability_frequency</span></code></a> (0.05<em> 1/s</em>) Moist stability frequency</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.reference_density"><code class="docutils literal notranslate"><span class="pre">reference_density</span></code></a> (0.0074<em> kg m-3</em>) Reference density</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.scale_factor"><code class="docutils literal notranslate"><span class="pre">scale_factor</span></code></a> (1) Precipitation scaling factor <span class="math notranslate nohighlight">\(S\)</span>.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.truncate"><code class="docutils literal notranslate"><span class="pre">truncate</span></code></a> (true) Truncate precipitation at 0, disallowing negative precipitation values.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.water_vapor_scale_height"><code class="docutils literal notranslate"><span class="pre">water_vapor_scale_height</span></code></a> (2500<em> m</em>) Water vapor scale height</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.wind_direction"><code class="docutils literal notranslate"><span class="pre">wind_direction</span></code></a> (270<em> degrees</em>) The direction the wind is coming from</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.orographic_precipitation.wind_speed"><code class="docutils literal notranslate"><span class="pre">wind_speed</span></code></a> (10<em> m/s</em>) The wind speed.</p></li>
+</ol>
 </div>
 </div>
 
@@ -617,25 +568,23 @@ Coriolis force (see equation 6 in <a class="reference internal" href="../zzz_ref
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

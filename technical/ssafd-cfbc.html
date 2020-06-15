@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calving front stress boundary condition &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="BOMBPROOF, PISM’s numerical scheme for conservation of energy" href="bombproof.html" />
     <link rel="prev" title="Using Schoof’s parameterized bed roughness technique in PISM" href="bed_roughness.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -35,20 +35,22 @@
   <div class="section" id="calving-front-stress-boundary-condition">
 <h1><a class="toc-backref" href="#id6">Calving front stress boundary condition</a><a class="headerlink" href="#calving-front-stress-boundary-condition" title="Permalink to this headline">¶</a></h1>
 <div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#calving-front-stress-boundary-condition" id="id6">Calving front stress boundary condition</a><ul>
-<li><a class="reference internal" href="#notation" id="id7">Notation</a></li>
-<li><a class="reference internal" href="#id1" id="id8">Calving front stress boundary condition</a></li>
-<li><a class="reference internal" href="#shallow-shelf-approximation" id="id9">Shallow shelf approximation</a></li>
-<li><a class="reference internal" href="#implementing-the-calving-front-boundary-condition" id="id10">Implementing the calving front boundary condition</a></li>
-<li><a class="reference internal" href="#evaluating-the-pressure-difference-term" id="id11">Evaluating the “pressure difference term”</a><ul>
-<li><a class="reference internal" href="#floating-case" id="id12">Floating case</a></li>
-<li><a class="reference internal" href="#grounded-below-sea-level" id="id13">Grounded below sea level</a></li>
-<li><a class="reference internal" href="#grounded-above-sea-level" id="id14">Grounded above sea level</a></li>
+<li><p><a class="reference internal" href="#calving-front-stress-boundary-condition" id="id6">Calving front stress boundary condition</a></p>
+<ul>
+<li><p><a class="reference internal" href="#notation" id="id7">Notation</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id8">Calving front stress boundary condition</a></p></li>
+<li><p><a class="reference internal" href="#shallow-shelf-approximation" id="id9">Shallow shelf approximation</a></p></li>
+<li><p><a class="reference internal" href="#implementing-the-calving-front-boundary-condition" id="id10">Implementing the calving front boundary condition</a></p></li>
+<li><p><a class="reference internal" href="#evaluating-the-pressure-difference-term" id="id11">Evaluating the “pressure difference term”</a></p>
+<ul>
+<li><p><a class="reference internal" href="#floating-case" id="id12">Floating case</a></p></li>
+<li><p><a class="reference internal" href="#grounded-below-sea-level" id="id13">Grounded below sea level</a></p></li>
+<li><p><a class="reference internal" href="#grounded-above-sea-level" id="id14">Grounded above sea level</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#modeling-melange-back-pressure" id="id15">Modeling melange back-pressure</a></li>
+<li><p><a class="reference internal" href="#modeling-melange-back-pressure" id="id15">Modeling melange back-pressure</a></p></li>
 </ul>
 </li>
 </ul>
@@ -74,71 +76,71 @@
 \newcommand{\partII}{(\tilde N_{xy})}\]</div>
 <div class="section" id="notation">
 <h2><a class="toc-backref" href="#id7">Notation</a><a class="headerlink" href="#notation" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="docutils" id="tab-cfbc-notation">
+<table class="docutils align-default" id="tab-cfbc-notation">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col style="width: 50%" />
+<col style="width: 50%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Variable</th>
-<th class="head">Meaning</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Meaning</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(h\)</span></td>
-<td>ice top surface elevation</td>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(h\)</span></p></td>
+<td><p>ice top surface elevation</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(b\)</span></td>
-<td>ice bottom surface elevation</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(b\)</span></p></td>
+<td><p>ice bottom surface elevation</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(H = h - b\)</span></td>
-<td>ice thickness</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(H = h - b\)</span></p></td>
+<td><p>ice thickness</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(\zs\)</span></td>
-<td>sea level elevation</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\zs\)</span></p></td>
+<td><p>sea level elevation</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(g\)</span></td>
-<td>acceleration due to gravity</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(g\)</span></p></td>
+<td><p>acceleration due to gravity</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(\rhoi\)</span></td>
-<td>ice density</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\rhoi\)</span></p></td>
+<td><p>ice density</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(\rhosw\)</span></td>
-<td>sea water density</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\rhosw\)</span></p></td>
+<td><p>sea water density</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(\viscosity\)</span></td>
-<td>vertically-averaged viscosity of ice</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\viscosity\)</span></p></td>
+<td><p>vertically-averaged viscosity of ice</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(\n\)</span></td>
-<td>normal vector</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\n\)</span></p></td>
+<td><p>normal vector</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(B(T)\)</span></td>
-<td>ice hardness</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(B(T)\)</span></p></td>
+<td><p>ice hardness</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(\pice\)</span></td>
-<td>pressure due to the weight of a column of ice</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\pice\)</span></p></td>
+<td><p>pressure due to the weight of a column of ice</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(\psw\)</span></td>
-<td>pressure due to the weight of a column of seawater</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\psw\)</span></p></td>
+<td><p>pressure due to the weight of a column of seawater</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(D\)</span></td>
-<td>strain rate tensor</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(D\)</span></p></td>
+<td><p>strain rate tensor</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(d_{e}\)</span></td>
-<td>effective strain rate</td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(d_{e}\)</span></p></td>
+<td><p>effective strain rate</p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(t\)</span></td>
-<td>Cauchy stress tensor</td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td><p>Cauchy stress tensor</p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(t^{D}\)</span></td>
-<td>deviatoric stress tensor; note <span class="math notranslate nohighlight">\(\td{ij} = t_{ij} + p \delta_{ij}\)</span></td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(t^{D}\)</span></p></td>
+<td><p>deviatoric stress tensor; note <span class="math notranslate nohighlight">\(\td{ij} = t_{ij} + p \delta_{ij}\)</span></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="id1">
 <h2><a class="toc-backref" href="#id8">Calving front stress boundary condition</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>In the 3D case the calving front stress boundary condition (<a class="reference internal" href="../zzz_references_html.html#greveblatter2009" id="id2">[52]</a>, equation
+<p>In the 3D case the calving front stress boundary condition (<a class="bibtex reference internal" href="../zzz_references_html.html#greveblatter2009" id="id2">[52]</a>, equation
 (6.19)) reads</p>
 <div class="math notranslate nohighlight">
 \[\left.t\right|_{\text{cf}} \cdot \n = -\psw \n.\]</div>
@@ -155,7 +157,7 @@ vertically-integrated forms of the stresses <span class="math notranslate nohigh
 separately from the shear stresses <span class="math notranslate nohighlight">\(\td{xz},\td{yz}\)</span>, the third of the above equations can
 be omitted from the remaining analysis.</p>
 <p>Let <span class="math notranslate nohighlight">\(\pice=\rhoi g (h-z)\)</span>. In the hydrostatic approximation, <span class="math notranslate nohighlight">\(t_{zz}=-\pice\)</span>
-(<a class="reference internal" href="../zzz_references_html.html#greveblatter2009" id="id3">[52]</a>, equation (5.59)). Next, since <span class="math notranslate nohighlight">\(\td{}\)</span> has trace zero,</p>
+(<a class="bibtex reference internal" href="../zzz_references_html.html#greveblatter2009" id="id3">[52]</a>, equation (5.59)). Next, since <span class="math notranslate nohighlight">\(\td{}\)</span> has trace zero,</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}p &amp;= p - \td{xx} - \td{yy} - \td{zz}\\&amp;= - t_{zz} - \td{xx} - \td{yy}\\&amp;= \pice - \td{xx} - \td{yy}.\end{aligned}\end{align} \]</div>
 <p>Thus</p>
@@ -205,8 +207,8 @@ calving front. Then <span class="math notranslate nohighlight">\(\n = (1,0)\)</s
 <div class="math notranslate nohighlight" id="equation-ssafd-cfbc-vertintbdry">
 <span class="eqno">(37)<a class="headerlink" href="#equation-ssafd-cfbc-vertintbdry" title="Permalink to this equation">¶</a></span>\[2N_{xx} + N_{yy} = \int_{b}^{h}(\pice - \psw) dz.\]</div>
 <p>We call the right-hand side of <a class="reference internal" href="#equation-ssafd-cfbc-vertintbdry">(37)</a> the “pressure difference term.”</p>
-<p>In forming the matrix approximation of the SSA <a class="reference internal" href="../zzz_references_html.html#bbssasliding" id="id4">[25]</a>,
-<a class="reference internal" href="../zzz_references_html.html#winkelmannetal2011" id="id5">[33]</a>, instead of assembling a matrix row corresponding to the
+<p>In forming the matrix approximation of the SSA <a class="bibtex reference internal" href="../zzz_references_html.html#bbssasliding" id="id4">[25]</a>,
+<a class="bibtex reference internal" href="../zzz_references_html.html#winkelmannetal2011" id="id5">[33]</a>, instead of assembling a matrix row corresponding to the
 generic equation <a class="reference internal" href="#equation-ssafd-cfbc-4">(36)</a> we use</p>
 <div class="math notranslate nohighlight">
 \[\frac1{\dx}\left(\left[\int_{b}^{h}(\pice - \psw) dz\right]_{i+\frac12,j} - \partI_{i-\frac12,j}\right) +
@@ -340,25 +342,23 @@ ranging from <span class="math notranslate nohighlight">\(0\)</span> to <span cl
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

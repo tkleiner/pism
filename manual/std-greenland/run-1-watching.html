@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Watching the first run &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Second run: a better ice-dynamics model" href="run-2.html" />
     <link rel="prev" title="First run" href="run-1.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -57,23 +57,21 @@ running</p>
 (right). Recall that our intention was to generate a minimal model of the Greenland ice
 sheet in approximate steady-state with a steady (constant-in-time) climate. The measurable
 steadiness of the <code class="docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code> time series is a possible standard for steady
-state (see <a class="reference internal" href="../../zzz_references_html.html#eismint00" id="id1">[21]</a>, for exampe).</p>
-<div class="figure" id="fig-growing">
+state (see <a class="bibtex reference internal" href="../../zzz_references_html.html#eismint00" id="id1">[21]</a>, for exampe).</p>
+<div class="figure align-default" id="fig-growing">
 <img alt="../../_images/growing-thk-ivol-g20km.png" src="../../_images/growing-thk-ivol-g20km.png" />
-<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Two views produced by <code class="docutils literal notranslate"><span class="pre">ncview</span></code> during a PISM model run.</span></p>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Two views produced by <code class="docutils literal notranslate"><span class="pre">ncview</span></code> during a PISM model run.</span><a class="headerlink" href="#fig-growing" title="Permalink to this image">¶</a></p>
 <div class="legend">
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Left:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">thk</span></code>, the ice sheet thickness, a space-dependent field, from file
-<code class="docutils literal notranslate"><span class="pre">ex_g20km_10ka.nc</span></code>.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Right:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code>, the total ice sheet volume time-series, from file
-<code class="docutils literal notranslate"><span class="pre">ts_g20km_10ka.nc</span></code>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Left</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">thk</span></code>, the ice sheet thickness, a space-dependent field, from file
+<code class="docutils literal notranslate"><span class="pre">ex_g20km_10ka.nc</span></code>.</p>
+</dd>
+<dt class="field-even">Right</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">ice_volume_glacierized</span></code>, the total ice sheet volume time-series, from file
+<code class="docutils literal notranslate"><span class="pre">ts_g20km_10ka.nc</span></code>.</p>
+</dd>
+</dl>
 </div>
 </div>
 <p>At the end of the run the output file <code class="docutils literal notranslate"><span class="pre">g20km_10ka.nc</span></code> is generated.
@@ -84,23 +82,22 @@ we do:</p>
 :history = &quot;user@machine 2017-10-04 19:16:08 AKDT: PISM done.  Performance stats: 0.1784 wall clock hours, 0.7136 proc.-hours, 14005.0054 model years per proc.-hour.\n&quot;,
 </pre></div>
 </div>
-<div class="figure" id="fig-firstoutput">
+<div class="figure align-default" id="fig-firstoutput">
 <img alt="../../_images/g20km-10ka-usurf-csurf-mask.png" src="../../_images/g20km-10ka-usurf-csurf-mask.png" />
-<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Fields from output file <code class="docutils literal notranslate"><span class="pre">g20km_10ka.nc</span></code>.</span></p>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Fields from output file <code class="docutils literal notranslate"><span class="pre">g20km_10ka.nc</span></code>.</span><a class="headerlink" href="#fig-firstoutput" title="Permalink to this image">¶</a></p>
 <div class="legend">
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Left:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">usurf</span></code>, the ice sheet surface elevation in meters.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Middle:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">velsurf_mag</span></code>, the surface speed in meters/year, including the 100 m/year
-contour (solid black).</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Right:</th><td class="field-body"><code class="variable docutils literal notranslate"><span class="pre">mask</span></code>, with 0 = ice-free land, 2 = grounded ice, 4 = ice-free ocean.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Left</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">usurf</span></code>, the ice sheet surface elevation in meters.</p>
+</dd>
+<dt class="field-even">Middle</dt>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">velsurf_mag</span></code>, the surface speed in meters/year, including the 100 m/year
+contour (solid black).</p>
+</dd>
+<dt class="field-odd">Right</dt>
+<dd class="field-odd"><p><code class="variable docutils literal notranslate"><span class="pre">mask</span></code>, with 0 = ice-free land, 2 = grounded ice, 4 = ice-free ocean.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -176,25 +173,23 @@ contour (solid black).</td>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>

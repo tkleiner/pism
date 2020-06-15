@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Building PETSc &#8212; PISM, a Parallel Ice Sheet Model 1.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Building PISM" href="pism.html" />
     <link rel="prev" title="Installing PISM using Spack" href="spack.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -38,7 +38,8 @@
 distribution may not be available in package repositories. Download the PETSc
 source by grabbing the current gzipped tarball at:</p>
 <blockquote>
-<div><a class="reference external" href="https://www.mcs.anl.gov/petsc/download/index.html">https://www.mcs.anl.gov/petsc/download/index.html</a></div></blockquote>
+<div><p><a class="reference external" href="https://www.mcs.anl.gov/petsc/download/index.html">https://www.mcs.anl.gov/petsc/download/index.html</a></p>
+</div></blockquote>
 <p>(Use version 3.5 or newer; see <a class="reference internal" href="prerequisites.html#sec-install-prerequisites"><span class="std std-ref">Required tools and libraries</span></a> for
 details.) The “lite” form of the tarball is fine if you are willing to depend on an
 Internet connection for accessing PETSc documentation.</p>
@@ -46,7 +47,7 @@ Internet connection for accessing PETSc documentation.</p>
 might be best to read the following comments on the PETSc configure and build process
 first:</p>
 <ol class="arabic">
-<li><p class="first">Untar in your preferred location and enter the new PETSc directory. Note PETSc should
+<li><p>Untar in your preferred location and enter the new PETSc directory. Note PETSc should
 <em>not</em> be configured using root privileges. When you run the configure script the
 following options are recommended; note PISM uses shared libraries by default:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PETSC_DIR</span><span class="o">=</span><span class="nv">$PWD</span>
@@ -56,7 +57,7 @@ following options are recommended; note PISM uses shared libraries by default:</
                       --with-fc<span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
-<p>You need to define the environment variables <code class="docutils literal notranslate"><span class="pre">PETSC_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> <a class="footnote-reference" href="#id2" id="id1">[1]</a> –
+<p>You need to define the environment variables <code class="docutils literal notranslate"><span class="pre">PETSC_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> <a class="footnote-reference brackets" href="#id2" id="id1">1</a> –
 one way is shown here – <em>before</em> running the configuration script. Turning off the
 inclusion of debugging code and symbols can give a significant speed improvement, but
 some kinds of development will benefit from setting <code class="docutils literal notranslate"><span class="pre">--with-debugging=1</span></code>. Using
@@ -64,11 +65,10 @@ shared libraries may be unwise on certain clusters; check with your system
 administrator. PISM does not use PETSc’s Fortran API, so the Fortran compiler is
 disabled by <code class="docutils literal notranslate"><span class="pre">--with-fc=0</span></code>.</p>
 </li>
-<li><p class="first">It is sometimes convenient to have PETSc grab a local copy of BLAS and LAPACK rather
+<li><p>It is sometimes convenient to have PETSc grab a local copy of BLAS and LAPACK rather
 than using the system-wide version. So one may add “<code class="docutils literal notranslate"><span class="pre">--download-f2cblaslapack=1</span></code>” to
-the other configure options.</p>
-</li>
-<li><p class="first">If there is an existing MPI installation, we recommend using MPI’s compiler wrappers to
+the other configure options.</p></li>
+<li><p>If there is an existing MPI installation, we recommend using MPI’s compiler wrappers to
 specify an MPI library when installing PETSc, for example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CC</span><span class="o">=</span>mpicc <span class="nv">CXX</span><span class="o">=</span>mpicxx ./config/configure.py --with-shared-libraries <span class="se">\</span>
                                           --with-debugging<span class="o">=</span><span class="m">0</span> <span class="se">\</span>
@@ -79,28 +79,24 @@ specify an MPI library when installing PETSc, for example:</p>
 might want to try adding the <code class="docutils literal notranslate"><span class="pre">--download-mpich=1</span></code> (or <code class="docutils literal notranslate"><span class="pre">--download-openmpi=1</span></code>)
 option to PETSc’s configure command.</p>
 </li>
-<li><p class="first">Configuration of PETSc for a batch system requires special procedures described at the
+<li><p>Configuration of PETSc for a batch system requires special procedures described at the
 PETSc documentation site. One starts with a configure option <code class="docutils literal notranslate"><span class="pre">--with-batch=1</span></code>. See
 the “Installing on machine requiring cross compiler or a job scheduler” section of the
-<a class="reference external" href="https://www.mcs.anl.gov/petsc/documentation/installation.html">PETSc installation page</a>.</p>
-</li>
-<li><p class="first">Configuring PETSc may take a moment even when everything goes smoothly. A value for the
+<a class="reference external" href="https://www.mcs.anl.gov/petsc/documentation/installation.html">PETSc installation page</a>.</p></li>
+<li><p>Configuring PETSc may take a moment even when everything goes smoothly. A value for the
 environment variable <code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> will be reported at the end of the configure
 process; take note of this value. One may always reconfigure with additional
-<code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> as needed.</p>
-</li>
-<li><p class="first">After <code class="docutils literal notranslate"><span class="pre">configure.py</span></code> finishes, you will need to run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">all</span> <span class="pre">test</span></code> in the PETSc
-directory and watch the result.</p>
-</li>
+<code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> as needed.</p></li>
+<li><p>After <code class="docutils literal notranslate"><span class="pre">configure.py</span></code> finishes, you will need to run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">all</span> <span class="pre">test</span></code> in the PETSc
+directory and watch the result.</p></li>
 </ol>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>The <code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> variable is just a string you can use to choose different PETSc
-configurations and does not have any other significance.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">PETSC_ARCH</span></code> variable is just a string you can use to choose different PETSc
+configurations and does not have any other significance.</p>
+</dd>
+</dl>
 </div>
 
 
@@ -168,25 +164,23 @@ configurations and does not have any other significance.</td></tr>
 
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1772-gacd2b2dd1
+      Git revision v1.0-1816-gf076a761f
       committed by Constantine Khrulev
-      on 2020-05-15 13:15:53 -0800 |
+      on 2020-06-15 11:14:56 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>
