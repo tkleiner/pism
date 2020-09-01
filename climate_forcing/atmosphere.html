@@ -46,7 +46,7 @@
 <li><p><a class="reference internal" href="#one-weather-station" id="id21">One weather station</a></p></li>
 <li><p><a class="reference internal" href="#scalar-temperature-offsets" id="id22">Scalar temperature offsets</a></p></li>
 <li><p><a class="reference internal" href="#scalar-precipitation-offsets" id="id23">Scalar precipitation offsets</a></p></li>
-<li><p><a class="reference internal" href="#scalar-precipitation-scaling" id="id24">Scalar precipitation scaling</a></p></li>
+<li><p><a class="reference internal" href="#precipitation-scaling" id="id24">Precipitation scaling</a></p></li>
 <li><p><a class="reference internal" href="#precipitation-correction-using-scalar-temperature-offsets" id="id25">Precipitation correction using scalar temperature offsets</a></p></li>
 <li><p><a class="reference internal" href="#adjustments-using-modeled-change-in-surface-elevation" id="id26">Adjustments using modeled change in surface elevation</a></p></li>
 <li><p><a class="reference internal" href="#using-climate-data-anomalies" id="id27">Using climate data anomalies</a></p></li>
@@ -299,30 +299,32 @@ from.</p></li>
 <a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
 </ul>
 </div>
-<div class="section" id="scalar-precipitation-scaling">
-<span id="sec-atmosphere-frac-p"></span><h2><a class="toc-backref" href="#id24">Scalar precipitation scaling</a><a class="headerlink" href="#scalar-precipitation-scaling" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="precipitation-scaling">
+<span id="sec-atmosphere-frac-p"></span><h2><a class="toc-backref" href="#id24">Precipitation scaling</a><a class="headerlink" href="#precipitation-scaling" title="Permalink to this headline">¶</a></h2>
 <dl class="field-list simple">
 <dt class="field-odd">Options</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">-atmosphere</span> <span class="pre">...,frac_P</span></code></p>
 </dd>
 <dt class="field-even">Variables</dt>
-<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code> [no unit]</p>
+<dd class="field-even"><p><code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code> [1]</p>
 </dd>
 <dt class="field-odd">C++ class</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pism::atmosphere::Frac_P</span></code></p>
 </dd>
 </dl>
-<p>This modifier scales precipitation output of an atmosphere model using a scalar
-time-dependent precipitation fraction, with a value of one corresponding to no change in
-precipitation. It takes the following command-line options:</p>
-<ul class="simple">
-<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_file</span></code> sets the name of the file PISM will read <code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code>
-from.</p></li>
-<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_period</span></code> (<em>years</em>) sets the period of the forcing data (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
-<li><p><code class="option docutils literal notranslate"><span class="pre">-atmosphere_frac_P_reference_year</span></code> sets the reference year (section
-<a class="reference internal" href="time.html#sec-periodic-forcing"><span class="std std-ref">Periodic forcing</span></a>).</p></li>
-</ul>
+<p>This modifier scales precipitation output of an atmosphere model using a time-dependent
+precipitation fraction, with a value of <em>one</em> corresponding to no change in precipitation.
+It supports both 1D (scalar) and 2D (spatially-variable) factors.</p>
+<p>If the variable <code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code> in the input file (see <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.frac_P.file"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.frac_P</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.file</span></code></a>) depends
+on time only it is used as a time-dependent constant-in-space scaling factor.</p>
+<p>If the variable <code class="variable docutils literal notranslate"><span class="pre">frac_P</span></code> has more than one dimension PISM tries to use it as a
+time-and-space-dependent scaling factor.</p>
+<p>See configuration parameters with the prefix <code class="docutils literal notranslate"><span class="pre">atmosphere.frac_P.</span></code></p>
+<ol class="simple">
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.frac_P.file"><code class="docutils literal notranslate"><span class="pre">file</span></code></a> Name of the file containing scalar precipitation scaling.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.frac_P.period"><code class="docutils literal notranslate"><span class="pre">period</span></code></a> (0<em> years</em>) Length of the period of the climate forcing data. Set to zero to disable.</p></li>
+<li><p><a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.frac_P.reference_year"><code class="docutils literal notranslate"><span class="pre">reference_year</span></code></a> (0<em> years</em>) Reference year to use when <a class="reference internal" href="../manual/parameters/index.html#config-atmosphere.frac_P.period"><code class="docutils literal notranslate"><span class="pre">atmosphere</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.frac_P</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.period</span></code></a> is active.</p></li>
+</ol>
 </div>
 <div class="section" id="precipitation-correction-using-scalar-temperature-offsets">
 <span id="sec-atmosphere-precip-scaling"></span><h2><a class="toc-backref" href="#id25">Precipitation correction using scalar temperature offsets</a><a class="headerlink" href="#precipitation-correction-using-scalar-temperature-offsets" title="Permalink to this headline">¶</a></h2>
@@ -550,7 +552,7 @@ with the prefix <code class="docutils literal notranslate"><span class="pre">atm
 <li class="toctree-l3"><a class="reference internal" href="#one-weather-station">One weather station</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scalar-temperature-offsets">Scalar temperature offsets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scalar-precipitation-offsets">Scalar precipitation offsets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scalar-precipitation-scaling">Scalar precipitation scaling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#precipitation-scaling">Precipitation scaling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#precipitation-correction-using-scalar-temperature-offsets">Precipitation correction using scalar temperature offsets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#adjustments-using-modeled-change-in-surface-elevation">Adjustments using modeled change in surface elevation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-climate-data-anomalies">Using climate data anomalies</a></li>
@@ -582,9 +584,9 @@ with the prefix <code class="docutils literal notranslate"><span class="pre">atm
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1836-gb71192212
+      Git revision v1.0-1837-ga19a853ac
       committed by Constantine Khrulev
-      on 2020-08-31 11:43:52 -0800 |
+      on 2020-08-31 20:46:05 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>
