@@ -83,13 +83,13 @@ directory instead.</p>
 24
 25
 26
-27</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Install HDF5 1.10.5 with parallel I/O in ~/local/hdf5,</span>
+27</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Install HDF5 1.12.0 with parallel I/O in ~/local/hdf5,</span>
 <span class="c1"># using ~/local/build/hdf5 as the build directory.</span>
 
-<span class="nv">version</span><span class="o">=</span><span class="m">1</span>.10.5
+<span class="nv">version</span><span class="o">=</span><span class="m">1</span>.12.0
 <span class="nv">prefix</span><span class="o">=</span><span class="nv">$HOME</span>/local/hdf5
 <span class="nv">build_dir</span><span class="o">=</span>~/local/build/hdf5
-<span class="nv">hdf5_site</span><span class="o">=</span>https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10
+<span class="nv">hdf5_site</span><span class="o">=</span>https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12
 <span class="nv">url</span><span class="o">=</span><span class="si">${</span><span class="nv">hdf5_site</span><span class="si">}</span>/hdf5-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>/src/hdf5-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
 
 mkdir -p <span class="si">${</span><span class="nv">build_dir</span><span class="si">}</span>
@@ -150,7 +150,7 @@ hides numerous compiler warnings emitted when building HDF5.</p>
 
 <span class="nv">hdf5</span><span class="o">=</span>~/local/hdf5
 
-<span class="nv">version</span><span class="o">=</span><span class="m">4</span>.7.3
+<span class="nv">version</span><span class="o">=</span><span class="m">4</span>.7.4
 <span class="nv">prefix</span><span class="o">=</span><span class="nv">$HOME</span>/local/netcdf
 <span class="nv">build_dir</span><span class="o">=</span>~/local/build/netcdf
 <span class="nv">url</span><span class="o">=</span>ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-c-<span class="si">${</span><span class="nv">version</span><span class="si">}</span>.tar.gz
@@ -289,7 +289,7 @@ make install
 rm -rf <span class="si">${</span><span class="nv">build</span><span class="si">}</span>
 mkdir -p <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/build <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/sources
 
-git clone --depth<span class="o">=</span><span class="m">1</span> -b master <span class="si">${</span><span class="nv">url</span><span class="si">}</span> <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/sources
+git clone --depth<span class="o">=</span><span class="m">1</span> -b pio_2_5_1 <span class="si">${</span><span class="nv">url</span><span class="si">}</span> <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/sources
 
 <span class="nb">pushd</span> <span class="si">${</span><span class="nv">build</span><span class="si">}</span>/build
 
@@ -388,9 +388,9 @@ disable ParallelIO features not used by PISM.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1840-g248f66242
+      Git revision v1.0-1842-g523b6ae5b
       committed by Constantine Khrulev
-      on 2020-09-02 09:56:04 -0800 |
+      on 2020-09-02 11:43:07 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>
