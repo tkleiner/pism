@@ -178,7 +178,7 @@ salinity is clipped so that it stays in the <span class="math notranslate nohigh
 ensure that we stay in the range of applicability of the melting point temperature
 parameterization; see <a class="bibtex reference internal" href="../zzz_references_html.html#hollandjenkins1999" id="id7">[11]</a>. To disable salinity clipping, use the
 <code class="option docutils literal notranslate"><span class="pre">-no_clip_shelf_base_salinity</span></code> option or set the configuration parameter
-<a class="reference internal" href="../manual/parameters/index.html#config-ocean.three_equation_model_clip_salinity"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.three_equation_model_clip_salinity</span></code></a>  to “no”.</p></li>
+<a class="reference internal" href="../manual/parameters/index.html#config-ocean.th.clip_salinity"><code class="docutils literal notranslate"><span class="pre">ocean</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.th</span></code>&shy;<code class="docutils literal notranslate"><span class="pre">.clip_salinity</span></code></a>  to “no”.</p></li>
 </ul>
 <p>See <a class="reference internal" href="../technical/ocean-th.html#sec-ocean-th-details"><span class="std std-ref">Three-equation ocean model (implementation details)</span></a> for implementation details.</p>
 </div>
@@ -549,9 +549,9 @@ updates. PISM may take longer time-steps if the adaptive scheme allows it, thoug
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1855-g01c8ba727
+      Git revision v1.0-1861-gfd832a2d6
       committed by Constantine Khrulev
-      on 2020-09-09 11:35:14 -0800 |
+      on 2020-09-17 08:51:27 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>
