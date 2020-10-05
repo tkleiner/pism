@@ -15,6 +15,11 @@ Changes since v1.2
   compressed NetCDF from rank 0.
 - Support writing compressed NetCDF in parallel with NetCDF 4.7.4 or newer and HDF5 1.10.3
   or newer. Set `output.compression_level` to enable compression.
+- The new `-bed_def given` class reads in a prescribed bed deformation history from a file
+  (e.g. from a solid-Earth model) relative to a (high-resolution) reference topography, 
+  indicated by configuration parameter `bed_deformation.given.file` and 
+  `bed_deformation.given.reference_file`, respectively.
+
 
 Changes from v1.1 to v1.2
 =========================
