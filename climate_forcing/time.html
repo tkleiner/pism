@@ -65,9 +65,15 @@ appropriate in forcing files.</p>
 </div>
 <div class="section" id="using-time-bounds-in-forcing-data">
 <span id="sec-time-bounds"></span><h2>Using time bounds in forcing data<a class="headerlink" href="#using-time-bounds-in-forcing-data" title="Permalink to this headline">¶</a></h2>
-<p>PISM interprets climate forcing data as piecewise-constant in time. A forcing file is
-required to contain time bounds corresponding to each record.</p>
-<p>PISM follows the CF (Climate and Forecasting) meta-data conventions. The <code class="docutils literal notranslate"><span class="pre">ncdump</span> <span class="pre">-h</span></code>
+<p>To make <a class="reference internal" href="../manual/practical-usage/mass-conservation.html#sec-mass-conservation"><span class="std std-ref">balancing the books</span></a> possible, PISM interprets <em>fluxes</em>
+(examples: top surface mass balance, precipitation, sub shelf mass flux) as
+piecewise-constant in time. A forcing file is required to contain time bounds
+corresponding to each record.</p>
+<p>Other 2D input fields (examples: ice surface temperature, near-surface air temperature)
+are interpreted as piecewise-linear in time.</p>
+<p><em>Scalar</em> time-dependent inputs are interpreted as piecewise-constant in time if an input
+file contains time bounds and piecewise-linear otherwise.</p>
+<p>PISM supports time bounds specified according to <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a>. The <code class="docutils literal notranslate"><span class="pre">ncdump</span> <span class="pre">-h</span></code>
 output from a conforming file would look similar to:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>netcdf forcing {
 dimensions:
@@ -86,8 +92,7 @@ variables:
 </div>
 <p>The <code class="variable docutils literal notranslate"><span class="pre">time_bounds</span></code> variable stores the starting and the ending time for each interval
 in the forcing. This variable is assumed to have the same units as the <code class="variable docutils literal notranslate"><span class="pre">time</span></code>
-variable it is associated with, which is why its arguments are not set in this example.</p>
-<p>Please see the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html">CF Conventions</a> document for details.</p>
+variable it is associated with, which is why these attributes are not set in this example.</p>
 </div>
 </div>
 
@@ -165,9 +170,9 @@ variable it is associated with, which is why its arguments are not set in this e
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      Git revision v1.0-1867-g9964da542
-      committed by Andy Aschwanden
-      on 2020-09-30 10:28:43 -0800 |
+      Git revision v1.0-1870-g45d3cdd71
+      committed by Constantine Khrulev
+      on 2020-10-12 09:52:35 -0800 |
       &copy; 2004--2020, the PISM authors.
       
     </div>
