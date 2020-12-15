@@ -1,4 +1,5 @@
 /* Copyright (C) 2013, 2014, 2015, 2016, 2019, 2020 PISM Authors
+ *               2019, 2020 Thomas Kleiner, Johannes Sutter
  *
  * This file is part of PISM.
  *
@@ -20,8 +21,8 @@
 #ifndef _ICEMODELVEC3CUSTOM_H_
 #define _ICEMODELVEC3CUSTOM_H_
 
-#include <memory>
 #include <map>
+#include <memory>
 
 #include "iceModelVec.hh"
 
@@ -39,15 +40,14 @@ namespace pism {
  */
 class IceModelVec3Custom : public IceModelVec3D {
 public:
-  IceModelVec3Custom(IceGrid::ConstPtr mygrid,
-                     const std::string &short_name,
-                     const std::string &z_name,
-                     const std::vector<double> &my_zlevels,
-                     const std::map<std::string, std::string> &z_attrs);
+  IceModelVec3Custom(IceGrid::ConstPtr mygrid, const std::string &short_name, const std::string &z_name,
+                     const std::vector<double> &my_zlevels, const std::map<std::string, std::string> &z_attrs);
   virtual ~IceModelVec3Custom();
 
   typedef std::shared_ptr<IceModelVec3Custom> Ptr;
   typedef std::shared_ptr<const IceModelVec3Custom> ConstPtr;
+
+  void update(const std::string &filename, unsigned int start);
 };
 
 } // end of namespace pism

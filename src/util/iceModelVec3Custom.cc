@@ -1,4 +1,5 @@
 /* Copyright (C) 2013, 2014, 2015, 2016, 2017, 2019, 2020 PISM Authors
+ *               2019, 2020 Thomas Kleiner, Johannes Sutter
  *
  * This file is part of PISM.
  *
@@ -24,6 +25,10 @@
 #include "pism/util/Context.hh"
 #include "pism/util/IceModelVec_impl.hh"
 #include "pism/util/VariableMetadata.hh"
+
+#include "io/io_helpers.hh"
+#include "pism/util/Logger.hh"
+#include "pism/util/io/PIO.hh"
 
 namespace pism {
 
@@ -64,6 +69,29 @@ IceModelVec3Custom::IceModelVec3Custom(IceGrid::ConstPtr grid,
 
 IceModelVec3Custom::~IceModelVec3Custom() {
   // empty
+}
+
+//! Update by reading only one record from the file.
+// Adapted from IceModelVec2T::update(unsigned int start)
+void IceModelVec3Custom::update(const std::string &filename, unsigned int start) {
+
+  Logger::ConstPtr log = m_grid->ctx()->log();
+  const bool allow_extrapolation = m_grid->ctx()->config()->get_boolean("grid.allow_extrapolation");
+
+  m_report_range = true;
+
+  PIO nc(m_grid->com, "guess_mode", filename, PISM_READONLY);
+
+  unsigned int t_length = nc.inq_nrecords();
+  if (start >= t_length) {
+    throw RuntimeError::formatted(PISM_ERROR_LOCATION,
+                                  "IceModelVec3Custom::update(const std::string &filename, unsigned int start): start = %d is invalid", start);
+  }
+
+  petsc::VecArray tmp_array(m_v);
+  io::regrid_spatial_variable(m_metadata[0], *m_grid, nc, start, CRITICAL, m_report_range, allow_extrapolation, 0.0,
+                              m_interpolation_type, tmp_array.get());
+  log->message(5, " %s: reading entry #%02d ...\n", m_name.c_str(), start);
 }
 
 } // end of namespace pism
