@@ -40,18 +40,15 @@ namespace ocean {
 ISMIP6Physics::ISMIP6Physics(IceGrid::ConstPtr grid) : Component(grid) {
 
   m_ice_shelf_mask.create(m_grid, "ice_shelf_mask", WITHOUT_GHOSTS);
-  m_ice_shelf_mask.set_attrs("diagnostic", "ice shelf mask (floating ice connected to the open ocean)", "", "");
+  m_ice_shelf_mask.set_attrs("diagnostic", "ice shelf mask (floating ice connected to the open ocean)", "", "", "", 0);
   m_ice_shelf_mask.metadata().set_numbers("flag_values", { 0.0, 1.0 });
   m_ice_shelf_mask.metadata().set_string("flag_meanings", "non_floating ice, floating_ice");
 
   m_ice_draft.create(m_grid, "ice_draft", WITHOUT_GHOSTS);
-  m_ice_draft.set_attrs("diagnostic",
-                        "ice_draft",
-                        "m", "", "", 0);
+  m_ice_draft.set_attrs("diagnostic", "ice_draft", "m", "", "", 0);
 
   m_basin_numbers.create(m_grid, "basinNumber", WITHOUT_GHOSTS); // check why we have GHOSTS
-  m_basin_numbers.set_attrs("climate_forcing",
-                            "mask determines basins for ISMIP6 ocean forcing",
+  m_basin_numbers.set_attrs("climate_forcing", "mask determines basins for ISMIP6 ocean forcing",
                             "", "", "", 0);
 
   m_deltaT_basin.create(m_grid, "deltaT_basin", WITH_GHOSTS); // check why we have GHOSTS
@@ -160,7 +157,7 @@ void ISMIP6Physics::init_impl() {
   if (deltaT_file.empty()) {
 
     m_deltaT_basin.set(0.0); // todo: read from config
-    m_gamma0 = m_config->get_double("ocean.ismip6.gamma0", "meter seconds-1");
+    m_gamma0 = m_config->get_number("ocean.ismip6.gamma0", "meter seconds-1");
     m_log->message(2, "  - WARNING: Option ocean.ismip6.deltaT_file is not set.\n");
     m_log->message(2, "             Using default deltaT '%f'...\n", 0.0);
     m_log->message(2, "             Using default gamma0 '%f'...\n", m_gamma0);
@@ -168,12 +165,14 @@ void ISMIP6Physics::init_impl() {
   } else {
 
     m_log->message(2, "  - Reading deltaT field and gamma0 from '%s'...\n", deltaT_file.c_str());
-    PIO file(m_grid->com, "guess_mode", deltaT_file, PISM_READONLY);
+    // PIO file(m_grid->com, "guess_mode", deltaT_file, PISM_READONLY); //
+    File file(m_grid->com, deltaT_file, PISM_GUESS, PISM_READONLY);
+
     m_deltaT_basin.regrid(file, CRITICAL);
-    if (file.inq_var("gamma0")) {
-      std::string units = file.get_att_text("gamma0", "units");
+    if (file.find_variable("gamma0")) {
+      std::string units = file.read_text_attribute("gamma0", "units");
       double gamma0     = 0.0;
-      file.get_var_double("gamma0", &gamma0);
+      file.read_variable("gamma0", { 0 }, { 1 }, &gamma0);
       m_gamma0 = units::convert(m_sys, gamma0, units, "meter seconds-1"); // convert m/a or m/s -> m/s
     } else {
       m_log->message(2, "  - WARNING: gamma0 not found in '%s'...\n", deltaT_file.c_str());

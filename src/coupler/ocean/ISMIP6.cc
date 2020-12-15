@@ -83,7 +83,8 @@ ISMIP6::ISMIP6(IceGrid::ConstPtr g) : CompleteOceanModel(g, nullptr), m_physics(
   // z_min -> bottom, z_max -> ocean surface, less or equal 0 m
   m_Moz = info.z_len;
   m_Loz = -info.z_min + info.z_max;
-  m_log->message(2, "  - ocean z range: %f m to %f m  (Loz = %f,  Moz = %d)\n", info.z_min, info.z_max, m_Loz, m_Moz);
+  m_log->message(2, "  - ocean z range: %f m to %f m  (Loz = %f,  Moz = %d)\n",
+                 info.z_min, info.z_max, m_Loz, m_Moz);
 
 
   // todo: think about z_bounds
@@ -98,20 +99,21 @@ ISMIP6::ISMIP6(IceGrid::ConstPtr g) : CompleteOceanModel(g, nullptr), m_physics(
   std::vector<double> zocean = info.z;
 
 
-  // create instance of IceModelVec3Custom (todo: stable1.1 version not working in dev)
+  // create instance of IceModelVec3Custom
   {
     std::map<std::string, std::string> attrs;
     attrs["units"]     = "m";
     attrs["long_name"] = "Z-coordinate in ocean";
     attrs["axis"]      = "Z";
     attrs["positive"]  = "up";
-    m_thermal_forcing.create(m_grid, "thermal_forcing", "zOcean", zocean, attrs);
+    m_thermal_forcing.reset(new IceModelVec3Custom(m_grid,
+                                                   "thermal_forcing", "zOcean", zocean, attrs));
   }
 
   // I prefer degC as in NCL and CDO examples
-  m_thermal_forcing.set_attrs("climate_forcing",
-                              "Thermal Forcing (in situ Temperature minus freezing temperature)",
-                              "degC", "", "", 0);
+  m_thermal_forcing->set_attrs("climate_forcing",
+                               "Thermal Forcing (in situ Temperature minus freezing temperature)",
+                               "degC", "", "", 0);
 
   // this is not really needed and could be derived from  shelf_base_mass_flux in the post processing
   m_forcing.create(m_grid, "thermal_forcing_at_depth", WITHOUT_GHOSTS);
@@ -130,8 +132,8 @@ ISMIP6::ISMIP6(IceGrid::ConstPtr g) : CompleteOceanModel(g, nullptr), m_physics(
   if (m_time_dependent) {
     m_tser     = nullptr;
     auto tname = m_config->get_string("time.dimension_name");
-    m_tser     = new Timeseries(*m_grid, tname, tname);
-    m_tser->dimension().set_string("units", m_grid->ctx()->time()->units_string());
+    m_tser     = new Timeseries(*m_grid, tname);
+    // m_tser->dimension().set_string("units", m_grid->ctx()->time()->units_string()); // TODO: stable1.1 -> dev ?
     // IceGrid.cc grid_info::report() time units are expected to be in seconds
     m_tser->variable().set_string("units", "seconds");            // read will not work without proper units
     m_tser->variable().set_string("glaciological_units", "days"); // read will not work without proper units
@@ -174,7 +176,7 @@ void ISMIP6::init_impl(const Geometry &geometry) {
   m_basin_area.resize(m_basin_count, 0.0);
   m_basin_average_forcing.resize(m_basin_count, 0.0);
 
-  m_thermal_forcing.set(0.0);
+  m_thermal_forcing->set(0.0);
 
   // READ TIMES FROM TF(x,y,z,t) file
   if (m_time_dependent) {
@@ -196,7 +198,7 @@ void ISMIP6::init_impl(const Geometry &geometry) {
   } else {
     // READING in the data directly
     m_log->message(2, "ISMIP6::init_impl(...): regrid thermal forcing from file '%s'\n", opt.filename.c_str());
-    m_thermal_forcing.regrid(opt.filename, CRITICAL); //TODO: check if CRITICAL_FILL_MISSING is beneficial
+    m_thermal_forcing->regrid(opt.filename, CRITICAL); //TODO: check if CRITICAL_FILL_MISSING is beneficial
   }
 }
 
@@ -268,8 +270,9 @@ void ISMIP6::update_impl(const Geometry &geometry, double t, double dt) {
       //       thus use time bounds if present (interpreting data as piecewise-constant)
       //       and use linear interpolation otherwise.
       unsigned int tidx = get_time_index(t, m_tser->times());
+
       ForcingOptions opt(*m_grid->ctx(), "ocean.ismip6"); // opt required for forcing file name
-      m_thermal_forcing.update(opt.filename, tidx);
+      m_thermal_forcing->update(opt.filename, tidx);
 
       // done update
       m_t_last = t; // Note, bedef uses t_final =  t + dt here.
@@ -280,7 +283,7 @@ void ISMIP6::update_impl(const Geometry &geometry, double t, double dt) {
 
   // for all i,j get ice draft and vertical interpolate TF to the ice draft position
   m_log->message(5, "ISMIP6::update_impl(...): m_forcing start\n");
-  m_physics->ocean_forcing_at_draft(m_thermal_forcing, m_forcing);
+  m_physics->ocean_forcing_at_draft(*m_thermal_forcing, m_forcing);
   m_log->message(5, "ISMIP6::update_impl(...): m_forcing end\n");
 
   // compute basin averages for non local methods or diagnostics

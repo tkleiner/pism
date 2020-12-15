@@ -55,8 +55,8 @@ protected:
   double m_Loz;       //!< thickness of the ocean layer, in meters
 
   // split 4d TF(x,y,z,t) into 3d TF(x,y,z) and time
-  IceModelVec3Custom m_thermal_forcing; //! spatial data in TF(x,y,z) for given time
-  Timeseries *m_tser;                   //! time dimension data from TF
+  IceModelVec3Custom::Ptr m_thermal_forcing; //! spatial data in TF(x,y,z) for given time
+  Timeseries *m_tser;                        //! time dimension data from TF
   //todo: use also tidxPrev, tidxCurr for interpolation in time also
   unsigned int tidxNext;
 
