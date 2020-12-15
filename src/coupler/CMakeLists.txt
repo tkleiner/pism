@@ -45,6 +45,8 @@ add_library (boundary OBJECT
   ./ocean/Pico.cc
   ./ocean/PicoPhysics.cc
   ./ocean/PicoGeometry.cc
+  ./ocean/ISMIP6Physics.cc
+  ./ocean/ISMIP6.cc
   ./ocean/sea_level/Initialization.cc
   ./ocean/sea_level/SeaLevel.cc
   ./ocean/sea_level/Delta_SL.cc
