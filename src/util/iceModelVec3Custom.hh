@@ -21,8 +21,8 @@
 #ifndef _ICEMODELVEC3CUSTOM_H_
 #define _ICEMODELVEC3CUSTOM_H_
 
-#include <map>
 #include <memory>
+#include <map>
 
 #include "iceModelVec.hh"
 
@@ -40,8 +40,11 @@ namespace pism {
  */
 class IceModelVec3Custom : public IceModelVec3D {
 public:
-  IceModelVec3Custom(IceGrid::ConstPtr mygrid, const std::string &short_name, const std::string &z_name,
-                     const std::vector<double> &my_zlevels, const std::map<std::string, std::string> &z_attrs);
+  IceModelVec3Custom(IceGrid::ConstPtr mygrid,
+                     const std::string &short_name,
+                     const std::string &z_name,
+                     const std::vector<double> &my_zlevels,
+                     const std::map<std::string, std::string> &z_attrs);
   virtual ~IceModelVec3Custom();
 
   typedef std::shared_ptr<IceModelVec3Custom> Ptr;

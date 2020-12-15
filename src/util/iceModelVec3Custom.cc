@@ -28,7 +28,8 @@
 
 #include "io/io_helpers.hh"
 #include "pism/util/Logger.hh"
-#include "pism/util/io/PIO.hh"
+#include "io/File.hh"
+#include "ConfigInterface.hh"
 
 namespace pism {
 
@@ -75,23 +76,24 @@ IceModelVec3Custom::~IceModelVec3Custom() {
 // Adapted from IceModelVec2T::update(unsigned int start)
 void IceModelVec3Custom::update(const std::string &filename, unsigned int start) {
 
-  Logger::ConstPtr log = m_grid->ctx()->log();
-  const bool allow_extrapolation = m_grid->ctx()->config()->get_boolean("grid.allow_extrapolation");
+  Logger::ConstPtr log = m_impl->grid->ctx()->log();
 
-  m_report_range = true;
+  m_impl->report_range = true;
 
-  PIO nc(m_grid->com, "guess_mode", filename, PISM_READONLY);
+  File file(m_impl->grid->com, filename, PISM_GUESS, PISM_READONLY);
+  const bool allow_extrapolation = m_impl->grid->ctx()->config()->get_flag("grid.allow_extrapolation");
 
-  unsigned int t_length = nc.inq_nrecords();
-  if (start >= t_length) {
+  const unsigned int time_length = file.nrecords();
+  if (start >= time_length) {
     throw RuntimeError::formatted(PISM_ERROR_LOCATION,
                                   "IceModelVec3Custom::update(const std::string &filename, unsigned int start): start = %d is invalid", start);
   }
 
-  petsc::VecArray tmp_array(m_v);
-  io::regrid_spatial_variable(m_metadata[0], *m_grid, nc, start, CRITICAL, m_report_range, allow_extrapolation, 0.0,
-                              m_interpolation_type, tmp_array.get());
-  log->message(5, " %s: reading entry #%02d ...\n", m_name.c_str(), start);
+  petsc::VecArray tmp_array(m_impl->v);
+  io::regrid_spatial_variable(m_impl->metadata[0], *m_impl->grid, file, start, CRITICAL, m_impl->report_range, allow_extrapolation, 0.0,
+                              m_impl->interpolation_type, tmp_array.get());
+
+  log->message(5, " %s: reading entry #%02d ...\n", m_impl->name.c_str(), start);
 }
 
 } // end of namespace pism
