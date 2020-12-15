@@ -1843,6 +1843,45 @@ netcdf pism_config {
     pism_config:ocean.th.reference_year_type = "integer";
     pism_config:ocean.th.reference_year_units = "years";
 
+    pism_config:ocean.ismip6.period = 0;
+    pism_config:ocean.ismip6.period_doc = "Length of the period of the climate forcing data. Set to zero to disable.";
+    pism_config:ocean.ismip6.period_type = "integer";
+    pism_config:ocean.ismip6.period_option = "ocean_ismip6_period";
+    pism_config:ocean.ismip6.period_units = "years";
+
+    pism_config:ocean.ismip6.reference_year = 0;
+    pism_config:ocean.ismip6.reference_year_doc = "Reference year to use when ``ocean.ismip6.period`` is active.";
+    pism_config:ocean.ismip6.reference_year_option = "ocean_ismip6_reference_year";
+    pism_config:ocean.ismip6.reference_year_type = "integer";
+    pism_config:ocean.ismip6.reference_year_units = "years";
+
+    pism_config:ocean.ismip6.file = "";
+    pism_config:ocean.ismip6.file_doc = "Name of the file containing climate forcing fields (4d).";
+    pism_config:ocean.ismip6.file_type = "string";
+    pism_config:ocean.ismip6.file_option = "ocean_ismip6_file";
+
+    pism_config:ocean.ismip6.basin_file = "";
+    pism_config:ocean.ismip6.basin_file_doc = "Name of the file containing basin definitions.";
+    pism_config:ocean.ismip6.basin_file_type = "string";
+    pism_config:ocean.ismip6.basin_file_option = "ocean_ismip6_basin_file";
+
+    pism_config:ocean.ismip6.deltaT_file = "";
+    pism_config:ocean.ismip6.deltaT_file_doc = "Name of the file containing gamma0 and temperature offsets per basin.";
+    pism_config:ocean.ismip6.deltaT_file_type = "string";
+    pism_config:ocean.ismip6.deltaT_file_option = "ocean_ismip6_deltaT_file";
+
+    pism_config:ocean.ismip6.gamma0 = 14477.0;
+    pism_config:ocean.ismip6.gamma0_doc = "Default gamma0 value used if not found in deltaT file (Median for non-local quadratic as of Dez. 2018: Melting parameterizations for the ISMIP6 Antarctic simulations)";
+    pism_config:ocean.ismip6.gamma0_type = "scalar";
+    pism_config:ocean.ismip6.gamma0_option = "ocean_ismip6_gamma0";
+    pism_config:ocean.ismip6.gamma0_units = "meter year-1";
+
+    pism_config:ocean.ismip6.thermal_forcing_method = "quadratic";
+    pism_config:ocean.ismip6.thermal_forcing_method_doc = "Selected parameterization for basal melt";
+    pism_config:ocean.ismip6.thermal_forcing_method_type = "keyword";
+    pism_config:ocean.ismip6.thermal_forcing_method_option = "ocean_ismip6_thermal_forcing";
+    pism_config:ocean.ismip6.thermal_forcing_method_choices = "quadratic_local,quadratic";
+
     pism_config:output.ISMIP6 = "false";
     pism_config:output.ISMIP6_doc = "Follow ISMIP6 conventions (units, variable names, \"standard names\") when writing output variables.";
     pism_config:output.ISMIP6_type = "flag";
