@@ -546,6 +546,7 @@ public:
   const std::vector<double> get_column_vector(int i, int j) const;
 
   virtual double getValZ(int i, int j, double z) const;
+  virtual double getValZocean(int i, int j, double z) const; // for ISMIP6 ocean todo: merge getValZ and getValZocean
   virtual bool isLegalLevel(double z) const;
 
   inline double& operator() (int i, int j, int k);

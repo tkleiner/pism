@@ -180,6 +180,31 @@ double IceModelVec3D::getValZ(int i, int j, double z) const {
   return valm + incr * (arr[j][i][mcurr+1] - valm);
 }
 
+//! Return value of scalar quantity at level z (m) by linear interpolation.
+//! should implement the same as in IceModelVec3D::getValZ(int i, int j, double z)
+//! Without checking for isLegalLevel(z)
+double IceModelVec3D::getValZocean(int i, int j, double z) const {
+#if (PISM_DEBUG==1)
+  assert(m_array != NULL);
+  check_array_indices(i, j, 0);
+#endif
+
+  double ***arr = (double***) m_array;
+  if (z >= m_impl->zlevels.back()) {
+    unsigned int nlevels = m_impl->zlevels.size();
+    return arr[j][i][nlevels - 1];
+  } else if (z <= m_impl->zlevels.front()) {
+    return arr[j][i][0];
+  }
+
+  unsigned int mcurr = gsl_interp_accel_find(m_impl->bsearch_accel, &m_impl->zlevels[0], m_impl->zlevels.size(), z);
+
+  const double incr = (z - m_impl->zlevels[mcurr]) / (m_impl->zlevels[mcurr+1] - m_impl->zlevels[mcurr]);
+  const double valm = arr[j][i][mcurr];
+  return valm + incr * (arr[j][i][mcurr+1] - valm);
+}
+
+
 //! Copies a horizontal slice at level z of an IceModelVec3 into an IceModelVec2S gslice.
 /*!
  * FIXME: this method is misnamed: the slice is horizontal in the PISM
@@ -188,9 +213,9 @@ double IceModelVec3D::getValZ(int i, int j, double z) const {
 void  IceModelVec3::getHorSlice(IceModelVec2S &gslice, double z) const {
   IceModelVec::AccessList list{this, &gslice};
 
-  ParallelSection loop(m_impl->grid->com);
+  ParallelSection loop(m_grid->com);
   try {
-    for (Points p(*m_impl->grid); p; p.next()) {
+    for (Points p(*m_grid); p; p.next()) {
       const int i = p.i(), j = p.j();
       gslice(i, j) = getValZ(i, j, z);
     }
