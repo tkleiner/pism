@@ -213,9 +213,9 @@ double IceModelVec3D::getValZocean(int i, int j, double z) const {
 void  IceModelVec3::getHorSlice(IceModelVec2S &gslice, double z) const {
   IceModelVec::AccessList list{this, &gslice};
 
-  ParallelSection loop(m_grid->com);
+  ParallelSection loop(m_impl->grid->com);
   try {
-    for (Points p(*m_grid); p; p.next()) {
+    for (Points p(*m_impl->grid); p; p.next()) {
       const int i = p.i(), j = p.j();
       gslice(i, j) = getValZ(i, j, z);
     }
