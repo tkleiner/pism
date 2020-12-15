@@ -79,6 +79,11 @@ public:
 
   VariableMetadata& variable();
 
+  // ISMIP6 ocean
+  const std::vector<double> &times() const;
+  const std::vector<double> &time_bounds() const;
+  const std::vector<double> &values() const;
+
 private:
   MPI_Comm m_com;
 

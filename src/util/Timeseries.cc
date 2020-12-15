@@ -231,4 +231,15 @@ VariableMetadata& Timeseries::variable() {
   return m_variable;
 }
 
+const std::vector<double> & Timeseries::times() const {
+  return m_time;
+}
+
+const std::vector<double> & Timeseries::time_bounds() const {
+  return m_time_bounds;
+}
+
+const std::vector<double> & Timeseries::values() const {
+  return m_values;
+}
 } // end of namespace pism
